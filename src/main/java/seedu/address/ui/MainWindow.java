@@ -33,6 +33,7 @@ public class MainWindow extends UiPart<Stage> {
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
+    private HelpWindow helpWindow;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -138,7 +139,9 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleHelp() {
-        return 
+        if (!helpWindow.isShowing()){
+            return; 
+        }
     }
 
     void show() {
