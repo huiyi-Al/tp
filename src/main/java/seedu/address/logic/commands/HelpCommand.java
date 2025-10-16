@@ -13,7 +13,8 @@ public class HelpCommand extends Command {
             + "Example: " + COMMAND_WORD;
 
     public static final String SHOWING_HELP_MESSAGE = "Available commands:\n"
-            + "add, addbooking, list, listbooking, delete, deletebooking, find, viewbooking, edit, clear, help, exit.";
+            + "add, addbooking, list, listbooking, delete, deletebooking, find, viewbooking, edit, "
+            + "markbooking, unmarkbooking, clear, help, exit.";
 
     @Override
     public CommandResult execute(Model model) {
