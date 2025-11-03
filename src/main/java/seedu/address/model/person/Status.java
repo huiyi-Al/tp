@@ -8,15 +8,17 @@ public enum Status {
     PROSPECT,
     POTENTIAL,
     ACTIVE,
-    INACTIVE,
-    RETURNING;
+    RETURNING,
+    COMPLETED,
+    INACTIVE;
 
     public static final String MESSAGE_CONSTRAINTS = "Status must be one of the following: "
         + "PROSPECT, "
         + "POTENTIAL, "
         + "ACTIVE, "
-        + "INACTIVE, "
-        + "RETURNING ";
+        + "RETURNING, "
+        + "COMPLETED, "
+        + "INACTIVE, ";
 
     /**
      * Returns true if a given string is a valid Status.

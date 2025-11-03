@@ -6,7 +6,7 @@
 
 # InSight User Guide
 
-> **Version:** 1.0  
+> **Version:** 1.6  
 > **Built for:** Creative professionals (photographers, videographers, and media freelancers)  
 > **Based on:** SE-EDU AddressBook Level 3
 
@@ -52,7 +52,7 @@ InSight consolidates your **people, bookings, packages, notes, and tags** into o
     - [Exit: `exit`](#exit-exit)
 4. [Glossary](#-glossary)
 5. [Saving the Data](#-saving-the-data)
-6. [FAQ](#-faq)
+6. [FAQ](#-faq)git 
 7. [Known Issues](#-known-issues)
 
 ---
@@ -60,7 +60,7 @@ InSight consolidates your **people, bookings, packages, notes, and tags** into o
 ## ⚡ Quick-Start
 
 1. Ensure **Java 17** or above is installed on your computer.
-2. Download the latest `.jar` file from [InSight Releases](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [InSight Releases](https://github.com/AY2526S1-CS2103T-T08-1/tp/releases).
 3. Copy the file to your preferred folder.
 4. Open a terminal and run:
    ```bash
@@ -142,6 +142,8 @@ Adds a booking to a specific client in InSight.
 - Each booking is tied to a client entry.
 - Tags can represent the booking type, theme, or location.
 
+💡 **Tip:** Since this is management of a single person, only one booking can exit at a single time regardless client.
+
 **Examples:**  
 `addbooking 1 d/Wedding Shoot dt/14/10/2025 1200 p/PORTRAIT t/outdoor t/summer`  
 `addbooking 2 d/Product Photoshoot dt/10/09/2025 1600 p/CORPORATE t/studio`
@@ -198,7 +200,7 @@ Marks a booking as Not Paid.
 Edits details of a client in InSight.
 
 **Format:**  
-`edit INDEX n/NAME p/PHONE e/EMAIL s/STATUS [a/ADDRESS] [t/TAG]…`
+`edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [s/STATUS] [a/ADDRESS] [t/TAG]…`
 
 **Notes:**
 - The INDEX refers to the client’s position in the displayed list.
@@ -353,6 +355,7 @@ Closes the InSight application.
 | Status    | Meaning                                                                        | Typical Use Case                                       |
 |-----------|--------------------------------------------------------------------------------|--------------------------------------------------------|
 | PROSPECT  | A potential client who has expressed interest but not confirmed a booking yet. | New lead from social media, email, or inquiry form.    |
+| POTENCIAL | A                                                                              |                                                        |
 | ACTIVE    | A current client with one or more ongoing or upcoming bookings.                | Client with a confirmed event or ongoing project.      |
 | RETURNING | A past client who has returned for additional services.                        | Repeat customer booking a new shoot or event.          |
 | COMPLETED | A client whose project(s) have been completed and delivered.                   | Finished work, awaiting feedback or testimonial.       |
@@ -362,14 +365,18 @@ Closes the InSight application.
 
 | Package Type | Description                                                                         | Example Use Case                                |
 |--------------|-------------------------------------------------------------------------------------|-------------------------------------------------|
-| WEDDING      | Full wedding photography or videography coverage, often spanning multiple sessions. | `editbooking 1 p/WEDDING`                       |
 | PORTRAIT     | Individual, couple, or family portraits conducted in studio or outdoor settings.    | `addbooking 1 d/Graduation Shoot p/PORTRAIT`    |
-| COMMERCIAL   | Product, branding, or corporate-related shoots.                                     | `addbooking 2 d/Product Launch p/COMMERCIAL`    |
+| FAMILY       |
 | EVENT        | Coverage of public/private events (birthdays, conferences).                         | `addbooking 3 d/Company Dinner p/EVENT`         |
-| LIFESTYLE    | Candid or aesthetic sessions capturing daily activities.                            | `addbooking 1 d/Instagram Campaign p/LIFESTYLE` |
+| WEDDING      | Full wedding photography or videography coverage, often spanning multiple sessions. | `editbooking 1 p/WEDDING`                       |
+| CORPORATE    |                                                                                     |                                                 |
+| PRODUCT      | Product, branding, or corporate-related shoots.                                     | `addbooking 2 d/Product Launch p/COMMERCIAL`    |
 | MATERNITY    | Shoots for expecting mothers/families.                                              | `addbooking 2 d/Maternity Portrait p/MATERNITY` |
-| TRAVEL       | Destination shoots involving travel logistics.                                      | `addbooking 1 d/Pre-Wedding in Bali p/TRAVEL`   |
-| CUSTOM       | Flexible or hybrid requests not fitting standard categories.                        | `addbooking 2 d/Studio & Drone Shoot p/CUSTOM`  |
+| BABY         |                                                                                     |                                                 |
+| GRADUATION   |                                                                                     |                                                 |
+| BIRTHDAY     |                                                                                     |                                                 |
+| ANNIVERSARY  | Destination shoots involving travel logistics.                                      | `addbooking 1 d/Pre-Wedding in Bali p/TRAVEL`   |
+| OTHER        | Flexible or hybrid requests not fitting standard categories.                        | `addbooking 2 d/Studio & Drone Shoot p/CUSTOM`  |
 
 
 ### 3. Tag Keywords
