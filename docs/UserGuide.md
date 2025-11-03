@@ -52,7 +52,7 @@ InSight consolidates your **people, bookings, packages, notes, and tags** into o
     - [Exit: `exit`](#exit-exit)
 4. [Glossary](#-glossary)
 5. [Saving the Data](#-saving-the-data)
-6. [FAQ](#-faq)git 
+6. [FAQ](#-faq)
 7. [Known Issues](#-known-issues)
 
 ---
