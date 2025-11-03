@@ -59,7 +59,9 @@ InSight consolidates your **people, bookings, packages, notes, and tags** into o
 
 ## ⚡ Quick-Start
 
-1. Ensure **Java 17** or above is installed on your computer.
+1. Ensure **Java 17** or above is installed on your computer by running:<br/>
+`java --version`<br/>
+If no avaliable version shown, you can install Java [here](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 2. Download the latest `.jar` file from [InSight Releases](https://github.com/AY2526S1-CS2103T-T08-1/tp/releases).
 3. Copy the file to your preferred folder.
 4. Open a terminal and run:
@@ -76,26 +78,26 @@ InSight consolidates your **people, bookings, packages, notes, and tags** into o
 
 ### Client Management Commands
 
-| Command         | Description                                                                                                                                                                                     |
-|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `add`           | Adds a client to InSight. <br/> Parameters: `n/NAME p/PHONE e/EMAIL s/STATUS [a/ADDRESS] [t/TAG]` <br/> Example: `add n/John Doe p/98765432 e/johnd@example.com s/PROSPECT a/311, Clementi Ave` |
-| `delete`        | Deletes a client. <br/> Parameters: `INDEX`  <br/> Example: `delete 1`                                                                                                                          |
-| `edit`          | Edits client details. <br/> Parameters: `INDEX [n/NAME] [p/PHONE] [e/EMAIL] [s/STATUS] [a/ADDRESS] [t/TAG]` <br/> Example: `edit 1 p/91234567 e/johndoe@example.com`                            |
-| `list`          | Lists all clients. <br/> Example: `list`                                                                                                                                                        |
-| `find`          | Finds clients by name or status. <br/> Parameters: `name + [name1 name2…]` or `status + [status1 status2…].  <br/> Examples . `find name alice bob . `find status active returning`             |
-| `sort`          | Sorts clients lexicographically.   <br/> Example: `sort`                                                                                                                                        |
+| Command         | Description                                                                                                   | Example                                                                        |                                                                                
+|-----------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| `add`           | Adds a client to InSight. <br/> Parameters: `n/NAME p/PHONE e/EMAIL s/STATUS [a/ADDRESS] [t/TAG]`             | `add n/John Doe p/98765432 e/johnd@example.com s/PROSPECT a/311, Clementi Ave` |
+| `delete`        | Deletes a client. <br/> Parameters: `INDEX`                                                                   | `delete 1`                                                                     |
+| `edit`          | Edits client details. <br/> Parameters: `INDEX [n/NAME] [p/PHONE] [e/EMAIL] [s/STATUS] [a/ADDRESS] [t/TAG]`   | `edit 1 p/91234567 e/johndoe@example.com`                                      |
+| `list`          | Lists all clients.                                                                                            | `list`                                                                         |
+| `find`          | Finds clients by name or status. <br/> Parameters: `name + [name1 name2…]` or `status + [status1 status2…]. ` | `find name alice bob .`<br/> `find status active returning`                    |
+| `sort`          | Sorts clients lexicographically.                                                                              |  `sort`                                                                        |
 
 ### Booking Management Commands
-| Command         | Description                                                                                                                                                                                          |
-|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `addbooking`    | Adds a booking to InSight. <br/> Parameters: `INDEX d/DESCRIPTION dt/dd/mm/yyyy HHmm p/PACKAGE t/TAG` <br/> Example: `addbooking 1 d/Wedding Shoot dt/14/10/2025 1200 p/PORTRAIT t/outdoor t/summer` |
-| `editbooking`   | Edits booking details. <br/> Parameters: `INDEX [d/DESCRIPTION] [dt/DATETIME] [p/PACKAGE] [t/TAG]`  <br/> Example: `editbooking 1 d/Wedding Shoot p/WEDDING`                                         |
-| `deletebooking` | Deletes a booking. <br/> Parameters: `INDEX` <br/> Example: `deletebooking 1`                                                                                                                        |
-| `listbooking`   | Lists all bookings <br/> Lists all bookings within InSight. <br/> Example: `listbooking`                                                                                                             |
-| `viewbooking`   | Displays all bookings for a specific client.<br/> Parameters: `INDEX` <br/> Example: `viewbooking 1`                                                                                                 |
-| `sortbooking`   | Sorts bookings by date and time.   <br/> Example: `sortbooking`                                                                                                                                      |
-| `markbooking`   | Marks a booking as 'Paid'. <br/> Parameters: `INDEX` <br/> Example: `markbooking 1`                                                                                                                  |
-| `unmarkbooking` | Unmarks a booking as 'Not Paid'. <br/> Parameters: `INDEX`   <br/> Example: `unmarkbooking 1`                                                                                                        |
+| Command         | Description                                                                                           | Example                                                                         |                                                                               
+|-----------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| `addbooking`    | Adds a booking to InSight. <br/> Parameters: `INDEX d/DESCRIPTION dt/dd/mm/yyyy HHmm p/PACKAGE t/TAG` | `addbooking 1 d/Wedding Shoot dt/14/10/2025 1200 p/PORTRAIT t/outdoor t/summer` |
+| `editbooking`   | Edits booking details. <br/> Parameters: `INDEX [d/DESCRIPTION] [dt/DATETIME] [p/PACKAGE] [t/TAG]`    | `editbooking 1 d/Wedding Shoot p/WEDDING`                                       |
+| `deletebooking` | Deletes a booking. <br/> Parameters: `INDEX`                                                          | `deletebooking 1`                                                               |
+| `listbooking`   | Lists all bookings <br/> Lists all bookings within InSight.                                           | `listbooking`                                                                   |
+| `viewbooking`   | Displays all bookings for a specific client.<br/> Parameters: `INDEX`                                 | `viewbooking 1`                                                                 |
+| `sortbooking`   | Sorts bookings by date and time.                                                                      | `sortbooking`                                                                   |
+| `markbooking`   | Marks a booking as 'Paid'. <br/> Parameters: `INDEX`                                                  | `markbooking 1`                                                                 |
+| `unmarkbooking` | Unmarks a booking as 'Not Paid'. <br/> Parameters: `INDEX`                                            | `unmarkbooking 1`                                                               |
 
 ### General Commands
 | Command | Description                                          |
