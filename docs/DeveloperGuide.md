@@ -274,11 +274,11 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* is a solo (one-person) residential on-site service technician (e.g., aircon cleaning / handyman / appliance servicing)
+* manages repeat customers and needs fast recall of client contact + exact service-location details
+* often works from a laptop/desktop between jobs and prefers a fast, typing-first workflow
+* can type quickly and prefers keyboard shortcuts / CLI-style commands over mouse-heavy interactions
+* needs to store service-location context (precise address, access instructions, precautions, special requirements) to avoid mistakes on-site
 
 **Value proposition**: manage contacts faster than a typical mouse/GUI driven app
 
