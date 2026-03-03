@@ -280,7 +280,7 @@ _{Explain here how the data archiving feature will be implemented}_
 * can type quickly and prefers keyboard shortcuts / CLI-style commands over mouse-heavy interactions
 * needs to store service-location context (precise address, access instructions, precautions, special requirements) to avoid mistakes on-site
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: A fast, typing-first address book that helps solo residential service technicians avoid mistakes and wasted time by keeping client contact details tightly coupled with service-location context (address precision, access instructions, precautions, special requirements), searchable in seconds.
 
 
 ### User stories
