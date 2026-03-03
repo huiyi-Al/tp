@@ -287,14 +287,41 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​                             | I want to …​                                                                 | So that I can…​                                                                 |
+|----------|--------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| `* * *`  | solo residential service technician   | add a new client with name, phone, email, and service address details        | record the exact contact details and service-location details                  |
+| `* * *`  | solo residential service technician   | delete a client record                                                       | remove one-off customers who are not likely to become repeat customers         |
+| `* * *`  | solo residential service technician   | find a client by name                                                        | locate the correct client quickly                                              |
+| `* * *`  | solo residential service technician   | view a list of clients stored                                                | get an overview of my business                                                 |
+| `* * *`  | solo residential service technician   | keep data in a human-editable local file that the app can load               | access client information between sessions                                     |
+| `* *`    | solo residential service technician   | update a client's contact details                                            | keep client records accurate when details change                               |
+| `* *`    | solo residential service technician   | have the list view sorted by name (lexicographic order)                      | quickly skim the list to find certain clients                                  |
+| `* *`    | solo residential service technician   | find a specific client's details quickly (e.g., by typing part of an address)| retrieve the correct client even if I don't remember their name                |
+| `* *`    | solo residential service technician   | add special requirements or precautions specified by each client             | avoid mistakes and prepare properly before a visit                              |
+| `* *`    | solo residential service technician   | see a compact view when listing clients and view full details only when I select a client | scan my list quickly without losing access to details                    |
+| `* *`    | solo residential service technician   | copy a client's service address to the clipboard                             | paste it quickly into maps or other apps                                       |
+| `* *`    | solo residential service technician   | append a timestamped service note to a client's record as a visit log        | track what was done previously and follow up correctly                         |
+| `* *`    | solo residential service technician   | sort the contact list by most recent interaction                             | prioritize clients I worked with recently                                      |
+| `* *`    | solo residential service technician   | attach tags to a client                                                      | recognize customer types or service types at a glance                           |
+| `* *`    | solo residential service technician   | filter clients by tag                                                        | narrow down to the relevant subset                                             |
+| `* *`    | solo residential service technician   | see a "Today's Visits" list when I tag clients with a date and remove them from the list when done | manage my daily visits quickly                                   |
+| `*`      | new user                              | start with sample data on first launch                                       | understand how the app is supposed to look without entering everything first   |
+| `*`      | solo residential service technician   | be prompted by the app when I want to delete a client with service history   | avoid accidentally losing important past records                               |
+| `*`      | solo residential service technician   | group tags into larger categories                                            | categorize clients and services more systematically                             |
+| `*`      | solo residential service technician   | update or rename a tag globally (cascading)                                  | keep my tagging consistent when I change my conventions                        |
+| `*`      | solo residential service technician   | delete a tag globally (cascading)                                            | keep my tagging consistent when I change my conventions                        |
+| `*`      | solo residential service technician   | pin frequent clients to a "Favorites" quick-access list                      | view my regular clients with a single command                                  |
+| `*`      | solo residential service technician   | store multiple service locations under one client                             | handle clients who have more than one address (e.g., home + property)          |
+| `*`      | solo residential service technician   | set one service location as the default                                      | quickly use the most common address without extra steps                        |
+| `*`      | solo residential service technician   | record the brand and model of an appliance for a client                      | prepare the right tools or parts before visiting                               |
+| `*`      | solo residential service technician   | see the list of clients visited within a certain time period                 | manage clients based on loyalty or recency                                     |
+| `*`      | solo residential service technician   | set a warranty end date for a specific repair                                | know whether a follow-up is still under warranty                               |
+| `*`      | solo residential service technician   | archive or hide inactive clients                                             | reduce clutter while keeping records for reference                             |
+| `*`      | solo residential service technician   | clear all data                                                               | reset the app completely when needed (e.g., for demo or testing)               |
+| `*`      | solo residential service technician   | be warned when adding a client that looks like a duplicate                   | avoid creating repeated records accidentally                                   |
+| `*`      | solo residential service technician   | merge two client records                                                     | combine duplicates into a single correct record                                |
+| `*`      | solo residential service technician   | import clients from other files into my existing list                        | bring over contacts from older tools or files quickly                          |
+| `*`      | solo residential service technician   | undo or redo recent actions                                                  | recover from mistakes quickly                                                  |
 
 *{More to be added}*
 
