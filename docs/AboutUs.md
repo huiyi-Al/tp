@@ -37,3 +37,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: UI
+
+### Sheryl Phoa
+
+<img src="images/sherylphoa.png" width="200px">
+
+[[github](http://github.com/sherylphoa)]
+
+* Role: Developer
+* Responsibilities: Data
