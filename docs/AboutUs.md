@@ -40,21 +40,21 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: Data
 
-### Jean Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
-
 ### Sim Yue Yang
 
 <img src="images/crunchybiscuit19.png" width="200px">
 
 [[github](http://github.com/crunchybiscuit19)]
+[[portfolio](team/johndoe.md)]
+
+* Role: Developer
+* Responsibilities: Dev Ops + Threading
+
+### Tan Kin Ru
+
+<img src="images/kihoo56tkr.png" width="200px">
+
+[[github](http://github.com/kihoo56tkr)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Developer
