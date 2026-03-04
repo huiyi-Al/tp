@@ -356,11 +356,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+1.  Portability: Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+2.  Capacity & Performance: Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+3.  Usability (Efficiency): A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  Data Integrity (Duplicate Prevention): The system must prevent duplicate client entries by enforcing uniqueness on normalized phone number and normalized email address. An attempt to add or edit a client resulting in a duplicate must be rejected with a clear error message.
+5.  Data Persistence (Safety): All data-modifying commands (`add`, `delete`, `edit`) must trigger an automatic save to the local JSON file. The save mechanism must use a safe write strategy (e.g., write to temp file then rename) to prevent data corruption in case of a system crash during write.
+6.  Fault Tolerance (Load Failure): If the data file is missing, corrupted, or in an invalid format on startup, the application must not crash. It should: 1. Rename the corrupted file (e.g., to clientbook.json.bak) if it exists but is unreadable. 2. Start gracefully with an empty client list. 3. Display a clear, user-friendly error message indicating the issue.
+7.  Recoverability (Backup): If corruption is detected during load, the system must automatically create a backup of the problematic file (.bak) before proceeding, allowing for manual data recovery if the user has technical expertise.
+8.  Performance (Command Response): Every user command that does not modify data (e.g., find, list, view) should display the result within 500 milliseconds for a database of up to 1000 clients.
+9.  Performance (Startup Latency): The application should be ready for user input within 3 seconds on a standard hardware configuration (e.g., a laptop from the last 5 years) with a dataset of up to 500 clients.
+10.  Usability (Learnability): A first-time user who has never used a command-line interface before should be able to understand the basic workflow (add, list, find) within 10 minutes, aided by sample data and a comprehensive help command.
+11.  Consistency (User Experience): The application must strictly adhere to the command format, parameter rules, and error messages defined in the functional specification to ensure a predictable and reliable user experience.
+12.  Constraint (Scope): The system is designed exclusively for a solo technician. Features requiring multi-user access, cloud synchronization, or network communication are explicitly out of scope for the MVP.
+13.  Constraint (Storage Format): Data persistence is limited to a human-editable JSON file. No external database systems (e.g., MySQL, PostgreSQL) shall be used.
+14.  Accessibility (Error Clarity): All error messages must be user-friendly and actionable, specifying exactly what went wrong and how to correct it, rather than displaying technical stack traces or cryptic codes.
 
 ### Glossary
 
