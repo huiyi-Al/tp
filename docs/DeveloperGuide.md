@@ -412,6 +412,7 @@ Use case ends.
     * Use case ends.
 * 2a. Provided phone number is same as phone number of another client.
     * `Linkline` returns error message informing `user` that the phone number is already in use.
+    * Use case ends.
 
 *{More to be added}*
 
