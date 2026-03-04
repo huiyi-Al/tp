@@ -40,7 +40,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Liu Ziyue
 
-<img src="images/huiyi-Al.png" width="200px">
+<img src="images/huiyi-al.png" width="200px">
 
 [[github](http://github.com/huiyi-Al)]
 
