@@ -1,15 +1,34 @@
+# Linkline README
+
 [![CI Status](https://github.com/AY2526S2-CS2103-F09-4/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S2-CS2103-F09-4/tp/actions/workflows/gradle.yml)
 [![codecov](https://codecov.io/gh/AY2526S2-CS2103-F09-4/tp/graph/badge.svg?token=4NQMP02WQZ)](https://codecov.io/gh/AY2526S2-CS2103-F09-4/tp)
 
+## UI
+
 ![Ui](docs/images/Ui.png)
 
-* This is **a sample project for Software Engineering (SE) students**.<br>
-  Example usages:
-  * as a starting point of a course project (as opposed to writing everything from scratch)
-  * as a case study
-* The project simulates an ongoing software project for a desktop application (called _AddressBook_) used for managing contact details.
-  * It is **written in OOP fashion**. It provides a **reasonably well-written** code base **bigger** (around 6 KLoC) than what students usually write in beginner-level SE modules, without being overwhelmingly big.
-  * It comes with a **reasonable level of user and developer documentation**.
-* It is named `AddressBook Level 3` (`AB3` for short) because it was initially created as a part of a series of `AddressBook` projects (`Level 1`, `Level 2`, `Level 3` ...).
-* For the detailed documentation of this project, see the **[Address Book Product Website](https://se-education.org/addressbook-level3)**.
-* This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.
+## Introduction
+
+* Linkline is a contact book application for service technician to easily track their clients' contact information and related service-location context.
+* Linkline is based off the [AddressBook-Level3 project](https://github.com/se-edu/addressbook-level3) project by [SE-EDU initiative](https://se-education.org).
+* Linkline contains a GUI, but most of the user interactions happen using a CLI (Command Line Interface).
+
+## Overview
+
+An overview of the most important features in Linkline:
+
+1. **Add client** Adds client with name, phone, email, and address, with optional notes field (free text).
+2. **Delete client** Deletes client record based on index shown in list.
+3. **Find client by name** Find clients with a query.
+4. **List client** List clients with full details.
+5.  **Local data persistence** Local data persistence using human-editable file.
+
+## Website and Guides
+
+* For the detailed documentation of this project, see the **[Linkline Product Website](https://ay2526s2-cs2103-f09-4.github.io/tp/)**.
+* To get started with using Linkline, visit our [**User Guide**](https://ay2526s2-cs2103-f09-4.github.io/tp/UserGuide.html).
+* As a Linkline contributor, visit our [**Developer Guide**](DeveloperGuide.html) .
+
+## Acknowledgements
+
+* Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
