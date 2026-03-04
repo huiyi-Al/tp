@@ -327,30 +327,92 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, `Linkline` is the system, and the `user` is the sole Actor, unless specified otherwise)
 
-**Use case: Delete a person**
+#### Use Case: UC01 - Add client  
+**System:** `Linkline`  
+**Actor:** `user`  
+**Guarantees:**
+* The number of clients is either unchanged (unsuccessful) or incremented (successful).  
 
 **MSS**
-
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
-
-    Use case ends.
+1. `user` requests to add a client.
+2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the CLI.
+3. System creates a new client and displays the details on the GUI.
+Use case ends.
 
 **Extensions**
+* 2a. Name provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the name must meet.
+    * Use case ends.
+* 2b. Phone number provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the phone number must meet.
+    * Use case ends.
+* 2c. Email address provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the email address must meet.
+    * Use case ends.
+* 2d. Address provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the address must meet.
+    * Use case ends.
+* 2e. Tag provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the tag must meet.
+    * Use case ends.
+* 2f. Notes provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the notes must meet.
+    * Use case ends.
 
-* 2a. The list is empty.
+#### Use Case: UC02 - Search for a client  
+**System:** `Linkline`  
+**Actor:** `user`  
+**MSS**
+1. `user` enters one or multiple words as a search query.
+2. System uses the query provided to filter and list the clients whose name match the query.
+Use case ends.
 
-  Use case ends.
+**Extensions**
+* 1a. The search query does not match against any of the clients' names.
+    * `Linkline` returns an empty page that informs `user` no matching clients were found.
+    * Use case ends.
+* 1b. No search query was provided.
+    * `Linkline` returns error message informing `user` that at least one word must be provided as a search query.
+    * Use case ends.
 
-* 3a. The given index is invalid.
+#### Use Case: UC03 - Navigate to client address.
+**System:** `Linkline`  
+**Actor:** `user`, User's operating system `os`, and mapping software `map`  
+**Preconditions:** A client address must be a valid address that `map` can parse.
 
-    * 3a1. AddressBook shows an error message.
+**MSS** 
+1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
+2. `user` pastes the client address into `map`.
+3. `user` follows the instructions given by `map` to go to the client address.
 
-      Use case resumes at step 2.
+**Extensions**
+* 1a. The index given is invalid, and does not point to a client.
+    * `Linkline` returns an error that informs `user` the index given is invalid.
+    * Use case ends.
+* 2a. `Linkline` fails to copy client address into `os` clipboard, for whatever reason.
+    * `Linkline` returns message informing `user` to copy the client address manually.
+    * `user` <ins>searches for the client (UC02)</ins>.
+    * `user` highlights client address and copies it.
+    * Use case resumes from step 2.
+
+#### Use Case: UC04 - Change client phone number
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` edits a client's detail via `Linkline` command by specifying their index and new phone number.
+2. `Linkline` displays new fields of the updated client.
+3. Use case ends.
+
+**Extensions**
+* 1a. The index given is invalid, and does not point to a client.
+    * `Linkline` returns an error that informs `user` the index given is invalid.
+    * Use case ends.
+* 2a. Provided phone number is same as phone number of another client.
+    * `Linkline` returns error message informing `user` that the phone number is already in use.
+    * Use case ends.
 
 *{More to be added}*
 
