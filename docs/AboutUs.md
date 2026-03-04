@@ -38,6 +38,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: UI
 
+### Liu Ziyue
+
+<img src="images/huiyi-Al.png" width="200px">
+
+[[github](http://github.com/huiyi-Al)]
+
+* Role: Developer
+* Responsibilities: Tests
+
 ### Sheryl Phoa
 
 <img src="images/sherylphoa.png" width="200px">
