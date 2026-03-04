@@ -11,51 +11,47 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Sim Yue Yang
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/crunchybiscuit19.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Project Advisor
-
-### Jane Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Team Lead
-* Responsibilities: UI
-
-### Johnny Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Data
-
-### Jean Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/crunchybiscuit19)]
 
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
+
+### Shim Jaejun
+
+<img src="images/jaejun02.png" width="200px">
+
+[[github](http://github.com/jaejun02)]
+
+* Role: Developer
+* Responsibilities: Dev Ops
+
+### Tan Kin Ru
+
+<img src="images/kihoo56tkr.png" width="200px">
+
+[[github](http://github.com/kihoo56tkr)]
+
+* Role: Developer
+* Responsibilities: UI
 
 ### Liu Ziyue
 
 <img src="images/huiyi-Al.png" width="200px">
 
 [[github](http://github.com/huiyi-Al)]
-[[portfolio](team/johndoe.md)]
 
 * Role: Developer
-* Responsibilities: UI
+* Responsibilities: Tests
+
+### Sheryl Phoa
+
+<img src="images/sherylphoa.png" width="200px">
+
+[[github](http://github.com/sherylphoa)]
+
+* Role: Developer
+* Responsibilities: Data
