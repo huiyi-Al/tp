@@ -9,7 +9,7 @@
 
 ## Introduction
 
-* Linkline is a contact book application for service technician to easily track their clients' contact information and related service-location context.
+* Linkline is a contact book application for service technicians to easily track their clients' contact information and related service-location context.
 * Linkline is based off the [AddressBook-Level3 project](https://github.com/se-edu/addressbook-level3) project by [SE-EDU initiative](https://se-education.org).
 * Linkline contains a GUI, but most of the user interactions happen using a CLI (Command Line Interface).
 
