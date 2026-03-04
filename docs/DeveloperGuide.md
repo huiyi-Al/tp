@@ -393,9 +393,25 @@ Use case ends.
     * Use case ends.
 * 2a. `Linkline` fails to copy client address into `os` clipboard, for whatever reason.
     * `Linkline` returns message informing `user` to copy the client address manually.
-    * `user` searches for the client (UC02).
+    * `user` <ins>searches for the client (UC02)</ins>.
     * `user` highlights client address and copies it.
     * Use case resumes from step 2.
+
+#### Use Case: UC04 - Change client phone number
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` edits a client's detail via `Linkline` command by specifying their index and new phone number.
+2. `Linkline` displays new fields of the updated client.
+3. Use case ends.
+
+**Extensions**
+* 1a. The index given is invalid, and does not point to a client.
+    * `Linkline` returns an error that informs `user` the index given is invalid.
+    * Use case ends.
+* 2a. Provided phone number is same as phone number of another client.
+    * `Linkline` returns error message informing `user` that the phone number is already in use.
 
 *{More to be added}*
 
