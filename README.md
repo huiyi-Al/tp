@@ -1,7 +1,7 @@
 [![CI Status](https://github.com/AY2526S2-CS2103-F09-4/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S2-CS2103-F09-4/tp/actions/workflows/gradle.yml)
 [![codecov](https://codecov.io/gh/AY2526S2-CS2103-F09-4/tp/graph/badge.svg?token=4NQMP02WQZ)](https://codecov.io/gh/AY2526S2-CS2103-F09-4/tp)
 
-![Ui](docs/images/Ui.jpg)
+![Ui](docs/images/Ui.png)
 
 * This is **a sample project for Software Engineering (SE) students**.<br>
   Example usages:
