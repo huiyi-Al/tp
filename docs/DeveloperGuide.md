@@ -439,11 +439,11 @@ Use case ends.
 * **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing commands rather than using a mouse.
 * **Compact View**: A display mode in the GUI where client records are shown with limited information (name and phone only), allowing the user to scan many records at once without excessive scrolling.
 * **Duplicate Client**: Two clients are considered duplicates if they share the same normalized phone number or normalized email address.
-* **Full View**: A details panel (or an expanded display mode) where all information for a specific client (name, phone, email, full address and notes) is visible to the user.
+* **Full View**: A details panel (or an expanded display mode) where all information for a specific client (name, phone, email, full address, tags and notes) is visible to the user.
 * **JSON (JavaScript Object Notation)**: The lightweight, text-based data format used by the Storage component to persist data to the hard disk.
 * **Mainstream OS**: Widely used operating systems like Windows, Linux, Unix, MacOS
 * **Service-Location Context**: Precise physical details about a client's address (e.g., precise address, access instructions, precautions, or special requirements) critical for an on-site technician.
-* **Solo Technician**: The target user of the app. A one-person business owner who prioritizes a fast, typing-first workflow to manage repeat customers.
+* **Solo Technician**: The target user of the app. 
 
 --------------------------------------------------------------------------------------------------------------------
 
