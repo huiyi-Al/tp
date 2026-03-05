@@ -278,9 +278,9 @@ _{Explain here how the data archiving feature will be implemented}_
 * manages repeat customers and needs fast recall of client contact + exact service-location details
 * often works from a laptop/desktop between jobs and prefers a fast, typing-first workflow
 * can type quickly and prefers keyboard shortcuts / CLI-style commands over mouse-heavy interactions
-* needs to store service-location context (precise address, access instructions, precautions, special requirements) to avoid mistakes on-site
+* needs to store service-location context to avoid mistakes on-site
 
-**Value proposition**: A fast, typing-first address book that helps solo residential service technicians avoid mistakes and wasted time by keeping client contact details tightly coupled with service-location context (address precision, access instructions, precautions, special requirements), searchable in seconds.
+**Value proposition**: A fast, typing-first address book that helps solo residential service technicians avoid mistakes and wasted time by keeping client contact details tightly coupled with service-location context, searchable in seconds.
 
 
 ### User stories
@@ -435,8 +435,15 @@ Use case ends.
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Client / Person**: The primary entity in the address book. Mandatory fields include Name, Phone, Email, and Address. Optional fields include Tags and Notes.
+* **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing commands rather than using a mouse.
+* **Compact View**: A display mode in the GUI where client records are shown with limited information (name and phone only), allowing the user to scan many records at once without excessive scrolling.
+* **Duplicate Client**: Two clients are considered duplicates if they share the same normalized phone number or normalized email address.
+* **Full View**: A details panel (or an expanded display mode) where all information for a specific client (name, phone, email, full address and notes) is visible to the user.
+* **JSON (JavaScript Object Notation)**: The lightweight, text-based data format used by the Storage component to persist data to the hard disk.
+* **Mainstream OS**: Widely used operating systems like Windows, Linux, Unix, MacOS
+* **Service-Location Context**: Precise physical details about a client's address (e.g., precise address, access instructions, precautions, or special requirements) critical for an on-site technician.
+* **Solo Technician**: The target user of the app. A one-person business owner who prioritizes a fast, typing-first workflow to manage repeat customers.
 
 --------------------------------------------------------------------------------------------------------------------
 
