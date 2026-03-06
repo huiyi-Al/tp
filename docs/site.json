@@ -1,8 +1,8 @@
 {
   "baseUrl": "",
   "titlePrefix": "Linkline",
-  "titleSuffix": "AddressBook Level-3",
-  "faviconPath": "images/SeEduLogo.png",
+  "titleSuffix": "",
+  "faviconPath": "images/LinklineLogo.png",
   "style": {
     "codeTheme": "light"
   },
