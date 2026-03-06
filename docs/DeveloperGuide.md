@@ -426,6 +426,7 @@ Use case ends.
 **Extensions**
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
 
 #### Use Case: UC06 - List Clients
 **System:** `Linkline`  
@@ -439,6 +440,7 @@ Use case ends.
 **Extensions**
 * 1a. There are no client added yet.
     * `Linkline` returns an error message to remind `user` to add at least one client before listing them.
+    * Use case ends.
 
 #### Use Case: UC07 - View client detail
 **System:** `Linkline`  
@@ -452,6 +454,7 @@ Use case ends.
 **Extensions**
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
 
 #### Use Case: UC07 - Add client detail
 **System:** `Linkline`  
@@ -465,8 +468,10 @@ Use case ends.
 **Extensions**
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
 * 2a. No field is provided.
     * `Linkline` returns an error message to inform `user` adding at least one field.
+    * Use case ends.
 
 
    *{More to be added}*
