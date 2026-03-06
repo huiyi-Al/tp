@@ -469,7 +469,7 @@ Use case ends.
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
     * Use case ends.
-* 2a. No field is provided.
+* 1a. No field is provided.
     * `Linkline` returns an error message to inform `user` adding at least one field.
     * Use case ends.
 
