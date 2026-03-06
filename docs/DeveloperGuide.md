@@ -414,7 +414,67 @@ Use case ends.
     * `Linkline` returns error message informing `user` that the phone number is already in use.
     * Use case ends.
 
-*{More to be added}*
+#### Use Case: UC05 - Delete a client
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` deletes a client via `Linkline` command by specifying the index of the target client.
+2. `Linkline` shows the client has been deleted and reduce the number of client in the list.
+3. Use case ends.
+
+**Extensions**
+* 1a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
+
+#### Use Case: UC06 - List Clients
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` requests to view all client added in `Linkline` via command.
+2. `Linkeline` shows list with all clients, in the order `user` add them.
+3. Use case ends.
+
+**Extensions**
+* 1a. There are no client added yet.
+    * `Linkline` returns an error message to remind `user` to add at least one client before listing them.
+    * Use case ends.
+
+#### Use Case: UC07 - View client detail
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` confirms personal detail of a specific client via `Linkline` by specifying the index of target client.
+2. `Linkline` shows full details of the client including name, phone, email, full address and precautions.
+3. Use case ends.
+
+**Extensions**
+* 1a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
+
+#### Use Case: UC07 - Add client detail
+**System:** `Linkline`  
+**Actor:** `user`
+
+**MSS**
+1. `user` add client detail as tag or/and notes via `Linkline` by specifying client index, tag content or/and notes content.
+2. `Linkline` displays new fields of the updated client.
+3. Use case ends.
+
+**Extensions**
+* 1a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
+* 1a. No field is provided.
+    * `Linkline` returns an error message to inform `user` adding at least one field.
+    * Use case ends.
+
+
+   *{More to be added}*
 
 ### Non-Functional Requirements
 
