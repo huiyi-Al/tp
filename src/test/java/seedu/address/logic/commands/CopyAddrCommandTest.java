@@ -33,7 +33,7 @@ public class CopyAddrCommandTest {
         CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(CopyAddrCommand.MESSAGE_COPY_ADDRESS_SUCCESS,
-                personToCopy.getName().fullName);
+                personToCopy.getName().fullName, INDEX_FIRST_PERSON.getOneBased());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
@@ -56,7 +56,7 @@ public class CopyAddrCommandTest {
         CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(CopyAddrCommand.MESSAGE_COPY_ADDRESS_SUCCESS,
-                personToCopy.getName().fullName);
+                personToCopy.getName().fullName, INDEX_FIRST_PERSON.getOneBased());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
