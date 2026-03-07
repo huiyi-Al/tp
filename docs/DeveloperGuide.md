@@ -329,11 +329,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, `Linkline` is the system, and the `user` is the sole Actor, unless specified otherwise)
 
-#### Use Case: UC01 - Add client  
-**System:** `Linkline`  
-**Actor:** `user`  
+#### Use Case: UC01 - Add client
+**System:** `Linkline`
+**Actor:** `user`
 **Guarantees:**
-* The number of clients is either unchanged (unsuccessful) or incremented (successful).  
+* The number of clients is either unchanged (unsuccessful) or incremented (successful).
 
 **MSS**
 1. `user` requests to add a client.
@@ -361,9 +361,9 @@ Use case ends.
     * `Linkline` returns error message informing `user` what criteria the notes must meet.
     * Use case ends.
 
-#### Use Case: UC02 - Search for a client  
-**System:** `Linkline`  
-**Actor:** `user`  
+#### Use Case: UC02 - Search for a client
+**System:** `Linkline`
+**Actor:** `user`
 **MSS**
 1. `user` enters one or multiple words as a search query.
 2. System uses the query provided to filter and list the clients whose name match the query.
@@ -378,11 +378,11 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC03 - Navigate to client address.
-**System:** `Linkline`  
-**Actor:** `user`, User's operating system `os`, and mapping software `map`  
+**System:** `Linkline`
+**Actor:** `user`, User's operating system `os`, and mapping software `map`
 **Preconditions:** A client address must be a valid address that `map` can parse.
 
-**MSS** 
+**MSS**
 1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
 2. `user` pastes the client address into `map`.
 3. `user` follows the instructions given by `map` to go to the client address.
@@ -398,7 +398,7 @@ Use case ends.
     * Use case resumes from step 2.
 
 #### Use Case: UC04 - Change client phone number
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -415,7 +415,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC05 - Delete a client
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -429,7 +429,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC06 - List Clients
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -443,7 +443,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC07 - View client detail
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -457,7 +457,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC07 - Add client detail
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -503,7 +503,7 @@ Use case ends.
 * **JSON (JavaScript Object Notation)**: The lightweight, text-based data format used by the Storage component to persist data to the hard disk.
 * **Mainstream OS**: Widely used operating systems like Windows, Linux, Unix, MacOS
 * **Service-Location Context**: Precise physical details about a client's address (e.g., precise address, access instructions, precautions, or special requirements) critical for an on-site technician.
-* **Solo Technician**: The target user of the app. 
+* **Solo Technician**: The target user of the app.
 
 --------------------------------------------------------------------------------------------------------------------
 
