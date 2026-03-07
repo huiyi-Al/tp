@@ -26,7 +26,7 @@ public class CopyAddrCommand extends Command {
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s";
+    public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s (Index: %2$s)\n(Press Ctrl+V or Cmd+V to paste)";
     public static final String MESSAGE_CLIPBOARD_UNAVAILABLE = "Could not access clipboard. Please copy manually.";
 
     private final Index targetIndex;
@@ -47,6 +47,7 @@ public class CopyAddrCommand extends Command {
         Person personToCopy = lastShownList.get(targetIndex.getZeroBased());
         String address = personToCopy.getAddress().value;
         String personName = personToCopy.getName().fullName;
+        int personIndex = targetIndex.getOneBased();
 
         try {
             // Copy to system clipboard
@@ -54,7 +55,7 @@ public class CopyAddrCommand extends Command {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
 
-            return new CommandResult(String.format(MESSAGE_COPY_ADDRESS_SUCCESS, personName));
+            return new CommandResult(String.format(MESSAGE_COPY_ADDRESS_SUCCESS, personName, personIndex));
         } catch (Exception e) {
             throw new CommandException(MESSAGE_CLIPBOARD_UNAVAILABLE);
         }
