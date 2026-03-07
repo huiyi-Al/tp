@@ -10,6 +10,9 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.awt.*;
+
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -29,6 +32,9 @@ public class CopyAddrCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
+        // Skip test if running in headless environment (CI)
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
+
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
@@ -50,6 +56,9 @@ public class CopyAddrCommandTest {
 
     @Test
     public void execute_validIndexFilteredList_success() {
+        // Skip test if running in headless environment (CI)
+        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
+        
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
