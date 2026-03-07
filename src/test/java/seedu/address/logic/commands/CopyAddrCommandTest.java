@@ -34,7 +34,6 @@ public class CopyAddrCommandTest {
     public void execute_validIndexUnfilteredList_success() {
         // Skip test if running in headless environment (CI)
         Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
-
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
@@ -58,7 +57,6 @@ public class CopyAddrCommandTest {
     public void execute_validIndexFilteredList_success() {
         // Skip test if running in headless environment (CI)
         Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
-        
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
