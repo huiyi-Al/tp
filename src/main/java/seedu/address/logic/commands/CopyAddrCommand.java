@@ -29,14 +29,11 @@ public class CopyAddrCommand extends Command {
     public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s (Index: %2$s)"
             + "\n(Press Ctrl+V or Cmd+V to paste)";
     public static final String MESSAGE_CLIPBOARD_UNAVAILABLE = "Could not access clipboard. Please copy manually.";
-
-    private final Index targetIndex;
-
     // Test flag - set to true to skip real clipboard
     private static boolean isTestMode = false;
-
     // For testing only - allows tests to simulate clipboard failure
     private static boolean simulateClipboardFailure = false;
+    private final Index targetIndex;
 
     /**
      * Constructor for production use.
