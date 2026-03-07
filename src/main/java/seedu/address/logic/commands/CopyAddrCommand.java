@@ -26,7 +26,8 @@ public class CopyAddrCommand extends Command {
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s (Index: %2$s)\n(Press Ctrl+V or Cmd+V to paste)";
+    public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s (Index: %2$s)"
+            + "\n(Press Ctrl+V or Cmd+V to paste)";
     public static final String MESSAGE_CLIPBOARD_UNAVAILABLE = "Could not access clipboard. Please copy manually.";
 
     private final Index targetIndex;
