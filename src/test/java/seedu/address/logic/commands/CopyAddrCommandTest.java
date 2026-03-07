@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -10,7 +10,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.awt.*;
+import java.awt.GraphicsEnvironment;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import seedu.address.model.person.Person;
  */
 public class CopyAddrCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
@@ -90,20 +90,20 @@ public class CopyAddrCommandTest {
         CopyAddrCommand copySecondCommand = new CopyAddrCommand(INDEX_SECOND_PERSON);
 
         // same object -> returns true
-        assertTrue(copyFirstCommand.equals(copyFirstCommand));
+        assertEquals(copyFirstCommand, copyFirstCommand);
 
         // same values -> returns true
         CopyAddrCommand copyFirstCommandCopy = new CopyAddrCommand(INDEX_FIRST_PERSON);
-        assertTrue(copyFirstCommand.equals(copyFirstCommandCopy));
+        assertEquals(copyFirstCommand, copyFirstCommandCopy);
 
         // different types -> returns false
-        assertFalse(copyFirstCommand.equals(1));
+        assertNotEquals(1, copyFirstCommand);
 
         // null -> returns false
-        assertFalse(copyFirstCommand.equals(null));
+        assertNotEquals(null, copyFirstCommand);
 
         // different person -> returns false
-        assertFalse(copyFirstCommand.equals(copySecondCommand));
+        assertNotEquals(copyFirstCommand, copySecondCommand);
     }
 
     @Test
