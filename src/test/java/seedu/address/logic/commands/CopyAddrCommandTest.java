@@ -10,9 +10,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.awt.GraphicsEnvironment;
-
-import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -30,13 +29,25 @@ public class CopyAddrCommandTest {
 
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
+    @BeforeEach
+    public void setUp() {
+        // Enable test mode before each test
+        CopyAddrCommand.setTestMode(true);
+        CopyAddrCommand.setSimulateClipboardFailure(false);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Reset test flags after each test
+        CopyAddrCommand.resetTestFlags();
+    }
+
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        // Skip test if running in headless environment (CI)
-        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
+        // These lines are now ALWAYS executed in test mode
         String expectedMessage = String.format(CopyAddrCommand.MESSAGE_COPY_ADDRESS_SUCCESS,
                 personToCopy.getName().fullName, INDEX_FIRST_PERSON.getOneBased());
 
@@ -46,17 +57,7 @@ public class CopyAddrCommandTest {
     }
 
     @Test
-    public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        CopyAddrCommand copyAddrCommand = new CopyAddrCommand(outOfBoundIndex);
-
-        assertCommandFailure(copyAddrCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-    }
-
-    @Test
     public void execute_validIndexFilteredList_success() {
-        // Skip test if running in headless environment (CI)
-        Assumptions.assumeFalse(GraphicsEnvironment.isHeadless(), "Skipping clipboard test in headless environment");
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -69,6 +70,24 @@ public class CopyAddrCommandTest {
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(copyAddrCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_clipboardUnavailable_throwsCommandException() {
+        // Simulate clipboard failure
+        CopyAddrCommand.setSimulateClipboardFailure(true);
+
+        CopyAddrCommand copyAddrCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
+
+        assertCommandFailure(copyAddrCommand, model, CopyAddrCommand.MESSAGE_CLIPBOARD_UNAVAILABLE);
+    }
+
+    @Test
+    public void execute_invalidIndexUnfilteredList_throwsCommandException() {
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        CopyAddrCommand copyAddrCommand = new CopyAddrCommand(outOfBoundIndex);
+
+        assertCommandFailure(copyAddrCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
@@ -85,25 +104,30 @@ public class CopyAddrCommandTest {
     }
 
     @Test
-    public void equals() {
-        CopyAddrCommand copyFirstCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
-        CopyAddrCommand copySecondCommand = new CopyAddrCommand(INDEX_SECOND_PERSON);
+    public void equals_differentType_returnsFalse() {
+        CopyAddrCommand copyCommand = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
-        // same object -> returns true
-        assertEquals(copyFirstCommand, copyFirstCommand);
+        // Test different type
+        assertNotEquals(copyCommand, new Object());
 
-        // same values -> returns true
-        CopyAddrCommand copyFirstCommandCopy = new CopyAddrCommand(INDEX_FIRST_PERSON);
-        assertEquals(copyFirstCommand, copyFirstCommandCopy);
+        // Test null
+        assertNotEquals(null, copyCommand);
+    }
 
-        // different types -> returns false
-        assertNotEquals(1, copyFirstCommand);
+    @Test
+    public void equals_sameValues_returnsTrue() {
+        CopyAddrCommand copyCommand1 = new CopyAddrCommand(INDEX_FIRST_PERSON);
+        CopyAddrCommand copyCommand2 = new CopyAddrCommand(INDEX_FIRST_PERSON);
 
-        // null -> returns false
-        assertNotEquals(null, copyFirstCommand);
+        assertEquals(copyCommand1, copyCommand2);
+    }
 
-        // different person -> returns false
-        assertNotEquals(copyFirstCommand, copySecondCommand);
+    @Test
+    public void equals_differentIndex_returnsFalse() {
+        CopyAddrCommand copyCommand1 = new CopyAddrCommand(INDEX_FIRST_PERSON);
+        CopyAddrCommand copyCommand2 = new CopyAddrCommand(INDEX_SECOND_PERSON);
+
+        assertNotEquals(copyCommand1, copyCommand2);
     }
 
     @Test

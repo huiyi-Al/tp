@@ -32,8 +32,39 @@ public class CopyAddrCommand extends Command {
 
     private final Index targetIndex;
 
+    // Test flag - set to true to skip real clipboard
+    private static boolean isTestMode = false;
+
+    // For testing only - allows tests to simulate clipboard failure
+    private static boolean simulateClipboardFailure = false;
+
+    /**
+     * Constructor for production use.
+     */
     public CopyAddrCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
+    }
+
+    /**
+     * For testing only - sets test mode.
+     */
+    public static void setTestMode(boolean testMode) {
+        isTestMode = testMode;
+    }
+
+    /**
+     * For testing only - sets whether to simulate clipboard failure.
+     */
+    public static void setSimulateClipboardFailure(boolean simulateFailure) {
+        simulateClipboardFailure = simulateFailure;
+    }
+
+    /**
+     * For testing only - resets test flags.
+     */
+    public static void resetTestFlags() {
+        isTestMode = false;
+        simulateClipboardFailure = false;
     }
 
     @Override
@@ -50,6 +81,15 @@ public class CopyAddrCommand extends Command {
         String personName = personToCopy.getName().fullName;
         int personIndex = targetIndex.getOneBased();
 
+        // In test mode, skip real clipboard
+        if (isTestMode) {
+            if (simulateClipboardFailure) {
+                throw new CommandException(MESSAGE_CLIPBOARD_UNAVAILABLE);
+            }
+            return new CommandResult(String.format(MESSAGE_COPY_ADDRESS_SUCCESS, personName, personIndex));
+        }
+
+        // Production code - real clipboard
         try {
             // Copy to system clipboard
             StringSelection stringSelection = new StringSelection(address);
@@ -68,7 +108,6 @@ public class CopyAddrCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof CopyAddrCommand)) {
             return false;
         }
