@@ -26,6 +26,12 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_preambleOnly_throwsParseException() {
+        assertParseFailure(parser, "alice",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_validArgsNamePrefixOnly_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
