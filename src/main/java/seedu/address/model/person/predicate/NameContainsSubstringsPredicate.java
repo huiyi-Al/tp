@@ -40,6 +40,6 @@ public class NameContainsSubstringsPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", substrings).toString();
+        return new ToStringBuilder(this).add("substrings", substrings).toString();
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseDifferent;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -29,6 +30,13 @@ public class FindCommandParserTest {
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_differentCase_returnsDifferentFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameContainsSubstringsPredicate(Arrays.asList("Alice", "Bob")));
+        assertParseDifferent(parser, "alice Bob", expectedFindCommand);
     }
 
 }
