@@ -57,7 +57,7 @@ public class StringUtil {
         checkArgument(preppedSubstring.split("\\s+").length == 1, "Word parameter should be a single word");
         String preppedSentence = sentence.toLowerCase();
 
-        return preppedSentence.contains(substring);
+        return preppedSentence.contains(preppedSubstring);
     }
 
     /**
