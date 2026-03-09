@@ -43,6 +43,27 @@ public class NameContainsSubstringsPredicateTest {
     }
 
     @Test
+    public void test_invalidSubstrings_throwIllegalArgumentException() {
+        NameContainsSubstringsPredicate predicate =
+                new NameContainsSubstringsPredicate(Collections.singletonList(""));
+        try {
+            predicate.test(new PersonBuilder().withName("Alice Bob").build());
+            throw new AssertionError("The expected IllegalArgumentException was not thrown.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Substring parameter cannot be empty", e.getMessage());
+        }
+
+        predicate =
+                new NameContainsSubstringsPredicate(Collections.singletonList("word1 word2"));
+        try {
+            predicate.test(new PersonBuilder().withName("Alice Bob").build());
+            throw new AssertionError("The expected IllegalArgumentException was not thrown.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Substring parameter should be a single word", e.getMessage());
+        }
+    }
+
+    @Test
     public void test_nameContainsSubstrings_returnsTrue() {
         // One substring
         NameContainsSubstringsPredicate predicate =
