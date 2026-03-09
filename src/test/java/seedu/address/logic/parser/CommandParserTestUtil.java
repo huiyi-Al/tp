@@ -26,7 +26,8 @@ public class CommandParserTestUtil {
     }
 
     /**
-     * Asserts that the parsing of {@code userInput} by {@code parser} is different from {@code expectedCommand}.
+     * Asserts that the parsing of {@code userInput} by {@code parser} is different and the command created
+     * is not equal to {@code expectedCommand}.
      */
     public static void assertParseDifferent(Parser<? extends Command> parser, String userInput,
                                           Command expectedCommand) {
@@ -34,7 +35,7 @@ public class CommandParserTestUtil {
             Command command = parser.parse(userInput);
             assertNotEquals(expectedCommand, command);
         } catch (ParseException pe) {
-            throw new IllegalArgumentException("userInput parsed incorrectly.", pe);
+            throw new IllegalArgumentException("Command was parsed incorrectly.", pe);
         }
     }
 
