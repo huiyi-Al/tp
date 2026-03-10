@@ -32,4 +32,24 @@ public class NotesTest {
         assertTrue(Notes.isValidNotes("")); // empty note
         assertTrue(Notes.isValidNotes("  Needs follow up tomorrow.  ")); // note with spaces
     }
+
+    @Test
+    public void equals() {
+        Notes notes = new Notes("Valid Notes");
+
+        // same values -> returns true
+        assertTrue(notes.equals(new Notes("Valid Notes")));
+
+        // same object -> returns true
+        assertTrue(notes.equals(notes));
+
+        // null -> returns false
+        assertFalse(notes.equals(null));
+
+        // different types -> returns false
+        assertFalse(notes.equals(5.0f));
+
+        // different values -> returns false
+        assertFalse(notes.equals(new Notes("Other Valid Notes")));
+    }
 }
