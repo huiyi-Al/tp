@@ -10,7 +10,7 @@ import java.util.List;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -47,7 +47,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> nameKeywords = new ArrayList<>();
         nameKeywords = Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+"));
 
-        return new FindCommand(new NameContainsKeywordsPredicate(nameKeywords));
+        return new FindCommand(new NameContainsSubstringsPredicate(nameKeywords));
     }
 
 }

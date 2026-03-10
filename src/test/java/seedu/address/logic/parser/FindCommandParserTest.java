@@ -11,7 +11,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
 
 public class FindCommandParserTest {
 
@@ -35,7 +35,7 @@ public class FindCommandParserTest {
     public void parse_validArgsNamePrefixOnly_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+                new FindCommand(new NameContainsSubstringsPredicate(Arrays.asList("Alice", "Bob")));
         assertParseSuccess(parser, PREFIX_NAME + "Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -46,7 +46,7 @@ public class FindCommandParserTest {
     public void parse_validArgsNamePreambleAndPrefixSuccess_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Bob")));
+                new FindCommand(new NameContainsSubstringsPredicate(Arrays.asList("Bob")));
         assertParseSuccess(parser, "Carol " + PREFIX_NAME + "Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -57,11 +57,18 @@ public class FindCommandParserTest {
     public void parse_validArgsNamePreambleAndPrefixFailure_throwsParseException() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Bob")));
+                new FindCommand(new NameContainsSubstringsPredicate(Arrays.asList("Bob")));
         assertParseDifferent(parser, "Bob " + PREFIX_NAME + "Carol", expectedFindCommand);
 
         // multiple whitespaces between keywords
         assertParseDifferent(parser, "\tBob\t " + PREFIX_NAME + "\nCarol\n", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_differentCase_returnsDifferentFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameContainsSubstringsPredicate(Arrays.asList("Alice", "Bob")));
+        assertParseDifferent(parser, PREFIX_NAME + "alice Bob", expectedFindCommand);
     }
 
 }
