@@ -329,11 +329,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, `Linkline` is the system, and the `user` is the sole Actor, unless specified otherwise)
 
-#### Use Case: UC01 - Add client  
-**System:** `Linkline`  
-**Actor:** `user`  
+#### Use Case: UC01 - Add new client
+**System:** `Linkline`
+**Actor:** `user`
 **Guarantees:**
-* The number of clients is either unchanged (unsuccessful) or incremented (successful).  
+* The number of clients is either unchanged (unsuccessful) or incremented (successful).
 
 **MSS**
 1. `user` requests to add a client.
@@ -361,9 +361,9 @@ Use case ends.
     * `Linkline` returns error message informing `user` what criteria the notes must meet.
     * Use case ends.
 
-#### Use Case: UC02 - Search for a client  
-**System:** `Linkline`  
-**Actor:** `user`  
+#### Use Case: UC02 - Search for a client
+**System:** `Linkline`
+**Actor:** `user`
 **MSS**
 1. `user` enters one or multiple words as a search query.
 2. System uses the query provided to filter and list (lexicographically) the clients whose name match the query.
@@ -378,11 +378,11 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC03 - Navigate to client address.
-**System:** `Linkline`  
-**Actor:** `user`, User's operating system `os`, and mapping software `map`  
+**System:** `Linkline`
+**Actor:** `user`, User's operating system `os`, and mapping software `map`
 **Preconditions:** A client address must be a valid address that `map` can parse.
 
-**MSS** 
+**MSS**
 1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
 2. `user` pastes the client address into `map`.
 3. `user` follows the instructions given by `map` to go to the client address.
@@ -398,7 +398,7 @@ Use case ends.
     * Use case resumes from step 2.
 
 #### Use Case: UC04 - Change client phone number
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -415,7 +415,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC05 - Delete a client
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -429,7 +429,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC06 - List Clients
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -443,7 +443,7 @@ Use case ends.
     * Use case ends.
 
 #### Use Case: UC07 - View client detail
-**System:** `Linkline`  
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
@@ -456,12 +456,12 @@ Use case ends.
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
     * Use case ends.
 
-#### Use Case: UC08 - Add client detail
-**System:** `Linkline`  
+#### Use Case: UC08 - Edit existing client details
+**System:** `Linkline`
 **Actor:** `user`
 
 **MSS**
-1. `user` add client detail as tag or/and notes via `Linkline` by specifying client index, tag content or/and notes content.
+1. `user` edit client detail by adding new tag(s) or/and notes via `Linkline` by specifying client index, tag content or/and notes content.
 2. `Linkline` displays new fields of the updated client.
 3. Use case ends.
 
@@ -478,20 +478,19 @@ Use case ends.
 
 ### Non-Functional Requirements
 
-1.  Portability: Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Capacity & Performance: Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  Usability (Efficiency): A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4.  Data Integrity (Duplicate Prevention): The system must prevent duplicate client entries by enforcing uniqueness on normalized phone number and normalized email address. An attempt to add or edit a client resulting in a duplicate must be rejected with a clear error message.
-5.  Data Persistence (Safety): All data-modifying commands (`add`, `delete`, `edit`) must trigger an automatic save to the local JSON file. The save mechanism must use a safe write strategy (e.g., write to temp file then rename) to prevent data corruption in case of a system crash during write.
-6.  Fault Tolerance (Load Failure): If the data file is missing, corrupted, or in an invalid format on startup, the application must not crash. It should: 1. Rename the corrupted file (e.g., to clientbook.json.bak) if it exists but is unreadable. 2. Start gracefully with an empty client list. 3. Display a clear, user-friendly error message indicating the issue.
-7.  Recoverability (Backup): If corruption is detected during load, the system must automatically create a backup of the problematic file (.bak) before proceeding, allowing for manual data recovery if the user has technical expertise.
-8.  Performance (Command Response): Every user command that does not modify data (e.g., find, list, view) should display the result within 500 milliseconds for a database of up to 1000 clients.
-9.  Performance (Startup Latency): The application should be ready for user input within 3 seconds on a standard hardware configuration (e.g., a laptop from the last 5 years) with a dataset of up to 500 clients.
-10.  Usability (Learnability): A first-time user who has never used a command-line interface before should be able to understand the basic workflow (add, list, find) within 10 minutes, aided by sample data and a comprehensive help command.
-11.  Consistency (User Experience): The application must strictly adhere to the command format, parameter rules, and error messages defined in the functional specification to ensure a predictable and reliable user experience.
-12.  Constraint (Scope): The system is designed exclusively for a solo technician. Features requiring multi-user access, cloud synchronization, or network communication are explicitly out of scope for the MVP.
-13.  Constraint (Storage Format): Data persistence is limited to a human-editable JSON file. No external database systems (e.g., MySQL, PostgreSQL) shall be used.
-14.  Accessibility (Error Clarity): All error messages must be user-friendly and actionable, specifying exactly what went wrong and how to correct it, rather than displaying technical stack traces or cryptic codes.
+1. Portability: Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+2. Capacity & Performance: Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+3. Usability (Efficiency): A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. Data Integrity (Duplicate Prevention): The system must prevent duplicate client entries by enforcing uniqueness on normalized phone number and normalized email address. An attempt to add or edit a client resulting in a duplicate must be rejected with a clear error message.
+5. Data Persistence (Safety): All data-modifying commands (`add`, `delete`, `edit`) must trigger an automatic save to the local JSON file. The save mechanism must use a safe write strategy (e.g., write to temp file then rename) to prevent data corruption in case of a system crash during write.
+6. Fault Tolerance (Load Failure): If the data file is missing, corrupted, or in an invalid format on startup, the application must not crash.
+7. Performance (Command Response): Every user command that does not modify data (e.g., find, list, view) should display the result within 500 milliseconds for a database of up to 1000 clients.
+8. Performance (Startup Latency): The application should be ready for user input within 3 seconds on a standard hardware configuration (e.g., a laptop from the last 5 years) with a dataset of up to 500 clients.
+9. Usability (Learnability): A first-time user who has never used a command-line interface before should be able to understand the basic workflow (add, list, find) within 10 minutes, aided by sample data and a comprehensive help command.
+10. Consistency (User Experience): The application must strictly adhere to the command format, parameter rules, and error messages defined in the functional specification to ensure a predictable and reliable user experience.
+11. Constraint (Scope): The system is designed exclusively for a solo technician. Features requiring multi-user access, cloud synchronization, or network communication are explicitly out of scope for the MVP.
+12. Constraint (Storage Format): Data persistence is limited to a human-editable JSON file. No external database systems (e.g., MySQL, PostgreSQL) shall be used.
+13. Accessibility (Error Clarity): All error messages must be user-friendly and actionable, specifying exactly what went wrong and how to correct it, rather than displaying technical stack traces or cryptic codes.
 
 ### Glossary
 
@@ -503,7 +502,7 @@ Use case ends.
 * **JSON (JavaScript Object Notation)**: The lightweight, text-based data format used by the Storage component to persist data to the hard disk.
 * **Mainstream OS**: Widely used operating systems like Windows, Linux, Unix, MacOS
 * **Service-Location Context**: Precise physical details about a client's address (e.g., precise address, access instructions, precautions, or special requirements) critical for an on-site technician.
-* **Solo Technician**: The target user of the app. 
+* **Solo Technician**: The target user of the app.
 
 --------------------------------------------------------------------------------------------------------------------
 

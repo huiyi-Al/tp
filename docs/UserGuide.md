@@ -146,6 +146,16 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Copying a person's address: `copyaddr`
+
+Copies the specified person's address from the address book.
+
+Format: `copyaddr INDEX`
+
+* Copies the person's address at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -202,5 +212,6 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Copy Address**   | `copyaddr INDEX`<br> e.g., `copyaddr 1`
 **List**   | `list`
 **Help**   | `help`
