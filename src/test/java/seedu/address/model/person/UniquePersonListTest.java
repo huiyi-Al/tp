@@ -186,6 +186,7 @@ public class UniquePersonListTest {
         assertEquals(expectedList, uniquePersonList);
     }
 
+/*  // Add this test when DuplicatedPersons constraint is changed to allow same names to be included in the list
     @Test
     public void add_sameNamesDifferentPhones_listIsSortedByPhone() {
         Person aliceFirst = new PersonBuilder(ALICE).withPhone("11111111").build();
@@ -198,7 +199,7 @@ public class UniquePersonListTest {
         assertEquals(aliceFirst, internalList.get(0));
         assertEquals(aliceSecond, internalList.get(1));
     }
-
+*/
     @Test
     public void setPerson_renamePerson_listReorders() {
         uniquePersonList.add(ALICE);
