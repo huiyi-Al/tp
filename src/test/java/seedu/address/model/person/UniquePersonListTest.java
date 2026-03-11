@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.testutil.PersonBuilder;
@@ -171,5 +172,43 @@ public class UniquePersonListTest {
     @Test
     public void toStringMethod() {
         assertEquals(uniquePersonList.asUnmodifiableObservableList().toString(), uniquePersonList.toString());
+    }
+
+    @Test
+    public void add_outOfOrder_listIsSorted() {
+        uniquePersonList.add(BOB);
+        uniquePersonList.add(ALICE);
+
+        UniquePersonList expectedList = new UniquePersonList();
+        expectedList.add(ALICE);
+        expectedList.add(BOB);
+
+        assertEquals(expectedList, uniquePersonList);
+    }
+
+    @Test
+    public void add_sameNamesDifferentPhones_listIsSortedByPhone() {
+        Person aliceFirst = new PersonBuilder(ALICE).withPhone("11111111").build();
+        Person aliceSecond = new PersonBuilder(ALICE).withPhone("99999999").build();
+
+        uniquePersonList.add(aliceSecond);
+        uniquePersonList.add(aliceFirst);
+
+        ObservableList<Person> internalList = uniquePersonList.asUnmodifiableObservableList();
+        assertEquals(aliceFirst, internalList.get(0));
+        assertEquals(aliceSecond, internalList.get(1));
+    }
+
+    @Test
+    public void setPerson_renamePerson_listReorders() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        Person aaron = new PersonBuilder(BOB).withName("Aaron").build();
+        uniquePersonList.setPerson(BOB, aaron);
+
+        ObservableList<Person> internalList = uniquePersonList.asUnmodifiableObservableList();
+        assertEquals(aaron, internalList.get(0));
+        assertEquals(ALICE, internalList.get(1));
     }
 }
