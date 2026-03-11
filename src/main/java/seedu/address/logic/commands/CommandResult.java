@@ -3,8 +3,10 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.commons.core.index.Index;
 
 /**
  * Represents the result of a command execution.
@@ -35,6 +37,7 @@ public class CommandResult {
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false);
     }
+
 
     public String getFeedbackToUser() {
         return feedbackToUser;
