@@ -67,6 +67,8 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+* List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -93,7 +95,7 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+Shows a sorted list of all persons in the address book.
 
 Format: `list`
 
