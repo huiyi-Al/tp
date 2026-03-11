@@ -67,8 +67,6 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
-* List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
-
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -80,7 +78,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
@@ -118,7 +116,7 @@ Examples:
 
 ### Locating persons by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names contain any of the given keywords. If there is more than one person, the list returned is sorted.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
