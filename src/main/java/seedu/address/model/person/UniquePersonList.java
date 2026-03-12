@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class UniquePersonList implements Iterable<Person> {
             throw new DuplicatePersonException();
         }
         internalList.add(toAdd);
+        sortInternalList();
     }
 
     /**
@@ -66,6 +68,7 @@ public class UniquePersonList implements Iterable<Person> {
         }
 
         internalList.set(index, editedPerson);
+        sortInternalList();
     }
 
     /**
@@ -95,6 +98,7 @@ public class UniquePersonList implements Iterable<Person> {
         }
 
         internalList.setAll(persons);
+        sortInternalList();
     }
 
     /**
@@ -146,5 +150,15 @@ public class UniquePersonList implements Iterable<Person> {
             }
         }
         return true;
+    }
+
+    /**
+     * Sorts the internal list based on the project's lexicographical requirements.
+     * 1. Normalized name (case-insensitive) ascending.
+     * 2. Normalized phone ascending (tie-breaker).
+     */
+    private void sortInternalList() {
+        internalList.sort(Comparator.comparing((Person p) -> p.getName().fullName.toLowerCase())
+                .thenComparing(p -> p.getPhone().value));
     }
 }
