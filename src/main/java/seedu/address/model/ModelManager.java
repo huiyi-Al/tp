@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
@@ -133,7 +133,7 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ObservableValue<Person> getSelectedPerson() {  // ← Return the interface type
+    public ObservableValue<Person> getSelectedPerson() {
         return selectedPerson;
     }
 

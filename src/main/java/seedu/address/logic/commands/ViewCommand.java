@@ -12,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Show the personal details of the specified person.
+ * Shows the personal details of the specified person.
  */
 public class ViewCommand extends Command {
 
@@ -27,6 +27,9 @@ public class ViewCommand extends Command {
 
     private final Index targetIndex;
 
+    /**
+     * @param targetIndex of the person in the filtered person list to view
+     */
     public ViewCommand(Index targetIndex) {
         requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
