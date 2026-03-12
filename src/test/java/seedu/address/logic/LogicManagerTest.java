@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import javafx.beans.value.ObservableValue;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
@@ -86,14 +85,6 @@ public class LogicManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
-    }
-
-    @Test
-    public void getSelectedPerson_afterModelUpdate_returnsSelectedPerson() {
-        Person firstPerson = model.getFilteredPersonList().get(0);
-        model.setSelectedPerson(firstPerson);
-        ObservableValue<Person> selectedPerson = logic.getSelectedPerson();
-        assertEquals(firstPerson, selectedPerson.getValue());
     }
 
     /**
