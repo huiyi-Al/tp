@@ -78,7 +78,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
@@ -93,7 +93,7 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+Shows a sorted list of all persons in the address book.
 
 Format: `list`
 
@@ -116,7 +116,7 @@ Examples:
 
 ### Locating persons by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names contain any of the given keywords. If there is more than one person, the list returned is sorted.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 

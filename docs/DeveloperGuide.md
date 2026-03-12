@@ -338,7 +338,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. `user` requests to add a client.
 2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the CLI.
-3. System creates a new client and displays the details on the GUI.
+3. System creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI.
 Use case ends.
 
 **Extensions**
@@ -366,7 +366,7 @@ Use case ends.
 **Actor:** `user`
 **MSS**
 1. `user` enters one or multiple words as a search query.
-2. System uses the query provided to filter and list the clients whose name match the query.
+2. System uses the query provided to filter and list (lexicographically) the clients whose name match the query.
 Use case ends.
 
 **Extensions**
@@ -402,7 +402,7 @@ Use case ends.
 **Actor:** `user`
 
 **MSS**
-1. `user` edits a client's detail via `Linkline` command by specifying their index and new phone number.
+1. `user` edits a client's detail via `Linkline` command by specifying their index and new phone number, and re-sorts the list to maintain lexicographical order.
 2. `Linkline` displays new fields of the updated client.
 3. Use case ends.
 
@@ -434,7 +434,7 @@ Use case ends.
 
 **MSS**
 1. `user` requests to view all client added in `Linkline` via command.
-2. `Linkeline` shows list with all clients, in the order `user` add them.
+2. `Linkeline` shows list with all clients sorted lexicographically by name.
 3. Use case ends.
 
 **Extensions**
@@ -456,7 +456,7 @@ Use case ends.
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
     * Use case ends.
 
-#### Use Case: UC07 - Edit existing client details
+#### Use Case: UC08 - Edit existing client details
 **System:** `Linkline`
 **Actor:** `user`
 
