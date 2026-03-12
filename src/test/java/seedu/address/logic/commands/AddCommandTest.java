@@ -160,7 +160,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public ObservableValue<Person> getSelectedPerson( ) {
+        public ObservableValue<Person> getSelectedPerson() {
             throw new AssertionError("This method should not be called.");
         }
 
