@@ -10,7 +10,7 @@
 
 ![Ui](images/Ui.png)
 
-**Linkline is a specialized desktop application for solo technicians to manage client details.** 
+**Linkline is a specialized desktop application for solo technicians to manage client details.**
 It helps aircon cleaners, handymen and appliance specialists manage repeat customers. By coupling client contact details with critical service-location context, Linkline ensures you avoid mistakes on-site and save time between jobs.
 
 While it has a GUI, most of the user interactions happen using a CLI (Command Line Interface).
