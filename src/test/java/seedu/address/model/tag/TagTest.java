@@ -36,6 +36,6 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("Best-Friend!")); // symbols now allowed
         assertTrue(Tag.isValidTagName("2nd floor")); // spaces now allowed
         assertTrue(Tag.isValidTagName("#urgent")); // leading symbols allowed
-        assertTrue(Tag.isValidTagName("a".repeat(51))); // exactly 50 characters
+        assertTrue(Tag.isValidTagName("a".repeat(50))); // exactly 50 characters
     }
 }
