@@ -1,5 +1,7 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,18 @@ public class TagTest {
     public void isValidTagName() {
         // null tag name
         assertThrows(NullPointerException.class, () -> Tag.isValidTagName(null));
+
+        // invalid tag names
+        assertFalse(Tag.isValidTagName("")); // empty string (0 characters)
+        assertFalse(Tag.isValidTagName(" ")); // spaces only
+        assertFalse(Tag.isValidTagName("tag#")); // non-alphanumeric
+        assertFalse(Tag.isValidTagName("ThisTagNameIsWayTooLongAndExceedsTheFiftyCharLimit!@")); // 51 characters (Exceeds 50 limit)
+
+        // valid tag names
+        assertTrue(Tag.isValidTagName("a")); // exactly 1 character
+        assertTrue(Tag.isValidTagName("abcde")); // alphanumeric
+        assertTrue(Tag.isValidTagName("12345")); // numeric only
+        assertTrue(Tag.isValidTagName("12345678901234567890123456789012345678901234567890")); // exactly 50 characters
     }
 
 }
