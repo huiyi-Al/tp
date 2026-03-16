@@ -30,6 +30,9 @@ public class EmailTest {
 
         // missing parts
         assertFalse(Email.isValidEmail("@example.com")); // missing local part
+        assertFalse(Email.isValidEmail(" @example.com")); // leading space (appears blank)
+        assertFalse(Email.isValidEmail("  @example.com")); // multiple spaces
+        assertFalse(Email.isValidEmail("+@example.com")); // local part is just a special character
         assertFalse(Email.isValidEmail("peterjackexample.com")); // missing '@' symbol
         assertFalse(Email.isValidEmail("peterjack@")); // missing domain name
 
