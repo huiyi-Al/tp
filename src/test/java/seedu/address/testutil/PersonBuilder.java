@@ -102,6 +102,14 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Notes} of the {@code Person} that we are building to the default notes.
+     */
+    public PersonBuilder withNotes() {
+        this.notes = new Notes(Notes.DEFAULT_NOTE);
+        return this;
+    }
+
     public Person build() {
         return new Person(name, phone, email, address, notes, tags);
     }

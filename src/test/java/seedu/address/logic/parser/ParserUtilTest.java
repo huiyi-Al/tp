@@ -17,6 +17,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Notes;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
@@ -25,12 +26,14 @@ public class ParserUtilTest {
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
+    private static final String INVALID_NOTES = "a".repeat(201);
     private static final String INVALID_TAG = "#friend";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
+    private static final String VALID_NOTES = "Call before arrival";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
 
@@ -146,6 +149,29 @@ public class ParserUtilTest {
         String emailWithWhitespace = WHITESPACE + VALID_EMAIL + WHITESPACE;
         Email expectedEmail = new Email(VALID_EMAIL);
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
+    }
+
+    @Test
+    public void parseNotes_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseNotes((String) null));
+    }
+
+    @Test
+    public void parseNotes_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseNotes(INVALID_NOTES));
+    }
+
+    @Test
+    public void parseNotes_validValueWithoutWhitespace_returnsNotes() throws Exception {
+        Notes expectedNotes = new Notes(VALID_NOTES);
+        assertEquals(expectedNotes, ParserUtil.parseNotes(VALID_NOTES));
+    }
+
+    @Test
+    public void parseNotes_validValueWithWhitespace_returnsTrimmedNotes() throws Exception {
+        String notesWithWhitespace = WHITESPACE + VALID_NOTES + WHITESPACE;
+        Notes expectedNotes = new Notes(VALID_NOTES);
+        assertEquals(expectedNotes, ParserUtil.parseNotes(notesWithWhitespace));
     }
 
     @Test
