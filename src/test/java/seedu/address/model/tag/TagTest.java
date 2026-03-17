@@ -28,15 +28,13 @@ public class TagTest {
         assertFalse(Tag.isValidTagName("")); // empty string (0 characters)
         assertFalse(Tag.isValidTagName(" ")); // spaces only
         assertFalse(Tag.isValidTagName("tag#")); // non-alphanumeric
-        // 51 characters (Exceeds 50 limit)
-        assertFalse(Tag.isValidTagName("ThisTagNameIsWayTooLongAndExceedsTheFiftyCharLimit!@"));
+        assertFalse(Tag.isValidTagName("ThisTagNameIsWayTooLongAndExceedsTheFiftyCharLimit!@")); // 51 characters (Exceeds 50 limit)
 
         // valid tag names
         assertTrue(Tag.isValidTagName("a")); // exactly 1 character
         assertTrue(Tag.isValidTagName("abcde")); // alphanumeric
         assertTrue(Tag.isValidTagName("12345")); // numeric only
-        // exactly 50 characters
-        assertTrue(Tag.isValidTagName("12345678901234567890123456789012345678901234567890"));
+        assertTrue(Tag.isValidTagName("12345678901234567890123456789012345678901234567890")); // exactly 50 characters
     }
 
 }
