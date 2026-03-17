@@ -14,21 +14,16 @@ import seedu.address.model.person.Person;
  */
 public class NameContainsSubstringsPredicate implements Predicate<Person> {
     private final List<String> substrings;
-    private final List<String> subNumbers;
 
-    public NameContainsSubstringsPredicate(List<String> substrings, List<String> subNumbers) {
+    public NameContainsSubstringsPredicate(List<String> substrings) {
         this.substrings = substrings;
-        this.subNumbers = subNumbers;
     }
 
     @Override
     public boolean test(Person person) {
         return substrings.stream()
                 .anyMatch(substring -> StringUtil.containsSubstringIgnoreCase(person.getName().fullName,
-                        substring))
-                || subNumbers.stream()
-                .anyMatch(subNumber -> StringUtil.containsSubstringIgnoreCase(person.getPhone().value,
-                        subNumber));
+                        substring));
     }
 
     @Override
