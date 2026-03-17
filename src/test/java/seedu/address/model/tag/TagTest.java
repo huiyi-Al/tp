@@ -38,4 +38,5 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("#urgent")); // leading symbols allowed
         assertTrue(Tag.isValidTagName("a".repeat(50))); // exactly 50 characters
     }
+
 }
