@@ -20,7 +20,8 @@ public class PhoneNumberPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return subNumbers.stream()
-                .anyMatch(subNumber -> StringUtil.containsSubstringIgnoreCase(person.getPhone().value, subNumber));
+                .anyMatch(subNumber -> StringUtil.containsSubstringIgnoreCase(person.getPhone().value,
+                        subNumber));
     }
 
     @Override

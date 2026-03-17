@@ -13,8 +13,7 @@ import java.util.Map;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
-import seedu.address.model.person.predicate.PhoneNumberPredicate;
+import seedu.address.model.person.predicate.SearchPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -72,13 +71,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         // Convert map to remove missing prefixes
         Map<Prefix, List<String>> presentArgMap = new HashMap<>();
         for (Prefix presentPrefix: presentPrefixes) {
-            if (argMultimap.getValue(PREFIX_NAME).isEmpty()) {
+            if (argMultimap.getValue(presentPrefix).isEmpty()) {
                 continue;
             }
-            presentArgMap.put(presentPrefix, Arrays.asList(argMultimap.getValue(PREFIX_NAME).get()
+            presentArgMap.put(presentPrefix, Arrays.asList(argMultimap.getValue(presentPrefix).get()
                     .split("\\s+")));
         }
 
-        return new FindCommand(new NameContainsSubstringsPredicate(new ArrayList<>()));
+        return new FindCommand(new SearchPredicate(presentArgMap));
     }
 }
