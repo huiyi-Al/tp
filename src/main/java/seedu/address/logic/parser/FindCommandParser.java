@@ -47,8 +47,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         List<String> nameKeywords = Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+"));
 
-        return new FindCommand(new NameContainsSubstringsPredicate(nameKeywords),
-                new PhoneNumberPredicate(Arrays.asList(new String[]{"992"})));
+        return new FindCommand(new NameContainsSubstringsPredicate(nameKeywords));
     }
 
 }

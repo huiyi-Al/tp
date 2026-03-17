@@ -27,18 +27,15 @@ public class FindCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "david" + " " + PREFIX_PHONE + "123";
 
     private final NameContainsSubstringsPredicate namePredicate;
-    private final PhoneNumberPredicate phonePredicate;
 
-    public FindCommand(NameContainsSubstringsPredicate namePredicate, PhoneNumberPredicate phonePredicate) {
+    public FindCommand(NameContainsSubstringsPredicate namePredicate) {
         this.namePredicate = namePredicate;
-        this.phonePredicate = phonePredicate;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(namePredicate);
-        model.updateFilteredPersonList(phonePredicate);
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }
@@ -55,15 +52,13 @@ public class FindCommand extends Command {
         }
 
         FindCommand otherFindCommand = (FindCommand) other;
-        return namePredicate.equals(otherFindCommand.namePredicate)
-                && phonePredicate.equals(otherFindCommand.phonePredicate);
+        return namePredicate.equals(otherFindCommand.namePredicate);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("namePredicate", namePredicate)
-                .add("phonePredicate", phonePredicate)
                 .toString();
     }
 }

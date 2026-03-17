@@ -1,5 +1,7 @@
 package seedu.address.model.person.predicate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -12,15 +14,21 @@ import seedu.address.model.person.Person;
  */
 public class NameContainsSubstringsPredicate implements Predicate<Person> {
     private final List<String> substrings;
+    private final List<String> subNumbers;
 
-    public NameContainsSubstringsPredicate(List<String> substrings) {
+    public NameContainsSubstringsPredicate(List<String> substrings, List<String> subNumbers) {
         this.substrings = substrings;
+        this.subNumbers = subNumbers;
     }
 
     @Override
     public boolean test(Person person) {
         return substrings.stream()
-                .anyMatch(substring -> StringUtil.containsSubstringIgnoreCase(person.getName().fullName, substring));
+                .anyMatch(substring -> StringUtil.containsSubstringIgnoreCase(person.getName().fullName,
+                        substring))
+                || subNumbers.stream()
+                .anyMatch(subNumber -> StringUtil.containsSubstringIgnoreCase(person.getPhone().value,
+                        subNumber));
     }
 
     @Override
