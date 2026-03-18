@@ -5,7 +5,7 @@
     "phone" : "94351253",
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
-    "notes" : "",
+    "notes" : "Prefers SMS before arrival",
     "tags" : [ "friends" ]
   }, {
     "name" : "Benson Meier",
@@ -19,7 +19,7 @@
     "phone" : "95352563",
     "email" : "heinz@example.com",
     "address" : "wall street",
-    "notes" : "",
+    "notes" : "Has gate access card",
     "tags" : [ ]
   }, {
     "name" : "Daniel Meier",
@@ -33,7 +33,7 @@
     "phone" : "9482224",
     "email" : "werner@example.com",
     "address" : "michegan ave",
-    "notes" : "",
+    "notes" : "Customer has a spare key",
     "tags" : [ ]
   }, {
     "name" : "Fiona Kunz",
@@ -47,7 +47,7 @@
     "phone" : "9482442",
     "email" : "anna@example.com",
     "address" : "4th street",
-    "notes" : "",
+    "notes" : "Prefers calls after 6pm",
     "tags" : [ ]
   } ]
 }
