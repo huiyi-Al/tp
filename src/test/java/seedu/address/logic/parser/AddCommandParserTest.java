@@ -69,6 +69,18 @@ public class AddCommandParserTest {
                 NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + NOTES_DESC_BOB
                         + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 new AddCommand(expectedPersonMultipleTags));
+
+        // values containing legacy-style text are treated as normal field values
+        String notesWithSlashText = " includes notable n/a cases";
+        Person expectedPersonWithSlashText = new PersonBuilder(BOB)
+                .withNotes(notesWithSlashText.trim())
+                .withTags(VALID_TAG_FRIEND)
+                .build();
+        assertParseSuccess(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + " " + PREFIX_NOTES + notesWithSlashText
+                        + TAG_DESC_FRIEND,
+                new AddCommand(expectedPersonWithSlashText));
     }
 
     @Test
@@ -100,7 +112,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser,
                 validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY + ADDRESS_DESC_AMY
                         + NOTES_DESC_AMY + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                         PREFIX_NOTES));
 
         // invalid value followed by valid value
