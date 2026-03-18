@@ -10,8 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Notes {
 
     public static final String DEFAULT_NOTE = "";
-    public static final String MESSAGE_CONSTRAINTS = "Notes can be empty, but they should be a single line";
-    public static final String VALIDATION_REGEX = "[^\\n\\r]*";
+    public static final int MAX_LENGTH = 200;
+    public static final String MESSAGE_CONSTRAINTS = "Notes should be between 0 and 200 characters.";
 
     public final String value;
 
@@ -31,7 +31,7 @@ public class Notes {
      */
     public static boolean isValidNotes(String test) {
         requireNonNull(test);
-        return test.matches(VALIDATION_REGEX);
+        return test.length() <= MAX_LENGTH;
     }
 
     @Override

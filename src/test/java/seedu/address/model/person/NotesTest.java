@@ -7,6 +7,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class NotesTest {
+    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
+    private static final String TOO_LONG_NOTES = "a".repeat(201);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -15,7 +17,7 @@ public class NotesTest {
 
     @Test
     public void constructor_invalidNotes_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new Notes("This is a note\nwith a newline."));
+        assertThrows(IllegalArgumentException.class, () -> new Notes(TOO_LONG_NOTES));
     }
 
     @Test
@@ -24,12 +26,13 @@ public class NotesTest {
         assertThrows(NullPointerException.class, () -> Notes.isValidNotes(null));
 
         // invalid notes
-        assertFalse(Notes.isValidNotes("This is a note\nwith a newline."));
-        assertFalse(Notes.isValidNotes("This is a note\rwith a carriage return."));
+        assertFalse(Notes.isValidNotes(TOO_LONG_NOTES));
 
         // valid notes
         assertTrue(Notes.isValidNotes("This is a valid note.")); // normal note
         assertTrue(Notes.isValidNotes("")); // empty note
+        assertTrue(Notes.isValidNotes(MAX_LENGTH_NOTES)); // 200 characters
+        assertTrue(Notes.isValidNotes("This note\nhas multiple lines.")); // multiline note
         assertTrue(Notes.isValidNotes("  Needs follow up tomorrow.  ")); // note with spaces
     }
 
