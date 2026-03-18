@@ -84,9 +84,11 @@ public class Person {
         String thisPhoneDigits = extractDigits(this.phone.value);
         String otherPhoneDigits = extractDigits(otherPerson.phone.value);
 
+        // Compare emails case-insensitively
+        boolean sameEmail = this.email.value.equalsIgnoreCase(otherPerson.email.value);
+
         // Check if phone digits match OR email matches
-        return thisPhoneDigits.equals(otherPhoneDigits)
-                || otherPerson.getEmail().equals(getEmail());
+        return thisPhoneDigits.equals(otherPhoneDigits) || sameEmail;
     }
 
     /**
