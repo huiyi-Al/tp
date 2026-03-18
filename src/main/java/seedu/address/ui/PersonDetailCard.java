@@ -2,7 +2,6 @@ package seedu.address.ui;
 
 import java.util.Comparator;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -49,8 +48,8 @@ public class PersonDetailCard extends UiPart<Region> {
         super(FXML);
         this.person = person;
         name.setText(person.getName().fullName);
-        phone.setText("Phone number 📞 : "+  person.getPhone().value);
-        address.setText("Home address 🏠 : "+ person.getAddress().value);
+        phone.setText("Phone number 📞 : " + person.getPhone().value);
+        address.setText("Home address 🏠 : " + person.getAddress().value);
         email.setText("Email address ✉️ : " + person.getEmail().value);
         notes.setText("Notes : " + person.getNotes().value);
 
