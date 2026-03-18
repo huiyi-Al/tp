@@ -71,9 +71,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         // Convert map to remove missing prefixes
         Map<Prefix, List<String>> presentArgMap = new HashMap<>();
         for (Prefix presentPrefix : presentPrefixes) {
-            if (argMultimap.getValue(presentPrefix).isEmpty()) {
-                continue;
-            }
             presentArgMap.put(presentPrefix, Arrays.asList(argMultimap.getValue(presentPrefix).get()
                     .split("\\s+")));
         }
