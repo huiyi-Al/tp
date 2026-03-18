@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -21,7 +22,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * The Main Window. Provides the basic application layout containing
  * a menu bar and space where other JavaFX elements can be placed.
  */
-public class MainWindow extends UiPart<Stage> {
+public class  MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
 
@@ -32,6 +33,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
+    private PersonDetailPanel personDetailPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -40,6 +42,12 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private MenuItem helpMenuItem;
+
+    @FXML
+    private SplitPane splitPane;
+
+    @FXML
+    private StackPane personDetailsPlaceholder;
 
     @FXML
     private StackPane personListPanelPlaceholder;
@@ -113,6 +121,9 @@ public class MainWindow extends UiPart<Stage> {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList(),
                                               logic.getSelectedPerson());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+
+        personDetailPanel = new PersonDetailPanel(logic.getSelectedPerson());
+        personDetailsPlaceholder.getChildren().add(personDetailPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
