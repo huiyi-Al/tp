@@ -36,11 +36,11 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(PREFIX_NAME, PREFIX_PHONE));
         trimmedArgs = " " + trimmedArgs; // To allow prefix on first character to be detected
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, PREFIX_NAME, PREFIX_PHONE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
 
         // If there isn't at least one prefix
         int missing = 0;
-        for (Prefix expectedPrefix: expectedPrefixes) {
+        for (Prefix expectedPrefix : expectedPrefixes) {
             if (argMultimap.getValue(expectedPrefix).isEmpty()) {
                 missing++;
             }
@@ -51,7 +51,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // If any prefix is present without any values given
-        for (Prefix expectedPrefix: expectedPrefixes) {
+        for (Prefix expectedPrefix : expectedPrefixes) {
             if (argMultimap.getValue(expectedPrefix).isPresent()
                     && argMultimap.getValue(expectedPrefix).get().isEmpty()) {
                 throw new ParseException(
@@ -61,7 +61,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // Keep list of all present prefixes
         List<Prefix> presentPrefixes = new ArrayList<>();
-        for (Prefix expectedPrefix: expectedPrefixes) {
+        for (Prefix expectedPrefix : expectedPrefixes) {
             if (argMultimap.getValue(expectedPrefix).isEmpty()) {
                 continue;
             }
@@ -70,7 +70,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // Convert map to remove missing prefixes
         Map<Prefix, List<String>> presentArgMap = new HashMap<>();
-        for (Prefix presentPrefix: presentPrefixes) {
+        for (Prefix presentPrefix : presentPrefixes) {
             if (argMultimap.getValue(presentPrefix).isEmpty()) {
                 continue;
             }

@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import seedu.address.logic.parser.Prefix;
@@ -64,8 +65,8 @@ public class SearchPredicate implements Predicate<Person> {
         }
 
         SearchPredicate otherSearchPredicate = (SearchPredicate) other;
-        return nameContainsSubstringsPredicate.equals(otherSearchPredicate.nameContainsSubstringsPredicate)
-                && phoneNumberPredicate.equals(otherSearchPredicate.phoneNumberPredicate);
+        return Objects.equals(nameContainsSubstringsPredicate, otherSearchPredicate.nameContainsSubstringsPredicate)
+                && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate);
     }
 
     @Override

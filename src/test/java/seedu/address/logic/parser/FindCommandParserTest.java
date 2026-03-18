@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,41 +82,41 @@ public class FindCommandParserTest {
     public void parse_differentCase_returnsDifferentFindCommand() {
         Map<Prefix, List<String>> argMap = new HashMap<>();
         argMap.put(PREFIX_NAME, Arrays.asList("Alice", "Bob"));
-
         FindCommand expectedFindCommand =
                 new FindCommand(new SearchPredicate(argMap));
+
         assertParseDifferent(parser, PREFIX_NAME + "alice Bob", expectedFindCommand);
     }
 
     @Test
     public void parse_validPhone_returnsFindCommand() {
         Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_PHONE, Arrays.asList("123"));
-
+        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
         FindCommand expectedFindCommand =
                 new FindCommand(new SearchPredicate(argMap));
-        assertParseDifferent(parser, PREFIX_PHONE + "123", expectedFindCommand);
+
+        assertParseSuccess(parser, PREFIX_PHONE + "123", expectedFindCommand);
     }
 
     @Test
     public void parse_validNameAndValidPhone_returnsFindCommand() {
         Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Alice"));
-        argMap.put(PREFIX_PHONE, Arrays.asList("123"));
-
+        argMap.put(PREFIX_NAME, Collections.singletonList("Alice"));
+        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
         FindCommand expectedFindCommand =
                 new FindCommand(new SearchPredicate(argMap));
-        assertParseDifferent(parser, PREFIX_NAME + "Alice" + " " + PREFIX_PHONE + "123", expectedFindCommand);
+
+        assertParseSuccess(parser, PREFIX_NAME + "Alice" + " " + PREFIX_PHONE + "123", expectedFindCommand);
     }
 
     @Test
-    public void parse_validNumberAndValidName_returnsFindCommand() {
+    public void parse_validPhoneAndValidName_returnsFindCommand() {
         Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Alice"));
-        argMap.put(PREFIX_PHONE, Arrays.asList("123"));
-
+        argMap.put(PREFIX_NAME, Collections.singletonList("Alice"));
+        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
         FindCommand expectedFindCommand =
                 new FindCommand(new SearchPredicate(argMap));
-        assertParseDifferent(parser, PREFIX_PHONE + "123" + " " + PREFIX_NAME + "Alice", expectedFindCommand);
+
+        assertParseSuccess(parser, PREFIX_PHONE + "123" + " " + PREFIX_NAME + "Alice", expectedFindCommand);
     }
 }

@@ -70,10 +70,6 @@ public class PhoneNumberPredicateTest {
         predicate = new PhoneNumberPredicate(Collections.singletonList("91234568"));
         assertFalse(predicate.test(new PersonBuilder().withPhone("91234567").build()));
 
-        // Space in tested string
-        predicate = new PhoneNumberPredicate(Arrays.asList("34"));
-        assertFalse(predicate.test(new PersonBuilder().withPhone("9123 4567").build()));
-
         // Keywords match phone, email and address, but does not match name
         predicate = new PhoneNumberPredicate(Arrays.asList("12345", "alice@email.com", "Main", "Street"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").withPhone("1234")

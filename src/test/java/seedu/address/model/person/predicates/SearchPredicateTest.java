@@ -37,6 +37,7 @@ public class SearchPredicateTest {
     private final Person person1;
     private final Person person2;
     private final Person person3;
+    private final Person person4;
 
     public SearchPredicateTest() {
         argMapEmpty = new HashMap<>();
@@ -57,7 +58,8 @@ public class SearchPredicateTest {
 
         person1 = new PersonBuilder().withName("Alan").withPhone("92355671").build();
         person2 = new PersonBuilder().withName("Cassie").withPhone("91237452").build();
-        person3 = new PersonBuilder().withName("Bertha").withPhone("81567342").build();
+        person3 = new PersonBuilder().withName("Bertha").withPhone("84567342").build();
+        person4 = new PersonBuilder().withName("Daniel").withPhone("98765432").build();
     }
 
     @Test
@@ -70,8 +72,8 @@ public class SearchPredicateTest {
 
         // same values -> returns true
         Map<Prefix, List<String>> argMapAllPresentCopy = new HashMap<>();
-        argMapAllPresent.put(PREFIX_NAME, Arrays.asList("al", "er"));
-        argMapAllPresent.put(PREFIX_PHONE, Arrays.asList("123", "456"));
+        argMapAllPresentCopy.put(PREFIX_NAME, Arrays.asList("al", "er"));
+        argMapAllPresentCopy.put(PREFIX_PHONE, Arrays.asList("123", "456"));
         SearchPredicate searchPredicateAllPresentCopy = new SearchPredicate(argMapAllPresentCopy);
         assertTrue(searchPredicateAllPresent.equals(searchPredicateAllPresentCopy));
 
@@ -108,10 +110,10 @@ public class SearchPredicateTest {
         assertFalse(searchPredicateNameOnly.test(person2));
 
         // None match on phone only
-        assertFalse(searchPredicatePhoneOnly.test(person3));
+        assertFalse(searchPredicatePhoneOnly.test(person1));
 
         // None match on any field
-        assertFalse(searchPredicateAllPresent.test(person1));
+        assertFalse(searchPredicateAllPresent.test(person4));
     }
 
     @Test
