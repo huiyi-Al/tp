@@ -41,7 +41,7 @@ public class PhoneNumberPredicateTest {
     }
 
     @Test
-    public void test_nameContainsSubstrings_returnsTrue() {
+    public void test_numberContainsSubnumber_returnsTrue() {
         // One subnumber
         PhoneNumberPredicate predicate =
                 new PhoneNumberPredicate(Collections.singletonList("123"));
@@ -61,7 +61,7 @@ public class PhoneNumberPredicateTest {
     }
 
     @Test
-    public void test_nameDoesNotContainSubstrings_returnsFalse() {
+    public void test_numberContainsSubnumber_returnsFalse() {
         // Zero substrings
         PhoneNumberPredicate predicate = new PhoneNumberPredicate(Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withPhone("91234567").build()));
