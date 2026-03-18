@@ -31,7 +31,6 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
 import seedu.address.model.person.predicate.SearchPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -83,7 +82,7 @@ public class AddressBookParserTest {
         Map<Prefix, List<String>> argMap = new HashMap<>();
         argMap.put(PREFIX_NAME, substrings);
         argMap.put(PREFIX_PHONE, subnumbers);
-        
+
         FindCommand command = (FindCommand) parser.parseCommand(
                 MessageFormat.format("{0} {1} {2} {3} {4}",
                         FindCommand.COMMAND_WORD,

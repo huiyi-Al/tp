@@ -22,21 +22,21 @@ import seedu.address.model.person.predicate.SearchPredicate;
 import seedu.address.testutil.PersonBuilder;
 
 public class SearchPredicateTest {
-    Map<Prefix, List<String>> argMapEmpty;
-    SearchPredicate searchPredicateEmpty;
+    private final Map<Prefix, List<String>> argMapEmpty;
+    private final SearchPredicate searchPredicateEmpty;
 
-    Map<Prefix, List<String>> argMapNameOnly;
-    SearchPredicate searchPredicateNameOnly;
+    private final Map<Prefix, List<String>> argMapNameOnly;
+    private final SearchPredicate searchPredicateNameOnly;
 
-    Map<Prefix, List<String>> argMapPhoneOnly;
-    SearchPredicate searchPredicatePhoneOnly;
+    private final Map<Prefix, List<String>> argMapPhoneOnly;
+    private final SearchPredicate searchPredicatePhoneOnly;
 
-    Map<Prefix, List<String>> argMapAllPresent;
-    SearchPredicate searchPredicateAllPresent;
+    private final Map<Prefix, List<String>> argMapAllPresent;
+    private final SearchPredicate searchPredicateAllPresent;
 
-    Person person1;
-    Person person2;
-    Person person3;
+    private final Person person1;
+    private final Person person2;
+    private final Person person3;
 
     public SearchPredicateTest() {
         argMapEmpty = new HashMap<>();
@@ -123,22 +123,22 @@ public class SearchPredicateTest {
         );
         String expectedNameOnly = MessageFormat.format(
                 "{0}, {1}\n",
-                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings=" +
-                        argMapNameOnly.get(PREFIX_NAME) + "}",
+                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings="
+                        + argMapNameOnly.get(PREFIX_NAME) + "}",
                 "NA"
         );
         String expectedPhoneOnly = MessageFormat.format(
                 "{0}, {1}\n",
                 "NA",
-                PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers=" +
-                        argMapPhoneOnly.get(PREFIX_PHONE) + "}"
+                PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers="
+                        + argMapPhoneOnly.get(PREFIX_PHONE) + "}"
         );
         String expectedAllPresent = MessageFormat.format(
                 "{0}, {1}\n",
-                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings=" +
-                        argMapNameOnly.get(PREFIX_NAME) + "}",
-                PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers=" +
-                        argMapPhoneOnly.get(PREFIX_PHONE) + "}"
+                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings="
+                        + argMapNameOnly.get(PREFIX_NAME) + "}",
+                PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers="
+                        + argMapPhoneOnly.get(PREFIX_PHONE) + "}"
         );
 
         assertEquals(expectedEmpty, searchPredicateEmpty.toString());

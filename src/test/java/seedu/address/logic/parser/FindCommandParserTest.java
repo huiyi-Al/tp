@@ -15,7 +15,6 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
 import seedu.address.model.person.predicate.SearchPredicate;
 
 public class FindCommandParserTest {
