@@ -117,7 +117,7 @@ public class Person {
 
     /**
      * Extracts only numeric digits from a phone string.
-     * Removes +, -, spaces, and any other non-digit characters.
+     * Removes -, spaces, and any other non-digit characters.
      */
     private String extractDigits(String phoneString) {
         return phoneString.replaceAll("[^0-9]", "");
