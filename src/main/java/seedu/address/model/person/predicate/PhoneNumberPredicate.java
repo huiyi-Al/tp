@@ -41,6 +41,6 @@ public class PhoneNumberPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("subNumbers", subNumbers).toString();
+        return new ToStringBuilder(this).add("subnumbers", subNumbers).toString();
     }
 }
