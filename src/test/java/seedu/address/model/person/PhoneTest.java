@@ -36,7 +36,7 @@ public class PhoneTest {
         // valid phone numbers
         assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
         assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("124293842033123")); // starts with +
+        assertTrue(Phone.isValidPhone("124293842033123"));
         assertTrue(Phone.isValidPhone("12429-3842 0331")); // contains both slash and spaces that are in between digits
     }
 
