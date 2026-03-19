@@ -122,7 +122,7 @@ public class SearchPredicateTest {
         );
         String expectedNameOnly = MessageFormat.format(
                 "{0}, {1}\n",
-                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings="
+                FullNamePredicate.class.getCanonicalName() + "{substrings="
                         + argMapNameOnly.get(PREFIX_NAME) + "}",
                 "NA"
         );
@@ -134,7 +134,7 @@ public class SearchPredicateTest {
         );
         String expectedAllPresent = MessageFormat.format(
                 "{0}, {1}\n",
-                NameContainsSubstringsPredicate.class.getCanonicalName() + "{substrings="
+                FullNamePredicate.class.getCanonicalName() + "{substrings="
                         + argMapNameOnly.get(PREFIX_NAME) + "}",
                 PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers="
                         + argMapPhoneOnly.get(PREFIX_PHONE) + "}"

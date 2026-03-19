@@ -16,7 +16,7 @@ import seedu.address.model.person.Person;
  * Tests that a {@code Person}'s {@code name} or {@code phone number} can be matched by the predicates provided.
  */
 public class SearchPredicate implements Predicate<Person> {
-    private final NameContainsSubstringsPredicate nameContainsSubstringsPredicate;
+    private final FullNamePredicate fullNamePredicate;
     private final PhoneNumberPredicate phoneNumberPredicate;
 
     /**
@@ -29,8 +29,8 @@ public class SearchPredicate implements Predicate<Person> {
      *               Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(Map<Prefix, List<String>> argMap) {
-        this.nameContainsSubstringsPredicate = argMap.containsKey(PREFIX_NAME)
-                ? new NameContainsSubstringsPredicate(argMap.get(PREFIX_NAME))
+        this.fullNamePredicate = argMap.containsKey(PREFIX_NAME)
+                ? new FullNamePredicate(argMap.get(PREFIX_NAME))
                 : null;
 
         this.phoneNumberPredicate = argMap.containsKey(PREFIX_PHONE)
@@ -43,8 +43,8 @@ public class SearchPredicate implements Predicate<Person> {
         boolean nameCondition = false;
         boolean phoneCondition = false;
 
-        if (nameContainsSubstringsPredicate != null) {
-            nameCondition = nameContainsSubstringsPredicate.test(person);
+        if (fullNamePredicate != null) {
+            nameCondition = fullNamePredicate.test(person);
         }
         if (phoneNumberPredicate != null) {
             phoneCondition = phoneNumberPredicate.test(person);
@@ -65,7 +65,7 @@ public class SearchPredicate implements Predicate<Person> {
         }
 
         SearchPredicate otherSearchPredicate = (SearchPredicate) other;
-        return Objects.equals(nameContainsSubstringsPredicate, otherSearchPredicate.nameContainsSubstringsPredicate)
+        return Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
                 && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate);
     }
 
@@ -73,7 +73,7 @@ public class SearchPredicate implements Predicate<Person> {
     public String toString() {
         return MessageFormat.format(
                 "{0}, {1}\n",
-                nameContainsSubstringsPredicate != null ? nameContainsSubstringsPredicate.toString() : "NA",
+                fullNamePredicate != null ? fullNamePredicate.toString() : "NA",
                 phoneNumberPredicate != null ? phoneNumberPredicate.toString() : "NA"
         );
     }

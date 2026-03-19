@@ -10,10 +10,10 @@ import seedu.address.model.person.Person;
 /**
  * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
  */
-public class NameContainsSubstringsPredicate implements Predicate<Person> {
+public class FullNamePredicate implements Predicate<Person> {
     private final List<String> substrings;
 
-    public NameContainsSubstringsPredicate(List<String> substrings) {
+    public FullNamePredicate(List<String> substrings) {
         this.substrings = substrings;
     }
 
@@ -31,12 +31,12 @@ public class NameContainsSubstringsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof NameContainsSubstringsPredicate)) {
+        if (!(other instanceof FullNamePredicate)) {
             return false;
         }
 
-        NameContainsSubstringsPredicate otherNameContainsSubstringsPredicate = (NameContainsSubstringsPredicate) other;
-        return substrings.equals(otherNameContainsSubstringsPredicate.substrings);
+        FullNamePredicate otherFullNamePredicate = (FullNamePredicate) other;
+        return substrings.equals(otherFullNamePredicate.substrings);
     }
 
     @Override
