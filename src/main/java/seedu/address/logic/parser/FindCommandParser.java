@@ -56,7 +56,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
-        
+
         return new FindCommand(new SearchPredicate(argMultimap));
     }
 }
