@@ -48,14 +48,14 @@
 
         <SplitPane fx:id="splitPane" dividerPositions="1" VBox.vgrow="ALWAYS">
 
-          <VBox fx:id="personList" styleClass="pane-with-border" minWidth="225" prefWidth="225" VBox.vgrow="ALWAYS">
+          <VBox fx:id="personList" styleClass="pane-with-border" minWidth="150" prefWidth="150" VBox.vgrow="ALWAYS">
             <padding>
               <Insets top="10" right="5" bottom="10" left="5" />
             </padding>
             <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
           </VBox>
 
-          <VBox fx:id="personDetails" styleClass="pane-with-border" minWidth="225" prefWidth="225">
+          <VBox fx:id="personDetails" styleClass="pane-with-border" minWidth="300" prefWidth="300">
             <padding>
               <Insets top="10" right="5" bottom="10" left="5" />
             </padding>

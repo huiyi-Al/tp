@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
 
@@ -20,7 +19,7 @@ public class PersonDetailPanel extends UiPart<Region> {
     private final Logger logger = LogsCenter.getLogger(PersonListPanel.class);
 
     @FXML
-    private StackPane personDetailsPlaceholder;
+    private StackPane detailsPlaceholder;
 
     @FXML
     private Label noselectionLabel;
@@ -48,7 +47,7 @@ public class PersonDetailPanel extends UiPart<Region> {
      * Shows the "no person selected" message.
      */
     private void showNoSelection() {
-        personDetailsPlaceholder.getChildren().clear();
+        detailsPlaceholder.getChildren().clear();
         currentDetailCard = null;
         noselectionLabel.setText("Select a client to view details");
     }
@@ -63,6 +62,6 @@ public class PersonDetailPanel extends UiPart<Region> {
         noselectionLabel.setManaged(false);
 
         currentDetailCard = new PersonDetailCard(person);
-        personDetailsPlaceholder.getChildren().setAll(currentDetailCard.getRoot());
+        detailsPlaceholder.getChildren().setAll(currentDetailCard.getRoot());
     }
 }
