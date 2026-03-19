@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -77,22 +78,23 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        List<String> substrings = Arrays.asList("foo", "bar", "baz");
-        List<String> subnumbers = Arrays.asList("123", "456", "789");
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, substrings);
-        argMap.put(PREFIX_PHONE, subnumbers);
+        String subNames = String.join(" ", "foo", "bar", "baz");
+        String subNumbers = String.join("123", "456", "789");
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, subNames);
+        argMultimap.put(PREFIX_PHONE, subNumbers);
 
         FindCommand command = (FindCommand) parser.parseCommand(
                 MessageFormat.format("{0} {1} {2} {3} {4}",
                         FindCommand.COMMAND_WORD,
                         PREFIX_NAME.toString(),
-                        substrings.stream().collect(Collectors.joining(" ")),
+                        subNames,
                         PREFIX_PHONE.toString(),
-                        subnumbers.stream().collect(Collectors.joining(" "))
-                ));
+                        subNumbers
+                )
+        );
 
-        assertEquals(new FindCommand(new SearchPredicate(argMap)), command);
+        assertEquals(new FindCommand(new SearchPredicate(argMultimap)), command);
     }
 
     @Test

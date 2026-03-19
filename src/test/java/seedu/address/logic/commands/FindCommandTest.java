@@ -15,13 +15,10 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.parser.Prefix;
+import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -34,40 +31,40 @@ public class FindCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-    private final Map<Prefix, List<String>> argMapEmpty;
+    private final ArgumentMultimap argMapEmpty;
     private final SearchPredicate searchPredicateEmpty;
 
-    private final Map<Prefix, List<String>> argMapNameOnly;
+    private final ArgumentMultimap argMapNameOnly;
     private final SearchPredicate searchPredicateNameOnly;
 
-    private final Map<Prefix, List<String>> argMapNameOnlyUnevenCases;
+    private final ArgumentMultimap argMapNameOnlyUnevenCases;
     private final SearchPredicate searchPredicateNameOnlyUnevenCases;
 
-    private final Map<Prefix, List<String>> argMapPhoneOnly;
+    private final ArgumentMultimap argMapPhoneOnly;
     private final SearchPredicate searchPredicatePhoneOnly;
 
-    private final Map<Prefix, List<String>> argMapAllPresent;
+    private final ArgumentMultimap argMapAllPresent;
     private final SearchPredicate searchPredicateAllPresent;
 
     public FindCommandTest() {
-        argMapEmpty = new HashMap<>();
+        argMapEmpty = new ArgumentMultimap();
         searchPredicateEmpty = new SearchPredicate(argMapEmpty);
 
-        argMapNameOnly = new HashMap<>();
-        argMapNameOnly.put(PREFIX_NAME, Arrays.asList("Kurz", "Elle", "Kunz"));
+        argMapNameOnly = new ArgumentMultimap();
+        argMapNameOnly.put(PREFIX_NAME, String.join(" ", "Kurz", "Elle", "Kunz"));
         searchPredicateNameOnly = new SearchPredicate(argMapNameOnly);
 
-        argMapNameOnlyUnevenCases = new HashMap<>();
-        argMapNameOnlyUnevenCases.put(PREFIX_NAME, Arrays.asList("KURZ", "ElLe", "kunz"));
+        argMapNameOnlyUnevenCases = new ArgumentMultimap();
+        argMapNameOnlyUnevenCases.put(PREFIX_NAME, String.join(" ", "KURZ", "ElLe", "kunz"));
         searchPredicateNameOnlyUnevenCases = new SearchPredicate(argMapNameOnlyUnevenCases);
 
-        argMapPhoneOnly = new HashMap<>();
-        argMapPhoneOnly.put(PREFIX_PHONE, Arrays.asList("535", "442"));
+        argMapPhoneOnly = new ArgumentMultimap();
+        argMapPhoneOnly.put(PREFIX_PHONE, String.join(" ", "535", "442"));
         searchPredicatePhoneOnly = new SearchPredicate(argMapPhoneOnly);
 
-        argMapAllPresent = new HashMap<>();
-        argMapAllPresent.put(PREFIX_NAME, Arrays.asList("Kurz", "Elle", "Kunz"));
-        argMapAllPresent.put(PREFIX_PHONE, Arrays.asList("535", "442"));
+        argMapAllPresent = new ArgumentMultimap();
+        argMapAllPresent.put(PREFIX_NAME, String.join(" ", "Kurz", "Elle", "Kunz"));
+        argMapAllPresent.put(PREFIX_PHONE, String.join(" ", "535", "442"));
         searchPredicateAllPresent = new SearchPredicate(argMapAllPresent);
     }
 
@@ -104,7 +101,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleSubstrings_multiplePersonsFound() {
+    public void execute_multipleSubNames_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicateNameOnly);
         expectedModel.updateFilteredPersonList(searchPredicateNameOnly);
 
@@ -114,7 +111,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleSubstringsDifferentCases_multiplePersonsFound() {
+    public void execute_multipleSubNamesDifferentCases_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicateNameOnlyUnevenCases);
         expectedModel.updateFilteredPersonList(searchPredicateNameOnlyUnevenCases);
 
@@ -124,7 +121,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleSubnumbers_multiplePersonsFound() {
+    public void execute_multipleSubNumbers_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicatePhoneOnly);
         expectedModel.updateFilteredPersonList(searchPredicatePhoneOnly);
 
@@ -134,7 +131,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleSubstringsAndSubnumbers_multiplePersonsFound() {
+    public void execute_multipleSubNamesAndSubnumbers_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicateAllPresent);
         expectedModel.updateFilteredPersonList(searchPredicateAllPresent);
 

@@ -38,12 +38,12 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgsNamePrefixOnly_returnsFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Alice", "Bob"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Alice Bob");
+        FindCommand expectedFindCommand =
+                new FindCommand(new SearchPredicate(argMultimap));
 
         // no leading and trailing whitespaces
-        FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
         assertParseSuccess(parser, PREFIX_NAME + "Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -52,12 +52,12 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgsNamePreambleAndPrefixSuccess_returnsFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Bob"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Bob");
+        FindCommand expectedFindCommand =
+                new FindCommand(new SearchPredicate(argMultimap));
 
         // no leading and trailing whitespaces
-        FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
         assertParseSuccess(parser, "Carol " + PREFIX_NAME + "Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -66,12 +66,12 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgsNamePreambleAndPrefixFailure_throwsParseException() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Bob"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Bob");
+        FindCommand expectedFindCommand =
+                new FindCommand(new SearchPredicate(argMultimap));
 
         // no leading and trailing whitespaces
-        FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
         assertParseDifferent(parser, "Bob " + PREFIX_NAME + "Carol", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -80,42 +80,42 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_differentCase_returnsDifferentFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Arrays.asList("Alice", "Bob"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Alice Bob");
         FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
+                new FindCommand(new SearchPredicate(argMultimap));
 
         assertParseDifferent(parser, PREFIX_NAME + "alice Bob", expectedFindCommand);
     }
 
     @Test
     public void parse_validPhone_returnsFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_PHONE, "123");
         FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
+                new FindCommand(new SearchPredicate(argMultimap));
 
         assertParseSuccess(parser, PREFIX_PHONE + "123", expectedFindCommand);
     }
 
     @Test
     public void parse_validNameAndValidPhone_returnsFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Collections.singletonList("Alice"));
-        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Alice");
+        argMultimap.put(PREFIX_PHONE, "123");
         FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
+                new FindCommand(new SearchPredicate(argMultimap));
 
         assertParseSuccess(parser, PREFIX_NAME + "Alice" + " " + PREFIX_PHONE + "123", expectedFindCommand);
     }
 
     @Test
     public void parse_validPhoneAndValidName_returnsFindCommand() {
-        Map<Prefix, List<String>> argMap = new HashMap<>();
-        argMap.put(PREFIX_NAME, Collections.singletonList("Alice"));
-        argMap.put(PREFIX_PHONE, Collections.singletonList("123"));
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, "Alice");
+        argMultimap.put(PREFIX_PHONE, "123");
         FindCommand expectedFindCommand =
-                new FindCommand(new SearchPredicate(argMap));
+                new FindCommand(new SearchPredicate(argMultimap));
 
         assertParseSuccess(parser, PREFIX_PHONE + "123" + " " + PREFIX_NAME + "Alice", expectedFindCommand);
     }

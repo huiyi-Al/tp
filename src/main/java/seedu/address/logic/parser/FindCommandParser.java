@@ -5,6 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.predicates.FullNamePredicate;
+import seedu.address.model.person.predicates.PhoneNumberPredicate;
 import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
@@ -53,23 +56,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
-
-        // Keep list of all present prefixes
-        List<Prefix> presentPrefixes = new ArrayList<>();
-        for (Prefix expectedPrefix : expectedPrefixes) {
-            if (argMultimap.getValue(expectedPrefix).isEmpty()) {
-                continue;
-            }
-            presentPrefixes.add(expectedPrefix);
-        }
-
-        // Convert map to remove missing prefixes
-        Map<Prefix, List<String>> presentArgMap = new HashMap<>();
-        for (Prefix presentPrefix : presentPrefixes) {
-            presentArgMap.put(presentPrefix, Arrays.asList(argMultimap.getValue(presentPrefix).get()
-                    .split("\\s+")));
-        }
-
-        return new FindCommand(new SearchPredicate(presentArgMap));
+        
+        return new FindCommand(new SearchPredicate(argMultimap));
     }
 }

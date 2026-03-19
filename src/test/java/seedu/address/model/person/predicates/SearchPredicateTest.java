@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,21 +15,22 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
 public class SearchPredicateTest {
-    private final Map<Prefix, List<String>> argMapEmpty;
+    private final ArgumentMultimap argMapEmpty;
     private final SearchPredicate searchPredicateEmpty;
 
-    private final Map<Prefix, List<String>> argMapNameOnly;
+    private final ArgumentMultimap argMapNameOnly;
     private final SearchPredicate searchPredicateNameOnly;
 
-    private final Map<Prefix, List<String>> argMapPhoneOnly;
+    private final ArgumentMultimap argMapPhoneOnly;
     private final SearchPredicate searchPredicatePhoneOnly;
 
-    private final Map<Prefix, List<String>> argMapAllPresent;
+    private final ArgumentMultimap argMapAllPresent;
     private final SearchPredicate searchPredicateAllPresent;
 
     private final Person person1;
@@ -37,20 +39,20 @@ public class SearchPredicateTest {
     private final Person person4;
 
     public SearchPredicateTest() {
-        argMapEmpty = new HashMap<>();
+        argMapEmpty = new ArgumentMultimap();
         searchPredicateEmpty = new SearchPredicate(argMapEmpty);
 
-        argMapNameOnly = new HashMap<>();
-        argMapNameOnly.put(PREFIX_NAME, Arrays.asList("al", "er"));
+        argMapNameOnly = new ArgumentMultimap();
+        argMapNameOnly.put(PREFIX_NAME, "al er");
         searchPredicateNameOnly = new SearchPredicate(argMapNameOnly);
 
-        argMapPhoneOnly = new HashMap<>();
-        argMapPhoneOnly.put(PREFIX_PHONE, Arrays.asList("123", "456"));
+        argMapPhoneOnly = new ArgumentMultimap();
+        argMapPhoneOnly.put(PREFIX_PHONE, "123 456");
         searchPredicatePhoneOnly = new SearchPredicate(argMapPhoneOnly);
 
-        argMapAllPresent = new HashMap<>();
-        argMapAllPresent.put(PREFIX_NAME, Arrays.asList("al", "er"));
-        argMapAllPresent.put(PREFIX_PHONE, Arrays.asList("123", "456"));
+        argMapAllPresent = new ArgumentMultimap();
+        argMapAllPresent.put(PREFIX_NAME, "al er");
+        argMapAllPresent.put(PREFIX_PHONE, "123 456");
         searchPredicateAllPresent = new SearchPredicate(argMapAllPresent);
 
         person1 = new PersonBuilder().withName("Alan").withPhone("92355671").build();
@@ -68,9 +70,9 @@ public class SearchPredicateTest {
         assertTrue(searchPredicateAllPresent.equals(searchPredicateAllPresent));
 
         // same values -> returns true
-        Map<Prefix, List<String>> argMapAllPresentCopy = new HashMap<>();
-        argMapAllPresentCopy.put(PREFIX_NAME, Arrays.asList("al", "er"));
-        argMapAllPresentCopy.put(PREFIX_PHONE, Arrays.asList("123", "456"));
+        ArgumentMultimap argMapAllPresentCopy = new ArgumentMultimap();
+        argMapAllPresentCopy.put(PREFIX_NAME, "al er");
+        argMapAllPresentCopy.put(PREFIX_PHONE, "123 456");
         SearchPredicate searchPredicateAllPresentCopy = new SearchPredicate(argMapAllPresentCopy);
         assertTrue(searchPredicateAllPresent.equals(searchPredicateAllPresentCopy));
 
@@ -115,34 +117,27 @@ public class SearchPredicateTest {
 
     @Test
     public void toStringMethod() {
+        assertTrue(argMapEmpty.getValue(PREFIX_NAME).isEmpty());
+        assertTrue(argMapEmpty.getValue(PREFIX_PHONE).isEmpty());
+        assertTrue(argMapAllPresent.getValue(PREFIX_NAME).isPresent());
+        assertTrue(argMapAllPresent.getValue(PREFIX_PHONE).isPresent());
+
         String expectedEmpty = MessageFormat.format(
                 "{0}, {1}",
-                "NA",
-                "NA"
-        );
-        String expectedNameOnly = MessageFormat.format(
-                "{0}, {1}",
                 FullNamePredicate.class.getCanonicalName() + "{subNames="
-                        + argMapNameOnly.get(PREFIX_NAME) + "}",
-                "NA"
-        );
-        String expectedPhoneOnly = MessageFormat.format(
-                "{0}, {1}",
-                "NA",
+                        + new ArrayList<>() + "}",
                 PhoneNumberPredicate.class.getCanonicalName() + "{subNumbers="
-                        + argMapPhoneOnly.get(PREFIX_PHONE) + "}"
+                        + new ArrayList<>() + "}"
         );
         String expectedAllPresent = MessageFormat.format(
                 "{0}, {1}",
                 FullNamePredicate.class.getCanonicalName() + "{subNames="
-                        + argMapNameOnly.get(PREFIX_NAME) + "}",
+                        + Arrays.asList(argMapAllPresent.getValue(PREFIX_NAME).get().split("\\s+")) + "}",
                 PhoneNumberPredicate.class.getCanonicalName() + "{subNumbers="
-                        + argMapPhoneOnly.get(PREFIX_PHONE) + "}"
+                        + Arrays.asList(argMapAllPresent.getValue(PREFIX_PHONE).get().split("\\s+")) + "}"
         );
 
         assertEquals(expectedEmpty, searchPredicateEmpty.toString());
-        assertEquals(expectedNameOnly, searchPredicateNameOnly.toString());
-        assertEquals(expectedPhoneOnly, searchPredicatePhoneOnly.toString());
         assertEquals(expectedAllPresent, searchPredicateAllPresent.toString());
     }
 }

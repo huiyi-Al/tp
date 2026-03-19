@@ -4,11 +4,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Person;
 
@@ -22,20 +25,19 @@ public class SearchPredicate implements Predicate<Person> {
     /**
      * Creates a {@code SearchPredicate} that filters persons based on the provided argument map.
      *
-     * @param argMap A map from {@code Prefix} to a list of search strings, where each prefix
-     *               corresponds to a field to filter on.
-     *               {@code PREFIX_NAME} for name substring matching.
-     *               {@code PREFIX_PHONE} for phone number matching.
-     *               Prefixes absent from the map are not filtered on.
+     * @param argMultimap A map from {@code Prefix} to a list of search strings, where each prefix
+     *                    corresponds to a field to filter on.
+     *                    {@code PREFIX_NAME} for name substring matching.
+     *                    {@code PREFIX_PHONE} for phone number matching.
+     *                    Prefixes absent from the map are not filtered on.
      */
-    public SearchPredicate(Map<Prefix, List<String>> argMap) {
-        this.fullNamePredicate = argMap.containsKey(PREFIX_NAME)
-                ? new FullNamePredicate(argMap.get(PREFIX_NAME))
-                : null;
-
-        this.phoneNumberPredicate = argMap.containsKey(PREFIX_PHONE)
-                ? new PhoneNumberPredicate(argMap.get(PREFIX_PHONE))
-                : null;
+    public SearchPredicate(ArgumentMultimap argMultimap) {
+        this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent() ?
+                new FullNamePredicate(Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+"))) :
+                new FullNamePredicate(new ArrayList<>());
+        this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent() ?
+                new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+"))) :
+                new PhoneNumberPredicate(new ArrayList<>());
     }
 
     @Override
@@ -73,8 +75,8 @@ public class SearchPredicate implements Predicate<Person> {
     public String toString() {
         return MessageFormat.format(
                 "{0}, {1}",
-                fullNamePredicate != null ? fullNamePredicate.toString() : "NA",
-                phoneNumberPredicate != null ? phoneNumberPredicate.toString() : "NA"
+                fullNamePredicate.toString(),
+                phoneNumberPredicate.toString()
         );
     }
 }
