@@ -158,6 +158,23 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Field validation constraints
+
+#### Implementation
+
+Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Notes`) and reused by parsers via `ParserUtil`.
+All user-provided values are trimmed in `ParserUtil` before validation.
+
+| Field | Constraint summary |
+| --- | --- |
+| `Name` | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`). |
+| `Phone` | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`). |
+| `Email` | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
+| `Address` | Must not be blank (first non-whitespace character required). |
+| `Notes` | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`). |
+
+This keeps validation centralized and consistent for both command execution and JSON deserialization.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
