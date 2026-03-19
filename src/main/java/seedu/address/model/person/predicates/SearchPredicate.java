@@ -42,12 +42,8 @@ public class SearchPredicate implements Predicate<Person> {
         boolean nameCondition = false;
         boolean phoneCondition = false;
 
-        if (fullNamePredicate != null) {
-            nameCondition = fullNamePredicate.test(person);
-        }
-        if (phoneNumberPredicate != null) {
-            phoneCondition = phoneNumberPredicate.test(person);
-        }
+        nameCondition = fullNamePredicate.test(person);
+        phoneCondition = phoneNumberPredicate.test(person);
 
         return nameCondition || phoneCondition;
     }
