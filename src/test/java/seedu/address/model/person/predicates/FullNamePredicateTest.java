@@ -104,10 +104,10 @@ public class FullNamePredicateTest {
 
     @Test
     public void toStringMethod() {
-        List<String> keywords = List.of("test1", "test2");
-        FullNamePredicate predicate = new FullNamePredicate(keywords);
+        List<String> subNames = List.of("test1", "test2");
+        FullNamePredicate predicate = new FullNamePredicate(subNames);
 
-        String expected = FullNamePredicate.class.getCanonicalName() + "{substrings=" + keywords + "}";
+        String expected = FullNamePredicate.class.getCanonicalName() + "{subNames=" + subNames + "}";
         assertEquals(expected, predicate.toString());
     }
 }

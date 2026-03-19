@@ -11,15 +11,15 @@ import seedu.address.model.person.Person;
  * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
  */
 public class FullNamePredicate implements Predicate<Person> {
-    private final List<String> substrings;
+    private final List<String> subNames;
 
-    public FullNamePredicate(List<String> substrings) {
-        this.substrings = substrings;
+    public FullNamePredicate(List<String> subNames) {
+        this.subNames = subNames;
     }
 
     @Override
     public boolean test(Person person) {
-        return substrings.stream()
+        return subNames.stream()
                 .anyMatch(substring -> StringUtil.containsSubstringIgnoreCase(person.getName().fullName,
                         substring));
     }
@@ -36,11 +36,11 @@ public class FullNamePredicate implements Predicate<Person> {
         }
 
         FullNamePredicate otherFullNamePredicate = (FullNamePredicate) other;
-        return substrings.equals(otherFullNamePredicate.substrings);
+        return subNames.equals(otherFullNamePredicate.subNames);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("substrings", substrings).toString();
+        return new ToStringBuilder(this).add("subNames", subNames).toString();
     }
 }

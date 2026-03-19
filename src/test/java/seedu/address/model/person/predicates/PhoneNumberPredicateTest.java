@@ -77,10 +77,10 @@ public class PhoneNumberPredicateTest {
 
     @Test
     public void toStringMethod() {
-        List<String> keywords = List.of("123", "456");
-        PhoneNumberPredicate predicate = new PhoneNumberPredicate(keywords);
+        List<String> subNumbers = List.of("123", "456");
+        PhoneNumberPredicate predicate = new PhoneNumberPredicate(subNumbers);
 
-        String expected = PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers=" + keywords + "}";
+        String expected = PhoneNumberPredicate.class.getCanonicalName() + "{subNumbers=" + subNumbers + "}";
         assertEquals(expected, predicate.toString());
     }
 }
