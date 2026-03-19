@@ -123,6 +123,7 @@ public class FindCommandTest {
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
 
+    @Test
     public void execute_multipleSubnumbers_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicatePhoneOnly);
         expectedModel.updateFilteredPersonList(searchPredicatePhoneOnly);
@@ -132,6 +133,7 @@ public class FindCommandTest {
         assertEquals(Arrays.asList(CARL, GEORGE), model.getFilteredPersonList());
     }
 
+    @Test
     public void execute_multipleSubstringsAndSubnumbers_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicateAllPresent);
         expectedModel.updateFilteredPersonList(searchPredicateAllPresent);
