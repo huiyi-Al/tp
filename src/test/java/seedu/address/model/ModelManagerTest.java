@@ -95,6 +95,13 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void detelePerson_selectedPerson() {
+        Person personToDelete = ALICE;
+        modelManager.setSelectedPerson(personToDelete);
+        assertEquals(ALICE, modelManager.getSelectedPerson().getValue());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
