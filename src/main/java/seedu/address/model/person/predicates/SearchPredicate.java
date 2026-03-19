@@ -6,13 +6,10 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 import seedu.address.logic.parser.ArgumentMultimap;
-import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Person;
 
 /**
@@ -32,12 +29,12 @@ public class SearchPredicate implements Predicate<Person> {
      *                    Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
-        this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent() ?
-                new FullNamePredicate(Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+"))) :
-                new FullNamePredicate(new ArrayList<>());
-        this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent() ?
-                new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+"))) :
-                new PhoneNumberPredicate(new ArrayList<>());
+        this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent()
+                ? new FullNamePredicate(Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+")))
+                : new FullNamePredicate(new ArrayList<>());
+        this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
+                ? new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
+                : new PhoneNumberPredicate(new ArrayList<>());
     }
 
     @Override

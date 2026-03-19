@@ -9,14 +9,10 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.ArgumentMultimap;
-import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 

@@ -7,12 +7,6 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseDiffer
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
