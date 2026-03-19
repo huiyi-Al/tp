@@ -72,7 +72,7 @@ public class SearchPredicate implements Predicate<Person> {
     @Override
     public String toString() {
         return MessageFormat.format(
-                "{0}, {1}\n",
+                "{0}, {1}",
                 fullNamePredicate != null ? fullNamePredicate.toString() : "NA",
                 phoneNumberPredicate != null ? phoneNumberPredicate.toString() : "NA"
         );

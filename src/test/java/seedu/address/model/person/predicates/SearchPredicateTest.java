@@ -116,24 +116,24 @@ public class SearchPredicateTest {
     @Test
     public void toStringMethod() {
         String expectedEmpty = MessageFormat.format(
-                "{0}, {1}\n",
+                "{0}, {1}",
                 "NA",
                 "NA"
         );
         String expectedNameOnly = MessageFormat.format(
-                "{0}, {1}\n",
+                "{0}, {1}",
                 FullNamePredicate.class.getCanonicalName() + "{substrings="
                         + argMapNameOnly.get(PREFIX_NAME) + "}",
                 "NA"
         );
         String expectedPhoneOnly = MessageFormat.format(
-                "{0}, {1}\n",
+                "{0}, {1}",
                 "NA",
                 PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers="
                         + argMapPhoneOnly.get(PREFIX_PHONE) + "}"
         );
         String expectedAllPresent = MessageFormat.format(
-                "{0}, {1}\n",
+                "{0}, {1}",
                 FullNamePredicate.class.getCanonicalName() + "{substrings="
                         + argMapNameOnly.get(PREFIX_NAME) + "}",
                 PhoneNumberPredicate.class.getCanonicalName() + "{subnumbers="
