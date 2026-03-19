@@ -48,4 +48,5 @@ public class PersonDetailPanelTest {
         selectedPerson.set(null);
         assertNotNull(personDetailPanel.getRoot());
     }
+    
 }
