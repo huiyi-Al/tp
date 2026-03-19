@@ -25,7 +25,7 @@ import seedu.address.logic.parser.Prefix;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.predicate.SearchPredicate;
+import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.

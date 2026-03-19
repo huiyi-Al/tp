@@ -16,9 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
-import seedu.address.model.person.predicate.PhoneNumberPredicate;
-import seedu.address.model.person.predicate.SearchPredicate;
 import seedu.address.testutil.PersonBuilder;
 
 public class SearchPredicateTest {

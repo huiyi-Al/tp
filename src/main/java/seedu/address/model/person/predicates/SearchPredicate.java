@@ -1,4 +1,4 @@
-package seedu.address.model.person.predicate;
+package seedu.address.model.person.predicates;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;

@@ -13,7 +13,7 @@ import java.util.Map;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.predicate.SearchPredicate;
+import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object

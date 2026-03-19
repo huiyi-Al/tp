@@ -9,7 +9,7 @@ import java.text.MessageFormat;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.predicate.SearchPredicate;
+import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
  * Finds and lists all persons in address book based on following criteria:
