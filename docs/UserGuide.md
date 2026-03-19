@@ -1,12 +1,14 @@
 ---
   layout: default.md
-  title: "User Guide"
-  pageNav: 3
+    title: "User Guide"
+    pageNav: 3
 ---
 
 # Linkline User Guide
 
-Linkline is a **desktop app for solo technicians to manage client details, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Linkline can get your contact management tasks done faster than traditional GUI apps.
+Linkline is a **desktop app for solo technicians to manage client details, optimized for use via a Command Line
+Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Linkline
+can get your contact management tasks done faster than traditional GUI apps.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -16,28 +18,32 @@ Linkline is a **desktop app for solo technicians to manage client details, optim
 ## Quick start
 
 1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   **Mac users:** Ensure you have the precise JDK version
+   prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103-F09-4/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for Linkline.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar linkline.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar linkline.jar` command
+   to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will
+   open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+    * `list` : Lists all contacts.
 
-   * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+    * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01` : Adds a
+      contact named `John Doe` to the Address Book.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
-   * `clear` : Deletes all contacts.
+    * `clear` : Deletes all contacts.
 
-   * `exit` : Exits the app.
+    * `exit` : Exits the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -59,13 +65,16 @@ Linkline is a **desktop app for solo technicians to manage client details, optim
   e.g. `[--tag=TAG]…​` can be used as ` ` (i.e. 0 times), `--tag=friend`, `--tag=friend --tag=family` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `--name=NAME --phone=PHONE_NUMBER`, `--phone=PHONE_NUMBER --name=NAME` is also acceptable.
+  e.g. if the command specifies `--name=NAME --phone=PHONE_NUMBER`, `--phone=PHONE_NUMBER --name=NAME` is also
+  acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be
+  ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-</box>
+* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
+  as space characters surrounding line-breaks may be omitted when copied over to the application.
+  </box>
 
 ### Viewing help : `help`
 
@@ -75,12 +84,12 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
-
 ### Adding a person: `add`
 
 Adds a person to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
 
-* Person with the same email or phone number as an existing person in the address book cannot be added as they are considered duplicated persons. 
+* Person with the same email or phone number as an existing person in the address book cannot be added as they are
+  considered duplicated persons.
 
 Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]`
 
@@ -90,8 +99,10 @@ Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [-
 </box>
 
 Examples:
+
 * `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01`
-* `add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
+*
+`add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
 
 ### Listing all persons : `list`
 
@@ -103,23 +114,29 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`
+Format:
+`edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`
 
-* Edits the person at the specified `INDEX`. 
-* The index refers to the index number shown in the displayed person list. 
+* Edits the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any tags after it.
+* You can remove all the person’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any
+  tags after it.
 
 Examples:
-*  `edit 1 --phone=91234567 --email=johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 --name=Betsy Crower --tag=` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+* `edit 1 --phone=91234567 --email=johndoe@example.com` Edits the phone number and email address of the 1st person to be
+  `91234567` and `johndoe@example.com` respectively.
+* `edit 2 --name=Betsy Crower --tag=` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing
+  tags.
 
 ### Locating persons by name: `find`
 
-Finds persons whose names and phone numbers contain any of the given keywords. If there is more than one person, the list returned is sorted.
+Finds persons whose names and phone numbers contain any of the given keywords. If there is more than one person, the
+list returned is sorted.
 
 Format: `find [--name=NAME_KEYWORD…​] [--phone=PHONE_KEYWORD…​]`
 
@@ -132,10 +149,11 @@ Format: `find [--name=NAME_KEYWORD…​] [--phone=PHONE_KEYWORD…​]`
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
+
 * `find --name=John` returns `john` and `John Doe`
 * `find --name=Alex --phone=1234` returns persons named `Alex` and persons with `1234` in their phone number
 * `find --name=alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex bernice'](images/findAlexBerniceResult.png) 
+  ![result for 'find alex bernice'](images/findAlexBerniceResult.png)
 
 ### Deleting a person : `delete`
 
@@ -148,6 +166,7 @@ Format: `delete INDEX`
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
+
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
@@ -185,17 +204,21 @@ Format: `exit`
 
 ### Saving the data
 
-LinkLine data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+LinkLine data are saved in the hard disk automatically after any command that changes the data. There is no need to save
+manually.
 
 ### Editing the data file
 
-LinkLine data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+LinkLine data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are
+welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 
 **Caution:**
-If your changes to the data file makes its format invalid, LinkLine will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the LinkLine to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, LinkLine will discard all data and start with an empty data
+file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the LinkLine to behave in unexpected ways (e.g., if a value entered is outside the
+acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 --------------------------------------------------------------------------------------------------------------------
@@ -203,27 +226,32 @@ Furthermore, certain edits can cause the LinkLine to behave in unexpected ways (
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous LinkLine home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains
+the data of your previous LinkLine home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only
+   the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the
+   application before running the application again.
+2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut
+   `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to
+   manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
 
-Action             | Format, Examples
--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**            | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits`
-**Clear**          | `clear`
-**Copy Address**   | `copyaddr INDEX`<br> e.g., `copyaddr 1`
-**Delete**         | `delete INDEX`<br> e.g., `delete 3`
-**Edit**           | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`
-**Find**           | `find [--name=KEYWORD [MORE_KEYWORDS]] [--phone=NUMBER [MORE_NUMBERS]]`<br> e.g., `find James Jake`
-**List**           | `list`
-**Help**           | `help`
-**View**           |`view INDEX`<br> e.g., `view 1`
+ Action           | Format, Examples                                                                                                                                                                                                                                                                      
+------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ **Add**          | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits` 
+ **Clear**        | `clear`                                                                                                                                                                                                                                                                               
+ **Copy Address** | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                               
+ **Delete**       | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                   
+ **Edit**         | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                   
+ **Find**         | `find [--name=KEYWORD [MORE_KEYWORDS]] [--phone=NUMBER [MORE_NUMBERS]]`<br> e.g., `find James Jake`                                                                                                                                                                                   
+ **List**         | `list`                                                                                                                                                                                                                                                                                
+ **Help**         | `help`                                                                                                                                                                                                                                                                                
+ **View**         | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                       
