@@ -49,6 +49,9 @@ public class PersonDetailPanel extends UiPart<Region> {
     private void showNoSelection() {
         detailsPlaceholder.getChildren().clear();
         currentDetailCard = null;
+
+        noselectionLabel.setVisible(true);
+        noselectionLabel.setManaged(true);
         noselectionLabel.setText("Select a client to view details");
     }
 

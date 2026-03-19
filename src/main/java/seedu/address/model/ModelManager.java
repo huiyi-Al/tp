@@ -100,12 +100,18 @@ public class ModelManager implements Model {
     @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+
+        if (target.equals(selectedPerson.get())) {
+            selectedPerson.set(null);
+        }
     }
 
     @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
+        selectedPerson.set(person);
     }
 
     @Override
@@ -113,6 +119,10 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+
+        if (target.equals(selectedPerson.get())) {
+            selectedPerson.set(editedPerson);
+        }
     }
 
     //=========== Filtered Person List Accessors =============================================================
