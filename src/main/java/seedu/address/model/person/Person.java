@@ -68,7 +68,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same phone or email.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -76,8 +76,19 @@ public class Person {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName());
+        if (otherPerson == null) {
+            return false;
+        }
+
+        // Extract only digits from phone numbers for comparison
+        String thisPhoneDigits = extractDigits(this.phone.value);
+        String otherPhoneDigits = extractDigits(otherPerson.phone.value);
+
+        // Compare emails case-insensitively
+        boolean sameEmail = this.email.value.equalsIgnoreCase(otherPerson.email.value);
+
+        // Check if phone digits match OR email matches
+        return thisPhoneDigits.equals(otherPhoneDigits) || sameEmail;
     }
 
     /**
@@ -102,6 +113,14 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && notes.equals(otherPerson.notes)
                 && tags.equals(otherPerson.tags);
+    }
+
+    /**
+     * Extracts only numeric digits from a phone string.
+     * Removes -, spaces, and any other non-digit characters.
+     */
+    private String extractDigits(String phoneString) {
+        return phoneString.replaceAll("[^0-9]", "");
     }
 
     @Override
