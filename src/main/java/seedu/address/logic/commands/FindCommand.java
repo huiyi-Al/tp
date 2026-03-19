@@ -2,35 +2,43 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+
+import java.text.MessageFormat;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
+import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
- * Keyword matching is case insensitive.
+ * Finds and lists all persons in address book based on following criteria:
+ * 1. Full name contains any of the argument keywords.
+ * 2. Phone number contains any of the numbers given.
+ * Keyword matching is case-insensitive.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified substrings (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: " + PREFIX_NAME + "substring [OPTIONAL_SUBSTRINGS]\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "david";
+    public static final String MESSAGE_USAGE = MessageFormat.format(
+            "{0}: Finds all persons whose names contain any of the specified substrings (case-insensitive) "
+                    + "and displays them as a list with index numbers.\n"
+                    + "Parameters: {1}substring [OPTIONAL_SUBSTRINGS] {2}number [OPTIONAL_NUMBERS]\n"
+                    + "Example: {0} {1}david {2}123",
+            COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE
+    );
 
-    private final NameContainsSubstringsPredicate predicate;
+    private final SearchPredicate searchPredicate;
 
-    public FindCommand(NameContainsSubstringsPredicate predicate) {
-        this.predicate = predicate;
+    public FindCommand(SearchPredicate searchPredicate) {
+        this.searchPredicate = searchPredicate;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.updateFilteredPersonList(predicate);
+        model.updateFilteredPersonList(searchPredicate);
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }
@@ -47,13 +55,13 @@ public class FindCommand extends Command {
         }
 
         FindCommand otherFindCommand = (FindCommand) other;
-        return predicate.equals(otherFindCommand.predicate);
+        return searchPredicate.equals(otherFindCommand.searchPredicate);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("predicate", predicate)
+                .add("searchPredicate", searchPredicate)
                 .toString();
     }
 }

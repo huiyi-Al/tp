@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.text.MessageFormat;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +26,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.predicate.NameContainsSubstringsPredicate;
+import seedu.address.model.person.predicates.SearchPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -73,11 +72,23 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        String subNames = String.join(" ", "foo", "bar", "baz");
+        String subNumbers = String.join("123", "456", "789");
+        ArgumentMultimap argMultimap = new ArgumentMultimap();
+        argMultimap.put(PREFIX_NAME, subNames);
+        argMultimap.put(PREFIX_PHONE, subNumbers);
+
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + PREFIX_NAME.toString()
-                        + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsSubstringsPredicate(keywords)), command);
+                MessageFormat.format("{0} {1} {2} {3} {4}",
+                        FindCommand.COMMAND_WORD,
+                        PREFIX_NAME.toString(),
+                        subNames,
+                        PREFIX_PHONE.toString(),
+                        subNumbers
+                )
+        );
+
+        assertEquals(new FindCommand(new SearchPredicate(argMultimap)), command);
     }
 
     @Test
@@ -102,7 +113,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+                -> parser.parseCommand(""));
     }
 
     @Test
