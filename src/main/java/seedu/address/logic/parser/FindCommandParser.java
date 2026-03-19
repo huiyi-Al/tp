@@ -39,24 +39,19 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
 
         // If there isn't at least one prefix
-        int missing = 0;
-        for (Prefix expectedPrefix : expectedPrefixes) {
-            if (argMultimap.getValue(expectedPrefix).isEmpty()) {
-                missing++;
-            }
-        }
-        if (missing == expectedPrefixes.size()) {
+        boolean nonePresent = expectedPrefixes.stream()
+                .allMatch(p -> argMultimap.getValue(p).isEmpty());
+        if (nonePresent) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        // If any prefix is present without any values given
-        for (Prefix expectedPrefix : expectedPrefixes) {
-            if (argMultimap.getValue(expectedPrefix).isPresent()
-                    && argMultimap.getValue(expectedPrefix).get().isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
+        // If any present prefixes are empty
+        boolean anyPresentButEmpty = expectedPrefixes.stream()
+                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
+        if (anyPresentButEmpty) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
         // Keep list of all present prefixes
