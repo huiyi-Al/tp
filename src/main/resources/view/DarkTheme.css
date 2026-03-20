@@ -362,3 +362,12 @@
     -fx-background-radius: 4;
     -fx-font-size: 15;
 }
+.emoji-label {
+    -fx-font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "EmojiOne Color", sans-serif;
+}
+.dotted-separator .line {
+    -fx-border-style: dotted;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: #aaaaaa;
+    -fx-pref-height: 1;
+}

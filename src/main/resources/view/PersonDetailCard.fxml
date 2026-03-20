@@ -2,28 +2,67 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Separator?>
+<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
         </columnConstraints>
-        <VBox alignment="CENTER_LEFT" minHeight="105" styleClass="label-bright" GridPane.columnIndex="0" >
+        <VBox alignment="CENTER_LEFT" minHeight="105" spacing="5" styleClass="label-bright" GridPane.columnIndex="0">
             <padding>
-                <Insets top="10" right="5" bottom="10" left="5" />
+                <Insets bottom="10" left="5" right="5" top="10" />
             </padding>
-            <Label fx:id="name" text="\$first" styleClass="card_big_label" />
-            <Label fx:id="phone" styleClass="card_small_label" text="\$phone" />
-            <Label fx:id="email" styleClass="card_small_label" text="\$email" />
-            <Label fx:id="address" styleClass="card_small_label" text="\$address" />
-            <Label fx:id="notes" styleClass="card_small_label" text="\$notes" />
-            <FlowPane fx:id="tags" styleClass="label" />
+            <Label fx:id="name" styleClass="card_big_label" text="\$first" />
+            <Region minHeight="5" prefHeight="5" />
+            <Separator styleClass="dotted-separator" />
+            <Label fx:id="phone" styleClass="card_small_label, emoji-label" text="\$phone">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/phone.png" />
+                  </image>
+               </ImageView>
+            </graphic></Label>
+            <Label fx:id="email" styleClass="card_small_label, emoji-label" text="\$email">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/email.png" />
+                  </image>
+               </ImageView>
+            </graphic></Label>
+            <Label fx:id="address" styleClass="card_small_label, emoji-label" text="\$address">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/address.png" />
+                  </image>
+               </ImageView>
+            </graphic></Label>
+            <Label fx:id="notes" styleClass="card_small_label, emoji-label" text="\$notes">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/note.png" />
+                  </image>
+               </ImageView>
+            </graphic></Label>
+            <Separator styleClass="dotted-separator" />
+            <Region minHeight="5" prefHeight="5" />
+            <FlowPane fx:id="tags" styleClass="label"/>
         </VBox>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 </HBox>

@@ -48,9 +48,9 @@ public class PersonDetailCard extends UiPart<Region> {
         super(FXML);
         this.person = person;
         name.setText(person.getName().fullName);
-        phone.setText("Phone number 📞 : " + person.getPhone().value);
-        address.setText("Home address 🏠 : " + person.getAddress().value);
-        email.setText("Email address ✉️ : " + person.getEmail().value);
+        phone.setText("Phone number : " + person.getPhone().value);
+        address.setText("Address : " + person.getAddress().value);
+        email.setText("Email address : " + person.getEmail().value);
         notes.setText("Notes : " + person.getNotes().value);
 
         person.getTags().stream()
