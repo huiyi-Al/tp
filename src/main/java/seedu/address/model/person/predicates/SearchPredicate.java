@@ -1,7 +1,6 @@
 package seedu.address.model.person.predicates;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import seedu.address.model.person.Person;
 public class SearchPredicate implements Predicate<Person> {
     private final FullNamePredicate fullNamePredicate;
     private final PhoneNumberPredicate phoneNumberPredicate;
+    private final EmailAddressPredicate emailAddressPredicate;
 
     /**
      * Creates a {@code SearchPredicate} that filters persons based on the provided argument map.
@@ -26,6 +26,7 @@ public class SearchPredicate implements Predicate<Person> {
      *                    corresponds to a field to filter on.
      *                    {@code PREFIX_NAME} for name substring matching.
      *                    {@code PREFIX_PHONE} for phone number matching.
+     *                    {@code PREFIX_EMAIL} for email address matching.
      *                    Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
@@ -35,17 +36,22 @@ public class SearchPredicate implements Predicate<Person> {
         this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
                 ? new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
                 : new PhoneNumberPredicate(new ArrayList<>());
+        this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
+                ? new EmailAddressPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
+                : new EmailAddressPredicate(new ArrayList<>());
     }
 
     @Override
     public boolean test(Person person) {
         boolean nameCondition = false;
         boolean phoneCondition = false;
+        boolean emailAddressCondition = false;
 
         nameCondition = fullNamePredicate.test(person);
         phoneCondition = phoneNumberPredicate.test(person);
+        emailAddressCondition = emailAddressPredicate.test(person);
 
-        return nameCondition || phoneCondition;
+        return nameCondition || phoneCondition || emailAddressCondition;
     }
 
     @Override
@@ -67,9 +73,10 @@ public class SearchPredicate implements Predicate<Person> {
     @Override
     public String toString() {
         return MessageFormat.format(
-                "{0}, {1}",
+                "{0}, {1}, {2}",
                 fullNamePredicate.toString(),
-                phoneNumberPredicate.toString()
+                phoneNumberPredicate.toString(),
+                emailAddressPredicate.toString()
         );
     }
 }
