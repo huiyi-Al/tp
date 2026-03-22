@@ -9,6 +9,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.log.LogHistory;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -28,6 +29,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Notes notes;
+    private LogHistory logHistory;
     private Set<Tag> tags;
 
     /**
@@ -39,6 +41,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         notes = new Notes(DEFAULT_NOTES);
+        logHistory = new LogHistory();
         tags = new HashSet<>();
     }
 
@@ -51,6 +54,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         notes = personToCopy.getNotes();
+        logHistory = personToCopy.getLogHistory();
         tags = new HashSet<>(personToCopy.getTags());
     }
 
@@ -110,8 +114,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code LogHistory} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withLogHistory(LogHistory logHistory) {
+        this.logHistory = logHistory;
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, notes, tags);
+        return new Person(name, phone, email, address, notes, logHistory, tags);
     }
 
 }
