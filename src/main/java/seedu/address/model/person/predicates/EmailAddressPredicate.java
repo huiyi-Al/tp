@@ -20,7 +20,7 @@ public class EmailAddressPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return subEmailAddresses.stream()
-                .anyMatch(subEmailAddress -> StringUtil.containsSubstringIgnoreCase(person.getPhone().value,
+                .anyMatch(subEmailAddress -> StringUtil.containsSubstringIgnoreCase(person.getEmail().value,
                         subEmailAddress));
     }
 

@@ -1,6 +1,8 @@
 package seedu.address.model.person.predicates;
 
-import static seedu.address.logic.parser.CliSyntax.*;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class SearchPredicate implements Predicate<Person> {
                 ? new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
                 : new PhoneNumberPredicate(new ArrayList<>());
         this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
-                ? new EmailAddressPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
+                ? new EmailAddressPredicate(Arrays.asList(argMultimap.getValue(PREFIX_EMAIL).get().split("\\s+")))
                 : new EmailAddressPredicate(new ArrayList<>());
     }
 
@@ -67,7 +69,8 @@ public class SearchPredicate implements Predicate<Person> {
 
         SearchPredicate otherSearchPredicate = (SearchPredicate) other;
         return Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
-                && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate);
+                && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate)
+                && Objects.equals(emailAddressPredicate, otherSearchPredicate.emailAddressPredicate);
     }
 
     @Override
