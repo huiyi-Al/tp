@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 
 import java.text.MessageFormat;
 
@@ -22,11 +23,12 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = MessageFormat.format(
-            "{0}: Finds all persons whose names contain any of the specified substrings (case-insensitive) "
-                    + "and displays them as a list with index numbers.\n"
-                    + "Parameters: {1}substring [OPTIONAL_SUBSTRINGS] {2}number [OPTIONAL_NUMBERS]\n"
-                    + "Example: {0} {1}david {2}123",
-            COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE
+            """
+                    {0}: Finds all persons whose names contain any of the specified substrings (case-insensitive) \
+                    and displays them as a list with index numbers.
+                    Parameters: {1}substring [OPTIONAL_SUBSTRINGS] {2}number [OPTIONAL_NUMBERS]
+                    Example: {0} {1}david {2}123 {3}d@gmail""",
+            COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL
     );
 
     private final SearchPredicate searchPredicate;
