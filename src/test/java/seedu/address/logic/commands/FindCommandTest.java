@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.parser.CliSyntax.*;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.ELLE;
@@ -17,9 +18,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -57,44 +56,55 @@ public class FindCommandTest {
     private static final Model MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private static final Model EXPECTED_MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-    private static final ArgumentMultimap TEST_ARGMAP_EMPTY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
-    private static FindCommand TEST_FIND_COMMAND_EMPTY = new FindCommand(TEST_SEARCH_PREDICATE_EMPTY);
+    private static final ArgumentMultimap TEST_ARGMAP_EMPTY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMPTY;
+    private static final FindCommand TEST_FIND_COMMAND_EMPTY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY = new SearchPredicate(TEST_ARGMAP_NAME_ONLY);
-    private static FindCommand TEST_FIND_COMMAND_NAME_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_NAME_ONLY);
+    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY;
+    private static final FindCommand TEST_FIND_COMMAND_NAME_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
-    private static FindCommand TEST_FIND_COMMAND_PHONE_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_PHONE_ONLY);
+    private static final ArgumentMultimap TEST_ARGMAP_PHONE_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_PHONE_ONLY;
+    private static final FindCommand TEST_FIND_COMMAND_PHONE_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
-    private static FindCommand TEST_FIND_COMMAND_EMAIL_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
+    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY;
+    private static final FindCommand TEST_FIND_COMMAND_EMAIL_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
-    private static FindCommand TEST_FIND_COMMAND_ALL_PRESENT = new FindCommand(TEST_SEARCH_PREDICATE_ALL_PRESENT);
+    private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
+    private static final FindCommand TEST_FIND_COMMAND_ALL_PRESENT;
 
-    public FindCommandTest() {
+    static {
+        TEST_ARGMAP_EMPTY = new ArgumentMultimap();
+        TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
+        TEST_FIND_COMMAND_EMPTY = new FindCommand(TEST_SEARCH_PREDICATE_EMPTY);
+
+        TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_NAME_ONLY.put(PREFIX_NAME, TEST_NAME_QUERY);
         TEST_SEARCH_PREDICATE_NAME_ONLY = new SearchPredicate(TEST_ARGMAP_NAME_ONLY);
         TEST_FIND_COMMAND_NAME_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_NAME_ONLY);
 
+        TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_PHONE_ONLY.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
         TEST_FIND_COMMAND_PHONE_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_PHONE_ONLY);
 
+        TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_EMAIL_ONLY.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
         TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
         TEST_FIND_COMMAND_EMAIL_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
 
+        TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
         TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
         TEST_FIND_COMMAND_ALL_PRESENT = new FindCommand(TEST_SEARCH_PREDICATE_ALL_PRESENT);
+    }
+
+    public FindCommandTest() {
     }
 
     @Test

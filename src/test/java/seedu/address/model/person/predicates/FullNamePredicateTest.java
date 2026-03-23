@@ -79,16 +79,16 @@ public class FullNamePredicateTest {
     @Test
     public void test_emptyStringSubstring_throwsIllegalArgumentException() {
         FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList(""));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> predicate.test(new PersonBuilder().withName(NAME_ALICE_BOB).build()));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
+                PersonBuilder().withName(NAME_ALICE_BOB).build()));
         assertEquals("Substring parameter cannot be empty", e.getMessage());
     }
 
     @Test
     public void test_multiWordSubstring_throwsIllegalArgumentException() {
         FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList("word1 word2"));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> predicate.test(new PersonBuilder().withName(NAME_ALICE_BOB).build()));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
+                PersonBuilder().withName(NAME_ALICE_BOB).build()));
         assertEquals("Substring parameter should be a single word", e.getMessage());
     }
 
@@ -151,4 +151,3 @@ public class FullNamePredicateTest {
         assertEquals(expected, predicate.toString());
     }
 }
- 

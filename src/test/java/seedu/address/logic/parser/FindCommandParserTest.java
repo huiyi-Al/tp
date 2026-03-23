@@ -1,9 +1,9 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseDifferent;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -36,10 +36,6 @@ import seedu.address.model.person.predicates.SearchPredicate;
  * </ul>
  */
 public class FindCommandParserTest {
-    private final ArgumentMultimap argMultimap;
-    private final FindCommandParser parser;
-    private FindCommand expected;
-
     private static final String TEST_EMPTY = "    ";
     private static final String TEST_NAME1 = "Alice";
     private static final String TEST_NAME2 = "Bob";
@@ -53,6 +49,9 @@ public class FindCommandParserTest {
     private static final String TEST_EMAIL2 = MessageFormat.format("{0}{1}@test.com", TEST_NAME2, TEST_PHONE2);
     private static final String TEST_MULTIEMAIL1 = MessageFormat.format("{0} {1}", TEST_EMAIL1, TEST_EMAIL2);
 
+    private final ArgumentMultimap argMultimap;
+    private final FindCommandParser parser;
+    private FindCommand expected;
 
     public FindCommandParserTest() {
         this.argMultimap = new ArgumentMultimap();

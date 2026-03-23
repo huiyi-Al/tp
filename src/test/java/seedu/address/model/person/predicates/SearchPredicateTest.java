@@ -64,53 +64,66 @@ public class SearchPredicateTest {
     private static final String TEST_EMAIL_QUERY = "3@nus.org";
     private static final String TEST_NAME_QUERY_ALTERNATIVE = "qw er";
 
-    private static final ArgumentMultimap TEST_ARGMAP_EMPTY = new ArgumentMultimap();
-    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
+    private static final ArgumentMultimap TEST_ARGMAP_EMPTY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMPTY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY;
+    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY_UPPERCASE = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY_UPPERCASE;
+    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY_UPPERCASE;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY_UPPERCASE;
 
-    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY_ALTERNATIVE = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY_ALTERNATIVE;
+    private static final ArgumentMultimap TEST_ARGMAP_NAME_ONLY_ALTERNATIVE;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_NAME_ONLY_ALTERNATIVE;
 
-    private static final ArgumentMultimap TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_PHONE_ONLY;
+    private static final ArgumentMultimap TEST_ARGMAP_PHONE_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_PHONE_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY;
+    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY;
 
-    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY_UPPERCASE = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY_UPPERCASE;
+    private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY_UPPERCASE;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY_UPPERCASE;
 
-    private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
-    private static SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
+    private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
 
-    public SearchPredicateTest() {
+    static {
+        TEST_ARGMAP_EMPTY = new ArgumentMultimap();
+        TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
+
+        TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_NAME_ONLY.put(PREFIX_NAME, TEST_NAME_QUERY);
         TEST_SEARCH_PREDICATE_NAME_ONLY = new SearchPredicate(TEST_ARGMAP_NAME_ONLY);
 
+        TEST_ARGMAP_NAME_ONLY_UPPERCASE = new ArgumentMultimap();
         TEST_ARGMAP_NAME_ONLY_UPPERCASE.put(PREFIX_NAME, TEST_NAME_QUERY.toUpperCase());
         TEST_SEARCH_PREDICATE_NAME_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_NAME_ONLY_UPPERCASE);
 
+        TEST_ARGMAP_NAME_ONLY_ALTERNATIVE = new ArgumentMultimap();
         TEST_ARGMAP_NAME_ONLY_ALTERNATIVE.put(PREFIX_NAME, TEST_NAME_QUERY_ALTERNATIVE);
         TEST_SEARCH_PREDICATE_NAME_ONLY_ALTERNATIVE = new SearchPredicate(TEST_ARGMAP_NAME_ONLY_ALTERNATIVE);
 
+        TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_EMAIL_ONLY.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
         TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
 
+        TEST_ARGMAP_EMAIL_ONLY_UPPERCASE = new ArgumentMultimap();
         TEST_ARGMAP_EMAIL_ONLY_UPPERCASE.put(PREFIX_EMAIL, TEST_EMAIL_QUERY.toUpperCase());
         TEST_SEARCH_PREDICATE_EMAIL_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY_UPPERCASE);
 
+        TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_PHONE_ONLY.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
 
+        TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
         TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
+    }
+
+    public SearchPredicateTest() {
     }
 
     @Test
