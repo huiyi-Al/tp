@@ -258,8 +258,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. `user` requests to add a client.
 2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the CLI.
-3. System creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI.
-Use case ends.
+3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI. 
+4. Use case ends.
 
 **Extensions**
 * 2a. Name provided is invalid by criteria given in feature specification.
@@ -287,8 +287,8 @@ Use case ends.
 
 **MSS**
 1. `user` enters one or multiple words as a search query.
-2. System uses the query provided to filter and list (lexicographically) the clients whose name match the query.
-Use case ends.
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients whose name match the query. 
+3. Use case ends.
 
 **Extensions**
 * 1a. The search query does not match against any of the clients' names.
@@ -307,6 +307,7 @@ Use case ends.
 1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
 2. `user` pastes the client address into `map`.
 3. `user` follows the instructions given by `map` to go to the client address.
+4. Use case ends.
 
 **Extensions**
 * 1a. The index given is invalid, and does not point to a client.
@@ -400,15 +401,15 @@ Use case ends.
 
 **MSS**
 1. `user` enters one or multiple keywords as a filter query.
-2. System uses the query provided to filter and list (lexicographically) the clients who have the specifed tags that match the query.
-   Use case ends.
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags that match the query. 
+3. Use case ends.
 
 **Extensions**
-* 1a. The filter query does not match against any of the clients' names.
+* 1a. The filter query does not match against any of the clients' tags.
     * `Linkline` returns an empty page that informs `user` no matching clients were found.
     * Use case ends.
 * 1b. No filter query was provided.
-    * `Linkline` returns error message informing `user` that at least one word must be provided as a search query.
+    * `Linkline` returns error message informing `user` that at least one word must be provided as a filter query.
     * Use case ends.
 * 1c. Filter query provided is invalid by criteria given in feature specification.
     * `Linkline` returns error message informing `user` what criteria the query must meet.

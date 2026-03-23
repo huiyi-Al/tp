@@ -101,8 +101,7 @@ Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [-
 Examples:
 
 * `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01`
-*
-`add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
+* `add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
 
 ### Listing all persons : `list`
 
@@ -194,17 +193,12 @@ Format: `view INDEX`
 
 Finds persons whose tags contain all the given keywords. If there is more than one person, the list returned is sorted.
 
-
 Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 
 * Multiple keywords can be provided, separated by spaces
 * The search is case-insensitive. e.g `Plumbing` will match `plumbing`
 * Only filters by tags.
 * Only persons matching all one keyword will be returned (i.e. `AND` search).
-
-Examples:
-
-* `filter --tag=AC-Service` returns persons with `AC-Service` in their tags.
 
 ### Clearing all entries : `clear`
 
@@ -269,6 +263,6 @@ the data of your previous LinkLine home folder.
  **Edit**         | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                   
  **Filter**         | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                     
  **Find**         | `find [--name=KEYWORD [MORE_KEYWORDS]] [--phone=NUMBER [MORE_NUMBERS]]`<br> e.g., `find --name=James Jake`                                                                                                                                                                                   
- **List**         | `list`                                                                                                                                                                                                                                                                                
  **Help**         | `help`                                                                                                                                                                                                                                                                                
+ **List**         | `list`                                                                                                                                                                                                                                                                                
  **View**         | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                       
