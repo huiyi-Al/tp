@@ -189,7 +189,8 @@ public class UniquePersonListTest {
     @Test
     public void add_sameNamesDifferentPhones_listIsSortedByPhone() {
         Person aliceFirst = new PersonBuilder(ALICE).withPhone("11111111").build();
-        Person aliceSecond = new PersonBuilder(ALICE).withPhone("99999999").build();
+        Person aliceSecond = new PersonBuilder(ALICE).withPhone("99999999")
+                .withEmail("alice_secondary@example.com").build();
 
         uniquePersonList.add(aliceSecond);
         uniquePersonList.add(aliceFirst);
