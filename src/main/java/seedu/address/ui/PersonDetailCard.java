@@ -1,11 +1,13 @@
 package seedu.address.ui;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.Optional;
+import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -18,7 +20,6 @@ import seedu.address.model.person.log.LogEntry;
 public class PersonDetailCard extends UiPart<Region> {
 
     private static final String FXML = "PersonDetailCard.fxml";
-    private static final DateTimeFormatter LOG_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("dd MMM uuuu, HH:mm");
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -45,9 +46,9 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label logsHeader;
     @FXML
-    private Label latestLogTimestamp;
+    private Label logsMetaLabel;
     @FXML
-    private Label latestLogPreview;
+    private ListView<LogEntry> logsListView;
     @FXML
     private Label noLogsLabel;
     @FXML
@@ -72,28 +73,28 @@ public class PersonDetailCard extends UiPart<Region> {
     }
 
     private void initializeLogSummary(Person person) {
-        int logCount = person.getLogHistory().size();
+        List<LogEntry> logEntries = person.getLogHistory().asUnmodifiableList();
+        int logCount = logEntries.size();
         logsHeader.setText("Logs (" + logCount + ")");
+        logsListView.setItems(FXCollections.observableArrayList(logEntries));
+        logsListView.setCellFactory(unused -> new LogEntryListCell());
 
-        Optional<LogEntry> latestLog = person.getLogHistory().getLatest();
-        if (latestLog.isPresent()) {
-            LogEntry logEntry = latestLog.get();
-            latestLogTimestamp.setText("Latest: " + logEntry.getTimestamp().format(LOG_TIMESTAMP_FORMATTER));
-            latestLogPreview.setText(logEntry.getMessage().value);
-            setLabelShown(latestLogTimestamp, true);
-            setLabelShown(latestLogPreview, true);
-            setLabelShown(noLogsLabel, false);
+        if (!logEntries.isEmpty()) {
+            logsMetaLabel.setText("Sorted: Latest");
+            setNodeShown(logsMetaLabel, true);
+            setNodeShown(logsListView, true);
+            setNodeShown(noLogsLabel, false);
             return;
         }
 
-        setLabelShown(latestLogTimestamp, false);
-        setLabelShown(latestLogPreview, false);
-        setLabelShown(noLogsLabel, true);
+        setNodeShown(logsMetaLabel, false);
+        setNodeShown(logsListView, false);
+        setNodeShown(noLogsLabel, true);
     }
 
-    private static void setLabelShown(Label label, boolean isShown) {
-        label.setVisible(isShown);
-        label.setManaged(isShown);
+    private static void setNodeShown(Node node, boolean isShown) {
+        node.setVisible(isShown);
+        node.setManaged(isShown);
     }
 }
 

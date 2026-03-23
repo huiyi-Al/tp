@@ -18,3 +18,46 @@
 .tooltip-text {
     -fx-text-fill: white;
 }
+
+.logs-list-view {
+    -fx-pref-height: 280;
+}
+
+.logs-list-view .list-cell {
+    -fx-padding: 8 10 10 10;
+}
+
+.log-entry-container {
+    -fx-padding: 8 6 10 6;
+}
+
+.log-entry-title {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+}
+
+.log-entry-timestamp {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+    -fx-text-fill: #ababab;
+}
+
+.log-entry-message {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+}
+
+.log-meta-label {
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+    -fx-text-fill: #bdbdbd;
+}
+
+.log-empty-label {
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-text-fill: #ababab;
+}
