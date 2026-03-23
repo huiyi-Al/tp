@@ -12,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Deletes a person identified using it's displayed index from the address book.
+ * Deletes a person identified using its displayed index from the address book.
  */
 public class DeleteCommand extends Command {
 
@@ -20,15 +20,24 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + "Parameters: INDEX\n"
+            + "Example: " + COMMAND_WORD + " 1\n"
+            + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_CONFIRM =
+            "Are you sure you want to delete %1$s (%2$s, %3$s)?\n"
+                    + "Type '%4$s %5$d' again to confirm.\n"
+                    + "Any other command will cancel this pending deletion.";
 
     private final Index targetIndex;
 
     public DeleteCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
+    }
+
+    public Index getTargetIndex() {
+        return targetIndex;
     }
 
     @Override
@@ -41,8 +50,15 @@ public class DeleteCommand extends Command {
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        model.deletePerson(personToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+
+        // This command just returns the person details for pending deletion
+        // The actual deletion will be handled by LogicManager when confirmation is received
+        throw new CommandException(String.format(MESSAGE_DELETE_CONFIRM,
+                personToDelete.getName().fullName,
+                personToDelete.getPhone().value,
+                personToDelete.getEmail().value,
+                COMMAND_WORD,
+                targetIndex.getOneBased()));
     }
 
     @Override
@@ -51,7 +67,6 @@ public class DeleteCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof DeleteCommand)) {
             return false;
         }
