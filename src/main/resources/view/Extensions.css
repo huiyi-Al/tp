@@ -50,12 +50,6 @@
     -fx-text-fill: white;
 }
 
-.log-meta-label {
-    -fx-font-size: 13px;
-    -fx-font-style: italic;
-    -fx-text-fill: #bdbdbd;
-}
-
 .log-empty-label {
     -fx-font-size: 14px;
     -fx-font-style: italic;

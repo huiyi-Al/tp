@@ -46,8 +46,6 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label logsHeader;
     @FXML
-    private Label logsMetaLabel;
-    @FXML
     private ListView<LogEntry> logsListView;
     @FXML
     private Label noLogsLabel;
@@ -80,14 +78,11 @@ public class PersonDetailCard extends UiPart<Region> {
         logsListView.setCellFactory(unused -> new LogEntryListCell());
 
         if (!logEntries.isEmpty()) {
-            logsMetaLabel.setText("Sorted: Latest");
-            setNodeShown(logsMetaLabel, true);
             setNodeShown(logsListView, true);
             setNodeShown(noLogsLabel, false);
             return;
         }
 
-        setNodeShown(logsMetaLabel, false);
         setNodeShown(logsListView, false);
         setNodeShown(noLogsLabel, true);
     }

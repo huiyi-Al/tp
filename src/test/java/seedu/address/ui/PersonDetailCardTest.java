@@ -36,12 +36,10 @@ public class PersonDetailCardTest {
         robot.interact(() -> root.getChildren().setAll(personDetailCard.getRoot()));
 
         Label logsHeader = robot.lookup("#logsHeader").queryAs(Label.class);
-        Label logsMetaLabel = robot.lookup("#logsMetaLabel").queryAs(Label.class);
         ListView<?> logsListView = (ListView<?>) robot.lookup("#logsListView").query();
         Label noLogsLabel = robot.lookup("#noLogsLabel").queryAs(Label.class);
 
         assertEquals("Logs (0)", logsHeader.getText());
-        assertFalse(logsMetaLabel.isVisible());
         assertFalse(logsListView.isVisible());
         assertTrue(noLogsLabel.isVisible());
         assertEquals("No entries", noLogsLabel.getText());
@@ -53,13 +51,10 @@ public class PersonDetailCardTest {
         robot.interact(() -> root.getChildren().setAll(personDetailCard.getRoot()));
 
         Label logsHeader = robot.lookup("#logsHeader").queryAs(Label.class);
-        Label logsMetaLabel = robot.lookup("#logsMetaLabel").queryAs(Label.class);
         ListView<?> logsListView = (ListView<?>) robot.lookup("#logsListView").query();
         Label noLogsLabel = robot.lookup("#noLogsLabel").queryAs(Label.class);
 
         assertEquals("Logs (2)", logsHeader.getText());
-        assertTrue(logsMetaLabel.isVisible());
-        assertEquals("Sorted: Latest", logsMetaLabel.getText());
         assertTrue(logsListView.isVisible());
         assertEquals(2, logsListView.getItems().size());
         assertFalse(noLogsLabel.isVisible());

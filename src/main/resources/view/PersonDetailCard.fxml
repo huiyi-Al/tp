@@ -69,7 +69,6 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Label fx:id="logsMetaLabel" styleClass="card_small_label, log-meta-label" text="Sorted: Latest" />
             <Separator styleClass="dotted-separator" />
             <ListView fx:id="logsListView" prefHeight="280.0" styleClass="logs-list-view" VBox.vgrow="ALWAYS" />
             <Label fx:id="noLogsLabel" styleClass="card_small_label, log-empty-label" text="No entries" />
