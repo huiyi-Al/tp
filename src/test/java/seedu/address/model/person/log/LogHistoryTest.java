@@ -47,6 +47,14 @@ public class LogHistoryTest {
     }
 
     @Test
+    public void constructor_unsortedEntries_normalizesToNewestFirstOrder() {
+        LogHistory logHistory = new LogHistory(List.of(LOG_ENTRY_1, LOG_ENTRY_3, LOG_ENTRY_2));
+
+        assertEquals(List.of(LOG_ENTRY_3, LOG_ENTRY_2, LOG_ENTRY_1), logHistory.asUnmodifiableList());
+        assertEquals(Optional.of(LOG_ENTRY_3), logHistory.getLatest());
+    }
+
+    @Test
     public void add_singleEntry_addedAsLatest() {
         LogHistory updatedHistory = new LogHistory().add(LOG_ENTRY_1);
 
@@ -62,6 +70,15 @@ public class LogHistoryTest {
                 .add(LOG_ENTRY_1)
                 .add(LOG_ENTRY_2)
                 .add(LOG_ENTRY_3);
+
+        assertEquals(List.of(LOG_ENTRY_3, LOG_ENTRY_2, LOG_ENTRY_1), updatedHistory.asUnmodifiableList());
+        assertEquals(Optional.of(LOG_ENTRY_3), updatedHistory.getLatest());
+    }
+
+    @Test
+    public void add_olderEntry_keepsNewestFirstOrder() {
+        LogHistory initialHistory = new LogHistory(List.of(LOG_ENTRY_3, LOG_ENTRY_2));
+        LogHistory updatedHistory = initialHistory.add(LOG_ENTRY_1);
 
         assertEquals(List.of(LOG_ENTRY_3, LOG_ENTRY_2, LOG_ENTRY_1), updatedHistory.asUnmodifiableList());
         assertEquals(Optional.of(LOG_ENTRY_3), updatedHistory.getLatest());

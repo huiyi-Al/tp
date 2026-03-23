@@ -5,6 +5,7 @@ import static seedu.address.storage.JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORM
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 public class JsonAdaptedPersonTest {
@@ -152,6 +154,26 @@ public class JsonAdaptedPersonTest {
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                         VALID_NOTES, VALID_LOGS, invalidTags);
         assertThrows(IllegalValueException.class, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_unsortedLogs_reordersToNewestFirst() throws Exception {
+        List<JsonAdaptedLogEntry> unsortedLogs = List.of(
+                new JsonAdaptedLogEntry("2026-03-20T09:00:00", "Older log message"),
+                new JsonAdaptedLogEntry("2026-03-22T11:00:00", "Newest log message"),
+                new JsonAdaptedLogEntry("2026-03-21T10:00:00", "Middle log message"));
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        VALID_NOTES, unsortedLogs, VALID_TAGS);
+        Person modelPerson = person.toModelType();
+
+        List<LocalDateTime> timestamps = modelPerson.getLogHistory().asUnmodifiableList().stream()
+                .map(logEntry -> logEntry.getTimestamp())
+                .collect(Collectors.toList());
+        assertEquals(List.of(
+                LocalDateTime.parse("2026-03-22T11:00:00"),
+                LocalDateTime.parse("2026-03-21T10:00:00"),
+                LocalDateTime.parse("2026-03-20T09:00:00")), timestamps);
     }
 
 }

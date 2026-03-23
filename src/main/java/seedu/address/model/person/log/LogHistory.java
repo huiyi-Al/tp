@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,6 +16,9 @@ import seedu.address.commons.core.index.Index;
  * Represents an immutable, newest-first history of log entries for one person.
  */
 public class LogHistory {
+    private static final Comparator<LogEntry> NEWEST_FIRST_COMPARATOR =
+            Comparator.comparing(LogEntry::getTimestamp).reversed();
+
     private final List<LogEntry> entries = new ArrayList<>();
 
     /**
@@ -24,11 +28,12 @@ public class LogHistory {
 
     /**
      * Creates a {@code LogHistory} from the provided entries.
-     * Entries are assumed to already be in display order (newest first).
+     * Entries are normalized into newest-first display order.
      */
     public LogHistory(List<LogEntry> entries) {
         requireAllNonNull(entries);
         this.entries.addAll(entries);
+        this.entries.sort(NEWEST_FIRST_COMPARATOR);
     }
 
     /**
@@ -68,7 +73,8 @@ public class LogHistory {
     public LogHistory add(LogEntry entry) {
         requireNonNull(entry);
         List<LogEntry> updatedEntries = new ArrayList<>(entries);
-        updatedEntries.add(0, entry);
+        updatedEntries.add(entry);
+        updatedEntries.sort(NEWEST_FIRST_COMPARATOR);
         return new LogHistory(updatedEntries);
     }
 
