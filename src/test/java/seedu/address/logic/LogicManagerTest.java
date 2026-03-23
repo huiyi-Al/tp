@@ -8,6 +8,10 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NOTES_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.AMY;
 
@@ -22,6 +26,7 @@ import org.junit.jupiter.api.io.TempDir;
 import javafx.beans.value.ObservableValue;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -179,5 +184,21 @@ public class LogicManagerTest {
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_delete_confirmationFlow() throws Exception {
+        Person personToDelete = new PersonBuilder(AMY).withTags().build();
+        logic.execute(AddCommand.COMMAND_WORD + " "
+                + PREFIX_NAME + personToDelete.getName().fullName + " "
+                + PREFIX_PHONE + personToDelete.getPhone().value + " "
+                + PREFIX_EMAIL + personToDelete.getEmail().value + " "
+                + PREFIX_ADDRESS + personToDelete.getAddress().value);
+
+        assertThrows(CommandException.class, () -> logic.execute("delete 1"));
+
+        CommandResult result = logic.execute("delete 1");
+        assertEquals(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.formatBasic(personToDelete)), result.getFeedbackToUser());
     }
 }
