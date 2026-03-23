@@ -131,7 +131,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleSubNamesAndSubnumbers_multiplePersonsFound() {
+    public void execute_multipleSubNamesAndSubNumbers_multiplePersonsFound() {
         FindCommand command = new FindCommand(searchPredicateAllPresent);
         expectedModel.updateFilteredPersonList(searchPredicateAllPresent);
 
