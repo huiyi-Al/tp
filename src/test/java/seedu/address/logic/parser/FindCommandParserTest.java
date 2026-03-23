@@ -28,9 +28,9 @@ import seedu.address.model.person.predicates.SearchPredicate;
  *   <li>Valid name w/ same case, same expected command.</li>
  *   <li>Valid name w/ different case, different expected command.</li>
  *   <li>Valid phone, same expected command.</li>
- *   <li>Valid email no @ or ., same expected command. (TODO)</li>
- *   <li>Valid email w/ @ and ., same expected command. (TODO)</li>
- *   <li>Valid email with different case, different expected command. (TODO)</li>
+ *   <li>Valid email no @ or ., same expected command.</li>
+ *   <li>Valid email w/ @ and ., same expected command.</li>
+ *   <li>Valid email with different case, different expected command.</li>
  *   <li>Valid all fields expected order, same expected command.</li>
  *   <li>Valid all fields scrambled order, same expected command.</li>
  * </ul>
