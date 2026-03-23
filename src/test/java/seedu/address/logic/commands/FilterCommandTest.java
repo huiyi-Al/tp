@@ -52,13 +52,24 @@ public class FilterCommandTest {
 
     @Test
     public void execute_multipleTags_onePersonFound() {
-        //  Benson is the only one in TypicalPersons with 'AC-Service' and 'Plumbing'
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         TagsMatchKeywordsPredicate predicate = new TagsMatchKeywordsPredicate(Arrays.asList("AC-Service", "Plumbing"));
         FilterCommand command = new FilterCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(BENSON), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_tagDoesNotExist_noPersonFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        // Filtering for a tag that no one has
+        TagsMatchKeywordsPredicate predicate = new TagsMatchKeywordsPredicate(Collections.singletonList("NonExistentTag"));
+        FilterCommand command = new FilterCommand(predicate);
+
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Collections.emptyList(), model.getFilteredPersonList());
     }
 
     @Test
