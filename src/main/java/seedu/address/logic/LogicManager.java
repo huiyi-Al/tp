@@ -52,13 +52,14 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        // Check if there's a pending deletion
+        // Check if there's a pending deletion FIRST (before parsing)
         if (pendingDeletion != null) {
             String trimmedCommand = commandText.trim();
             String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " " + pendingDeletion.getIndex().getOneBased();
 
             if (trimmedCommand.equals(expectedConfirmCommand)) {
                 // User confirmed deletion
+                logger.info("User confirmed deletion of index: " + pendingDeletion.getIndex().getOneBased());
                 Person personToDelete = pendingDeletion.getPerson();
                 model.deletePerson(personToDelete);
                 pendingDeletion = null;
@@ -75,6 +76,7 @@ public class LogicManager implements Logic {
                         Messages.formatBasic(personToDelete)));
             } else {
                 // Any other command cancels the pending deletion
+                logger.info("User cancelled pending deletion by typing: " + commandText);
                 pendingDeletion = null;
                 // Continue to execute the new command
             }
@@ -84,10 +86,9 @@ public class LogicManager implements Logic {
         try {
             Command command = addressBookParser.parseCommand(commandText);
 
-            // If it's a delete command, we need to set pending deletion
+            // If it's a delete command, we need to handle it specially
             if (command instanceof DeleteCommand) {
                 DeleteCommand deleteCommand = (DeleteCommand) command;
-                // Get the person to delete
                 List<Person> lastShownList = model.getFilteredPersonList();
                 int index = deleteCommand.getTargetIndex().getZeroBased();
 
@@ -97,8 +98,10 @@ public class LogicManager implements Logic {
 
                 Person personToDelete = lastShownList.get(index);
 
-                // Set pending deletion instead of executing delete
+                // Set pending deletion
                 pendingDeletion = new PendingDeletion(deleteCommand.getTargetIndex(), personToDelete);
+
+                // Throw exception with confirmation message (but pending deletion is already set!)
                 throw new CommandException(String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
                         personToDelete.getName().fullName,
                         personToDelete.getPhone().value,
@@ -107,6 +110,7 @@ public class LogicManager implements Logic {
                         deleteCommand.getTargetIndex().getOneBased()));
             }
 
+            // For non-delete commands, execute normally
             CommandResult commandResult = command.execute(model);
 
             try {
@@ -119,8 +123,10 @@ public class LogicManager implements Logic {
 
             return commandResult;
         } catch (CommandException | ParseException e) {
-            // On error, clear pending deletion
-            pendingDeletion = null;
+            // MESSAGE_DELETE_CONFIRM may be different for different index so check for first few words of error message instead
+            if (!(e instanceof CommandException && e.getMessage().contains("Are you sure"))) {
+                pendingDeletion = null;
+            }
             throw e;
         }
     }
