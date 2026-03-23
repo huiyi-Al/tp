@@ -338,13 +338,18 @@ Use case ends.
 **Actor:** `user`
 
 **MSS**
-1. `user` deletes a client via `Linkline` command by specifying the index of the target client.
-2. `Linkline` shows the client has been deleted and reduce the number of client in the list.
-3. Use case ends.
+1. `user` enters delete command with the index of the target client.
+2. `Linkline` displays the client's details and ask for confirmation.
+3. `user` enters the same delete command again.
+4. `Linkline` deletes the client and confirms the deletion.
+5. Use case ends.
 
 **Extensions**
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
+* 2a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending deletion and executes the new command normally.
     * Use case ends.
 
 #### Use Case: UC06 - List Clients
