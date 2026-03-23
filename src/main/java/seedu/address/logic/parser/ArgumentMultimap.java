@@ -19,7 +19,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class ArgumentMultimap {
 
-    /** Prefixes mapped to their respective arguments**/
+    /**
+     * Prefixes mapped to their respective arguments
+     **/
     private final Map<Prefix, List<String>> argMultimap = new HashMap<>();
 
     /**
@@ -33,6 +35,13 @@ public class ArgumentMultimap {
         List<String> argValues = getAllValues(prefix);
         argValues.add(argValue);
         argMultimap.put(prefix, argValues);
+    }
+
+    /**
+     * Clears all {@code prefix} key-value mappings in the map.
+     */
+    public void clear() {
+        argMultimap.clear();
     }
 
     /**
