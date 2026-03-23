@@ -123,7 +123,8 @@ public class LogicManager implements Logic {
 
             return commandResult;
         } catch (CommandException | ParseException e) {
-            // MESSAGE_DELETE_CONFIRM may be different for different index so check for first few words of error message instead
+            // MESSAGE_DELETE_CONFIRM may be different
+            // so check for first few words of error message instead
             if (!(e instanceof CommandException && e.getMessage().contains("Are you sure"))) {
                 pendingDeletion = null;
             }
