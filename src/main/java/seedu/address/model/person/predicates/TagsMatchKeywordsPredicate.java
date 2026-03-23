@@ -21,7 +21,6 @@ public class TagsMatchKeywordsPredicate implements Predicate<Person> {
         if (tagKeywords.isEmpty()) {
             return false;
         }
-        
         return tagKeywords.stream()
                 .allMatch(keyword -> person.getTags().stream()
                                 .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword)));

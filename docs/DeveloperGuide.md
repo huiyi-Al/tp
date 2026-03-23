@@ -258,7 +258,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. `user` requests to add a client.
 2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the CLI.
-3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI. 
+3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI.
 4. Use case ends.
 
 **Extensions**
@@ -287,7 +287,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 1. `user` enters one or multiple words as a search query.
-2. `Linkline` uses the query provided to filter and list (lexicographically) the clients whose name match the query. 
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients whose name match the query.
 3. Use case ends.
 
 **Extensions**
@@ -401,7 +401,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 1. `user` enters one or multiple keywords as a filter query.
-2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags that match the query. 
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags that match the query.
 3. Use case ends.
 
 **Extensions**
