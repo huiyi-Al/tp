@@ -13,17 +13,27 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.log.LogEntry;
+import seedu.address.model.person.log.LogMessage;
 
 /**
  * A utility class containing a list of {@code Person} objects to be used in tests.
  */
 public class TypicalPersons {
+
+    private static final LogEntry BENSON_LOG_1 = new LogEntry(
+            LocalDateTime.of(2026, 3, 22, 14, 5, 31),
+            new LogMessage("Observed intermittent leakage below sink cabinet."));
+    private static final LogEntry BENSON_LOG_2 = new LogEntry(
+            LocalDateTime.of(2026, 3, 21, 10, 18, 2),
+            new LogMessage("Client requested follow-up call next week."));
 
     public static final Person ALICE = new PersonBuilder().withName("Alice Pauline")
             .withAddress("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
@@ -32,6 +42,7 @@ public class TypicalPersons {
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withPhone("98765432")
+            .withLogs(BENSON_LOG_1, BENSON_LOG_2)
             .withTags("owesMoney", "friends").build();
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")
             .withEmail("heinz@example.com").withAddress("wall street").withNotes("Has gate access card").build();

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -33,15 +34,25 @@ public class LogAddCommand extends Command {
 
     private final Index personIndex;
     private final LogMessage logMessage;
+    private final Supplier<LocalDateTime> timestampSupplier;
 
     /**
      * Creates a {@code LogAddCommand} for the given person index and message.
      */
     public LogAddCommand(Index personIndex, LogMessage logMessage) {
+        this(personIndex, logMessage, LocalDateTime::now);
+    }
+
+    /**
+     * Creates a {@code LogAddCommand} with a timestamp supplier.
+     */
+    LogAddCommand(Index personIndex, LogMessage logMessage, Supplier<LocalDateTime> timestampSupplier) {
         requireNonNull(personIndex);
         requireNonNull(logMessage);
+        requireNonNull(timestampSupplier);
         this.personIndex = personIndex;
         this.logMessage = logMessage;
+        this.timestampSupplier = timestampSupplier;
     }
 
     @Override
@@ -54,7 +65,7 @@ public class LogAddCommand extends Command {
         }
 
         Person targetPerson = lastShownList.get(personIndex.getZeroBased());
-        LogEntry newLogEntry = new LogEntry(LocalDateTime.now(), logMessage);
+        LogEntry newLogEntry = new LogEntry(timestampSupplier.get(), logMessage);
         LogHistory updatedLogHistory = targetPerson.getLogHistory().add(newLogEntry);
         Person editedPerson = createPersonWithUpdatedLogHistory(targetPerson, updatedLogHistory);
 

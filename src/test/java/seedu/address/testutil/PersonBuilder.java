@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.log.LogEntry;
 import seedu.address.model.person.log.LogHistory;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
@@ -119,6 +121,15 @@ public class PersonBuilder {
      */
     public PersonBuilder withLogHistory(LogHistory logHistory) {
         this.logHistory = logHistory;
+        return this;
+    }
+
+    /**
+     * Sets the log history from the provided {@code logEntries}.
+     * Entries are normalized to newest-first order by {@code LogHistory}.
+     */
+    public PersonBuilder withLogs(LogEntry... logEntries) {
+        this.logHistory = new LogHistory(Arrays.asList(logEntries));
         return this;
     }
 
