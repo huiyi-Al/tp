@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.*;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
@@ -73,18 +72,22 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_find() throws Exception {
         String subNames = String.join(" ", "foo", "bar", "baz");
-        String subNumbers = String.join("123", "456", "789");
+        String subNumbers = String.join(" ", "123", "456", "789");
+        String subEmails = String.join(" ", "xy@z.com", "12@we.org");
         ArgumentMultimap argMultimap = new ArgumentMultimap();
         argMultimap.put(PREFIX_NAME, subNames);
         argMultimap.put(PREFIX_PHONE, subNumbers);
+        argMultimap.put(PREFIX_EMAIL, subEmails);
 
         FindCommand command = (FindCommand) parser.parseCommand(
-                MessageFormat.format("{0} {1} {2} {3} {4}",
+                MessageFormat.format("{0} {1} {2} {3} {4} {5} {6}",
                         FindCommand.COMMAND_WORD,
                         PREFIX_NAME.toString(),
                         subNames,
                         PREFIX_PHONE.toString(),
-                        subNumbers
+                        subNumbers,
+                        PREFIX_EMAIL.toString(),
+                        subEmails
                 )
         );
 
