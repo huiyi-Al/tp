@@ -23,9 +23,11 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.LogAddCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.log.LogMessage;
 import seedu.address.model.person.predicates.SearchPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -126,5 +128,13 @@ public class AddressBookParserTest {
         CopyAddrCommand command = (CopyAddrCommand) parser.parseCommand(
                 CopyAddrCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new CopyAddrCommand(INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_logAdd() throws Exception {
+        String message = "Observed leakage beneath sink during site visit.";
+        LogAddCommand command = (LogAddCommand) parser.parseCommand(
+                LogAddCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " " + message);
+        assertEquals(new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(message)), command);
     }
 }
