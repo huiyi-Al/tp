@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.log.LogEntry;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -15,6 +18,7 @@ import seedu.address.model.person.Person;
 public class PersonDetailCard extends UiPart<Region> {
 
     private static final String FXML = "PersonDetailCard.fxml";
+    private static final DateTimeFormatter LOG_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("dd MMM uuuu, HH:mm");
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -39,6 +43,14 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label notes;
     @FXML
+    private Label logsHeader;
+    @FXML
+    private Label latestLogTimestamp;
+    @FXML
+    private Label latestLogPreview;
+    @FXML
+    private Label noLogsLabel;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -52,10 +64,36 @@ public class PersonDetailCard extends UiPart<Region> {
         address.setText("Address : " + person.getAddress().value);
         email.setText("Email address : " + person.getEmail().value);
         notes.setText("Notes : " + person.getNotes().value);
+        initializeLogSummary(person);
 
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    private void initializeLogSummary(Person person) {
+        int logCount = person.getLogHistory().size();
+        logsHeader.setText("Logs (" + logCount + ")");
+
+        Optional<LogEntry> latestLog = person.getLogHistory().getLatest();
+        if (latestLog.isPresent()) {
+            LogEntry logEntry = latestLog.get();
+            latestLogTimestamp.setText("Latest: " + logEntry.getTimestamp().format(LOG_TIMESTAMP_FORMATTER));
+            latestLogPreview.setText(logEntry.getMessage().value);
+            setLabelShown(latestLogTimestamp, true);
+            setLabelShown(latestLogPreview, true);
+            setLabelShown(noLogsLabel, false);
+            return;
+        }
+
+        setLabelShown(latestLogTimestamp, false);
+        setLabelShown(latestLogPreview, false);
+        setLabelShown(noLogsLabel, true);
+    }
+
+    private static void setLabelShown(Label label, boolean isShown) {
+        label.setVisible(isShown);
+        label.setManaged(isShown);
     }
 }
 

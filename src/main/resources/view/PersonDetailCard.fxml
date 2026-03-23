@@ -58,6 +58,11 @@
                </ImageView>
             </graphic></Label>
             <Separator styleClass="dotted-separator" />
+            <Label fx:id="logsHeader" styleClass="card_small_label" text="Logs (0)" />
+            <Label fx:id="latestLogTimestamp" styleClass="card_small_label" text="Latest: -" />
+            <Label fx:id="latestLogPreview" styleClass="card_small_label" text="-" wrapText="true" />
+            <Label fx:id="noLogsLabel" styleClass="card_small_label" text="No logs yet" />
+            <Separator styleClass="dotted-separator" />
             <Region minHeight="5" prefHeight="5" />
             <FlowPane fx:id="tags" styleClass="label"/>
         </VBox>
