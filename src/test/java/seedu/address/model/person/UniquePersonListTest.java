@@ -198,7 +198,7 @@ public class UniquePersonListTest {
         assertEquals(aliceFirst, internalList.get(0));
         assertEquals(aliceSecond, internalList.get(1));
     }
-    
+
     @Test
     public void setPerson_renamePerson_listReorders() {
         uniquePersonList.add(ALICE);
