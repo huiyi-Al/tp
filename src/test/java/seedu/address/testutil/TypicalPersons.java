@@ -28,10 +28,10 @@ import seedu.address.model.person.log.LogMessage;
  */
 public class TypicalPersons {
 
-    private static final LogEntry BENSON_LOG_1 = new LogEntry(
+    public static final LogEntry BENSON_LOG_1 = new LogEntry(
             LocalDateTime.of(2026, 3, 22, 14, 5, 31),
             new LogMessage("Observed intermittent leakage below sink cabinet."));
-    private static final LogEntry BENSON_LOG_2 = new LogEntry(
+    public static final LogEntry BENSON_LOG_2 = new LogEntry(
             LocalDateTime.of(2026, 3, 21, 10, 18, 2),
             new LogMessage("Client requested follow-up call next week."));
 
