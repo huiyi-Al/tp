@@ -64,7 +64,8 @@ public class FilterCommandTest {
     public void execute_tagDoesNotExist_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         // Filtering for a tag that no one has
-        TagsMatchKeywordsPredicate predicate = new TagsMatchKeywordsPredicate(Collections.singletonList("NonExistentTag"));
+        TagsMatchKeywordsPredicate predicate =
+                new TagsMatchKeywordsPredicate(Collections.singletonList("NonExistentTag"));
         FilterCommand command = new FilterCommand(predicate);
 
         expectedModel.updateFilteredPersonList(predicate);
