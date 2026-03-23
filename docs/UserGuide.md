@@ -190,6 +190,22 @@ Format: `view INDEX`
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
+### Filtering clients by tags: `filter`
+
+Finds persons whose tags contain all the given keywords. If there is more than one person, the list returned is sorted.
+
+
+Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
+
+* Multiple keywords can be provided, separated by spaces
+* The search is case-insensitive. e.g `Plumbing` will match `plumbing`
+* Only filters by tags.
+* Only persons matching all one keyword will be returned (i.e. `AND` search).
+
+Examples:
+
+* `filter --tag=AC-Service` returns persons with `AC-Service` in their tags.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -251,7 +267,8 @@ the data of your previous LinkLine home folder.
  **Copy Address** | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                               
  **Delete**       | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                   
  **Edit**         | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                   
- **Find**         | `find [--name=KEYWORD [MORE_KEYWORDS]] [--phone=NUMBER [MORE_NUMBERS]]`<br> e.g., `find James Jake`                                                                                                                                                                                   
+ **Filter**         | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                     
+ **Find**         | `find [--name=KEYWORD [MORE_KEYWORDS]] [--phone=NUMBER [MORE_NUMBERS]]`<br> e.g., `find --name=James Jake`                                                                                                                                                                                   
  **List**         | `list`                                                                                                                                                                                                                                                                                
  **Help**         | `help`                                                                                                                                                                                                                                                                                
  **View**         | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                       
