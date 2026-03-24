@@ -37,8 +37,8 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_NOTES_AMY = "Prefers SMS before arrival";
     public static final String VALID_NOTES_BOB = "Customer has a spare key";
-    public static final String VALID_TAG_HUSBAND = "husband";
-    public static final String VALID_TAG_FRIEND = "friend";
+    public static final String VALID_TAG_PLUMBING = "Plumbing";
+    public static final String VALID_TAG_AC_SERVICE = "AC-Service";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -50,8 +50,8 @@ public class CommandTestUtil {
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
     public static final String NOTES_DESC_AMY = " " + PREFIX_NOTES + VALID_NOTES_AMY;
     public static final String NOTES_DESC_BOB = " " + PREFIX_NOTES + VALID_NOTES_BOB;
-    public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
-    public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
+    public static final String TAG_DESC_AC_SERVICE = " " + PREFIX_TAG + VALID_TAG_AC_SERVICE;
+    public static final String TAG_DESC_PLUMBING = " " + PREFIX_TAG + VALID_TAG_PLUMBING;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME
             + "a".repeat(101); // names cannot be more than 100 chars
@@ -72,10 +72,10 @@ public class CommandTestUtil {
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
-                .withNotes(VALID_NOTES_AMY).withTags(VALID_TAG_FRIEND).build();
+                .withNotes(VALID_NOTES_AMY).withTags(VALID_TAG_AC_SERVICE).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
-                .withNotes(VALID_NOTES_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+                .withNotes(VALID_NOTES_BOB).withTags(VALID_TAG_PLUMBING, VALID_TAG_AC_SERVICE).build();
     }
 
     /**

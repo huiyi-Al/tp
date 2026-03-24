@@ -162,16 +162,17 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Notes`) and reused by parsers via `ParserUtil`.
+Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Tag`, `Notes`) and reused by parsers via `ParserUtil`.
 All user-provided values are trimmed in `ParserUtil` before validation.
 
-| Field | Constraint summary |
-| --- | --- |
-| `Name` | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`). |
-| `Phone` | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`). |
+| Field | Constraint summary                                                                                                                            |
+| --- |-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name` | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`).                                                                 |
+| `Phone` | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
 | `Email` | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
-| `Address` | Must not be blank (first non-whitespace character required). |
-| `Notes` | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`). |
+| `Address` | Must not be blank (first non-whitespace character required).                                                                                  |
+| `Tag` | 1 to 0 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                    |
+| `Notes` | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.
 
@@ -257,8 +258,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. `user` requests to add a client.
 2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the CLI.
-3. System creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI.
-Use case ends.
+3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details on the GUI.
+4. Use case ends.
 
 **Extensions**
 * 2a. Name provided is invalid by criteria given in feature specification.
@@ -283,10 +284,11 @@ Use case ends.
 #### Use Case: UC02 - Search for a client
 **System:** `Linkline`
 **Actor:** `user`
+
 **MSS**
 1. `user` enters one or multiple words as a search query.
-2. System uses the query provided to filter and list (lexicographically) the clients whose name match the query.
-Use case ends.
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients whose name match the query.
+3. Use case ends.
 
 **Extensions**
 * 1a. The search query does not match against any of the clients' names.
@@ -305,6 +307,7 @@ Use case ends.
 1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
 2. `user` pastes the client address into `map`.
 3. `user` follows the instructions given by `map` to go to the client address.
+4. Use case ends.
 
 **Extensions**
 * 1a. The index given is invalid, and does not point to a client.
@@ -392,6 +395,25 @@ Use case ends.
     * `Linkline` returns an error message to inform `user` adding at least one field.
     * Use case ends.
 
+#### Use Case: UC09 - Filter clients by tags
+**System:** `Linkline`
+**Actor:** `user`
+
+**MSS**
+1. `user` enters one or multiple keywords as a filter query.
+2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags that match the query.
+3. Use case ends.
+
+**Extensions**
+* 1a. The filter query does not match against any of the clients' tags.
+    * `Linkline` returns an empty page that informs `user` no matching clients were found.
+    * Use case ends.
+* 1b. No filter query was provided.
+    * `Linkline` returns error message informing `user` that at least one word must be provided as a filter query.
+    * Use case ends.
+* 1c. Filter query provided is invalid by criteria given in feature specification.
+    * `Linkline` returns error message informing `user` what criteria the query must meet.
+    * Use case ends.
 
    *{More to be added}*
 

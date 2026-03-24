@@ -6,7 +6,7 @@
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "notes" : "Prefers SMS before arrival",
-    "tags" : [ "friends" ]
+    "tags" : [ "AC-Service" ]
   }, {
     "name" : "Benson Meier",
     "phone" : "98765432",
@@ -20,7 +20,7 @@
       "timestamp" : "2026-03-21T10:18:02",
       "message" : "Client requested follow-up call next week."
     } ],
-    "tags" : [ "owesMoney", "friends" ]
+    "tags" : [ "Plumbing", "AC-Service" ]
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
@@ -34,14 +34,14 @@
     "email" : "cornelia@example.com",
     "address" : "10th street",
     "notes" : "",
-    "tags" : [ "friends" ]
+    "tags" : [ "AC-Service" ]
   }, {
     "name" : "Elle Meyer",
     "phone" : "9482224",
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "notes" : "Customer has a spare key",
-    "tags" : [ ]
+    "tags" : [ "Plumbing" ]
   }, {
     "name" : "Fiona Kunz",
     "phone" : "9482427",
