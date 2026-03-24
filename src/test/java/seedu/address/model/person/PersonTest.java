@@ -13,11 +13,19 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.person.log.LogEntry;
+import seedu.address.model.person.log.LogHistory;
+import seedu.address.model.person.log.LogMessage;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
+    private static final LogEntry SAMPLE_LOG_ENTRY = new LogEntry(
+            LocalDateTime.of(2026, 3, 22, 14, 5, 31),
+            new LogMessage("Observed leakage below sink cabinet."));
 
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
@@ -32,6 +40,12 @@ public class PersonTest {
 
         // null -> returns false
         assertFalse(ALICE.isSamePerson(null));
+
+        // same phone/email but different logs -> returns true
+        Person aliceWithLogs = new PersonBuilder(ALICE)
+                .withLogHistory(new LogHistory().add(SAMPLE_LOG_ENTRY))
+                .build();
+        assertTrue(ALICE.isSamePerson(aliceWithLogs));
 
         // Same phone, different name/email/address
         Person samePhoneAsAlice = new PersonBuilder().withName(VALID_NAME_BOB)
@@ -115,13 +129,25 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different log history -> returns false
+        editedAlice = new PersonBuilder(ALICE)
+                .withLogHistory(new LogHistory().add(SAMPLE_LOG_ENTRY))
+                .build();
+        assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void constructor_withoutLogHistory_initializesEmptyLogHistory() {
+        Person person = new PersonBuilder().build();
+        assertTrue(person.getLogHistory().isEmpty());
     }
 
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", notes=" + ALICE.getNotes()
-                + ", tags=" + ALICE.getTags() + "}";
+                + ", logCount=" + ALICE.getLogHistory().size() + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

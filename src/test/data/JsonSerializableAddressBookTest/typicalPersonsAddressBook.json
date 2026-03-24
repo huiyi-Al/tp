@@ -13,6 +13,13 @@
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "notes" : "",
+    "logs" : [ {
+      "timestamp" : "2026-03-22T14:05:31",
+      "message" : "Observed intermittent leakage below sink cabinet."
+    }, {
+      "timestamp" : "2026-03-21T10:18:02",
+      "message" : "Client requested follow-up call next week."
+    } ],
     "tags" : [ "Plumbing", "AC-Service" ]
   }, {
     "name" : "Carl Kurz",

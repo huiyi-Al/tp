@@ -23,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.LogAddCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -70,6 +71,22 @@ public class LogicManagerTest {
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
+    public void execute_logAddCommandString_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NOTES_DESC_AMY;
+        logic.execute(addCommand);
+
+        String logMessage = "Observed leakage beneath sink during site visit.";
+        String logAddCommand = LogAddCommand.COMMAND_WORD + " 1 " + logMessage;
+        CommandResult result = logic.execute(logAddCommand);
+
+        Person updatedPerson = model.getFilteredPersonList().get(0);
+        assertEquals(String.format(LogAddCommand.MESSAGE_SUCCESS, updatedPerson.getName()), result.getFeedbackToUser());
+        assertEquals(1, updatedPerson.getLogHistory().size());
+        assertEquals(logMessage, updatedPerson.getLogHistory().getLatest().get().getMessage().value);
     }
 
     @Test

@@ -16,6 +16,8 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.log.LogEntry;
+import seedu.address.model.person.log.LogHistory;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -30,6 +32,7 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final String notes;
+    private final List<JsonAdaptedLogEntry> logs = new ArrayList<>();
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -38,12 +41,16 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("notes") String notes, @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("notes") String notes, @JsonProperty("logs") List<JsonAdaptedLogEntry> logs,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.notes = notes;
+        if (logs != null) {
+            this.logs.addAll(logs);
+        }
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -58,6 +65,9 @@ class JsonAdaptedPerson {
         email = source.getEmail().value;
         address = source.getAddress().value;
         notes = source.getNotes().value;
+        logs.addAll(source.getLogHistory().asUnmodifiableList().stream()
+                .map(JsonAdaptedLogEntry::new)
+                .collect(Collectors.toList()));
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -72,6 +82,11 @@ class JsonAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
+        }
+
+        final List<LogEntry> personLogs = new ArrayList<>();
+        for (JsonAdaptedLogEntry log : logs) {
+            personLogs.add(log.toModelType());
         }
 
         if (name == null) {
@@ -114,8 +129,10 @@ class JsonAdaptedPerson {
         }
         final Notes modelNotes = new Notes(notes);
 
+        final LogHistory modelLogHistory = new LogHistory(personLogs);
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelNotes, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelNotes, modelLogHistory, modelTags);
     }
 
 }

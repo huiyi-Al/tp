@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -23,6 +24,7 @@
                 <Insets bottom="10" left="5" right="5" top="10" />
             </padding>
             <Label fx:id="name" styleClass="card_big_label" text="\$first" />
+            <FlowPane fx:id="tags" styleClass="label"/>
             <Region minHeight="5" prefHeight="5" />
             <Separator styleClass="dotted-separator" />
             <Label fx:id="phone" styleClass="card_small_label, emoji-label" text="\$phone">
@@ -58,8 +60,18 @@
                </ImageView>
             </graphic></Label>
             <Separator styleClass="dotted-separator" />
-            <Region minHeight="5" prefHeight="5" />
-            <FlowPane fx:id="tags" styleClass="label"/>
+            <Label fx:id="logsHeader" styleClass="card_small_label, emoji-label" text="Logs (0)">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/clock.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <ListView fx:id="logsListView" prefHeight="280.0" styleClass="logs-list-view" VBox.vgrow="ALWAYS" />
+            <Label fx:id="noLogsLabel" styleClass="card_small_label, log-empty-label" text="No entries" />
+            <Separator styleClass="dotted-separator" />
         </VBox>
       <rowConstraints>
          <RowConstraints />

@@ -1,13 +1,18 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.log.LogEntry;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -39,6 +44,12 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label notes;
     @FXML
+    private Label logsHeader;
+    @FXML
+    private ListView<LogEntry> logsListView;
+    @FXML
+    private Label noLogsLabel;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -52,10 +63,33 @@ public class PersonDetailCard extends UiPart<Region> {
         address.setText("Address : " + person.getAddress().value);
         email.setText("Email address : " + person.getEmail().value);
         notes.setText("Notes : " + person.getNotes().value);
+        initializeLogSummary(person);
 
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    private void initializeLogSummary(Person person) {
+        List<LogEntry> logEntries = person.getLogHistory().asUnmodifiableList();
+        int logCount = logEntries.size();
+        logsHeader.setText("Logs (" + logCount + ")");
+        logsListView.setItems(FXCollections.observableArrayList(logEntries));
+        logsListView.setCellFactory(unused -> new LogEntryListCell());
+
+        if (!logEntries.isEmpty()) {
+            setNodeShown(logsListView, true);
+            setNodeShown(noLogsLabel, false);
+            return;
+        }
+
+        setNodeShown(logsListView, false);
+        setNodeShown(noLogsLabel, true);
+    }
+
+    private static void setNodeShown(Node node, boolean isShown) {
+        node.setVisible(isShown);
+        node.setManaged(isShown);
     }
 }
 
