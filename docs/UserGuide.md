@@ -80,6 +80,9 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
+* This command does not accept any arguments. 
+* Entering `help` with additional parameters (e.g., `help 123`) will return an error message.
+
 ### Adding a person: `add`
 
 Adds a person to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
@@ -105,6 +108,8 @@ Examples:
 Shows a sorted list of all persons in the address book.
 
 Format: `list`
+* This command does not accept any arguments.
+* Entering `list` with additional parameters (e.g., `list 123`) will return an error message.
 
 ### Editing a person : `edit`
 
@@ -191,12 +196,16 @@ Format: `view INDEX`
 Clears all entries from the address book.
 
 Format: `clear`
+* This command does not accept any arguments.
+* Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
+* This command does not accept any arguments.
+* Entering `exit` with additional parameters (e.g., `exit 123`) will return an error message.
 
 ### Saving the data
 
