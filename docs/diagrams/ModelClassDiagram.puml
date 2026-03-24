@@ -20,6 +20,8 @@ Class Name
 Class Phone
 Class Tag
 Class Notes
+Class LogHistory
+Class LogEntry
 
 Class I #FFFFFF
 }
@@ -44,6 +46,8 @@ Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
 Person *--> Notes
+Person *--> LogHistory
+LogHistory *--> "*" LogEntry
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
