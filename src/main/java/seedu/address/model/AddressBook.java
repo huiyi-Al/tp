@@ -126,6 +126,15 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Adds {@code t} for storage
+     */
+    public void addTag(Tag t) {
+        if (!tags.contains(t)) {
+            tags.add(t);
+        }
+    }
+
+    /**
      * Updates the tag {@code target} to {@code editedTag} globally.
      * Every person currently holding {@code target} will be updated to hold {@code editedTag}.
      */
