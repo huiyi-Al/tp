@@ -14,6 +14,7 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Shows a sorted list of all persons in the address book.\n"
+            + "Note: this command does not accept any arguments.\n"
             + "Example: " + COMMAND_WORD;
 
     public static final String MESSAGE_SUCCESS = "Listed all persons";
