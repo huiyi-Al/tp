@@ -3,6 +3,8 @@ package seedu.address.model.tag;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_AC_SERVICE;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PLUMBING;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.Arrays;
@@ -16,8 +18,8 @@ import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 public class UniqueTagListTest {
     private final UniqueTagList uniqueTagList = new UniqueTagList();
-    private final Tag plumbingTag = new Tag("plumbing");
-    private final Tag electricalTag = new Tag("electrical");
+    private final Tag plumbingTag = new Tag(VALID_TAG_PLUMBING);
+    private final Tag electricalTag = new Tag(VALID_TAG_AC_SERVICE);
 
     @Test
     public void contains_nullTag_throwsNullPointerException() {

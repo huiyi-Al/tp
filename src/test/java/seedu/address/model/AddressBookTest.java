@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -44,12 +45,20 @@ public class AddressBookTest {
     }
 
     @Test
+    public void resetData_withValidReadOnlyAddressBook_replacesTags() {
+        AddressBook newData = getTypicalAddressBook();
+        addressBook.resetData(newData);
+        assertEquals(newData.getTagList(), addressBook.getTagList());
+    }
+
+    @Test
     public void resetData_withDuplicatePersons_throwsDuplicatePersonException() {
         // Two persons with the same identity fields
         Person editedAlice = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_PLUMBING)
                 .build();
         List<Person> newPersons = Arrays.asList(ALICE, editedAlice);
-        AddressBookStub newData = new AddressBookStub(newPersons);
+        List<Tag> newTags = Collections.singletonList(new Tag(VALID_TAG_PLUMBING));
+        AddressBookStub newData = new AddressBookStub(newPersons, newTags);
 
         assertThrows(DuplicatePersonException.class, () -> addressBook.resetData(newData));
     }
@@ -84,8 +93,58 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasTag_nullTag_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasTag(null));
+    }
+
+    @Test
+    public void hasTag_tagInAddressBook_returnsTrue() {
+        Tag plumbingTag = new Tag(VALID_TAG_PLUMBING);
+        addressBook.addTag(plumbingTag);
+        assertTrue(addressBook.hasTag(plumbingTag));
+    }
+
+    @Test
+    public void addPerson_personWithNewTags_addsTagsToGlobalList() {
+        Tag newTag = new Tag(VALID_TAG_PLUMBING);
+        Person aliceWithNewTag = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
+
+        addressBook.addPerson(aliceWithNewTag);
+
+        assertTrue(addressBook.hasTag(newTag));
+        assertTrue(addressBook.getTagList().contains(newTag));
+    }
+
+    @Test
+    public void setTag_existingTagRenamed_updatesAllPersonsWithThatTag() {
+        Tag oldTag = new Tag("OldTag");
+        Tag newTag = new Tag("NewTag");
+
+        Person alice = new PersonBuilder().withName("Alice").withTags("OldTag").build();
+        Person bob = new PersonBuilder().withName("Bob").withTags("OldTag", "Other").build();
+
+        addressBook.addPerson(alice);
+        addressBook.addPerson(bob);
+
+        // Execute the global rename
+        addressBook.setTag(oldTag, newTag);
+
+        // Check global list
+        assertFalse(addressBook.hasTag(oldTag));
+        assertTrue(addressBook.hasTag(newTag));
+
+        // Check individual persons for the update
+        assertTrue(addressBook.getPersonList().get(0).getTags().contains(newTag));
+        assertFalse(addressBook.getPersonList().get(0).getTags().contains(oldTag));
+
+        assertTrue(addressBook.getPersonList().get(1).getTags().contains(newTag));
+        assertTrue(addressBook.getPersonList().get(1).getTags().contains(new Tag("Other")));
+    }
+
+    @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
+        String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList()
+                + ", tags=" + addressBook.getTagList() + "}";
         assertEquals(expected, addressBook.toString());
     }
 
@@ -94,14 +153,21 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final ObservableList<Tag> tags = FXCollections.observableArrayList();
 
-        AddressBookStub(Collection<Person> persons) {
+        AddressBookStub(Collection<Person> persons, Collection<Tag> tags) {
             this.persons.setAll(persons);
+            this.tags.setAll(tags);
         }
 
         @Override
         public ObservableList<Person> getPersonList() {
             return persons;
+        }
+
+        @Override
+        public ObservableList<Tag> getTagList() { // Implement this
+            return tags;
         }
     }
 
