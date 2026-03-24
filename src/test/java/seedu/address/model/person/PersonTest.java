@@ -8,7 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NOTES_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PLUMBING;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
@@ -39,7 +39,7 @@ public class PersonTest {
                 .withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB)
                 .withNotes(VALID_NOTES_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .withTags(VALID_TAG_PLUMBING).build();
         assertTrue(ALICE.isSamePerson(samePhoneAsAlice));
 
         // Same email, different name/phone/address
@@ -48,7 +48,7 @@ public class PersonTest {
                 .withEmail(ALICE.getEmail().value) // Same email as ALICE
                 .withAddress(VALID_ADDRESS_BOB)
                 .withNotes(VALID_NOTES_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .withTags(VALID_TAG_PLUMBING).build();
         assertTrue(ALICE.isSamePerson(sameEmailAsAlice));
 
         // Different phone AND different email
@@ -57,7 +57,7 @@ public class PersonTest {
                 .withEmail(VALID_EMAIL_BOB) // Different email
                 .withAddress(VALID_ADDRESS_BOB)
                 .withNotes(VALID_NOTES_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .withTags(VALID_TAG_PLUMBING).build();
         assertFalse(ALICE.isSamePerson(differentContactInfo));
 
         // Same name, different contact info
@@ -66,7 +66,7 @@ public class PersonTest {
                 .withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB)
                 .withNotes(VALID_NOTES_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .withTags(VALID_TAG_PLUMBING).build();
         assertFalse(ALICE.isSamePerson(sameNameDifferentContact));
 
         // Edge case: Both phone and email match exactly
@@ -113,7 +113,7 @@ public class PersonTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different tags -> returns false
-        editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
+        editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
         assertFalse(ALICE.equals(editedAlice));
     }
 
