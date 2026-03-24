@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -33,13 +32,13 @@ public class SearchPredicate implements Predicate<Person> {
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
         this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent()
-                ? new FullNamePredicate(Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+")))
+                ? new FullNamePredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_NAME))
                 : new FullNamePredicate(new ArrayList<>());
         this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
-                ? new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
+                ? new PhoneNumberPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_PHONE))
                 : new PhoneNumberPredicate(new ArrayList<>());
         this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
-                ? new EmailAddressPredicate(Arrays.asList(argMultimap.getValue(PREFIX_EMAIL).get().split("\\s+")))
+                ? new EmailAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_EMAIL))
                 : new EmailAddressPredicate(new ArrayList<>());
     }
 

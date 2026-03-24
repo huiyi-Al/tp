@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,16 @@ public class ArgumentMultimap {
     public Optional<String> getValue(Prefix prefix) {
         List<String> values = getAllValues(prefix);
         return values.isEmpty() ? Optional.empty() : Optional.of(values.get(values.size() - 1));
+    }
+
+    /**
+     * Returns the last value of {@code prefix}, separated by whitespaces
+     */
+    public List<String> getValueWhitespaceSeparated(Prefix prefix) {
+        if (getValue(prefix).isEmpty()) {
+            return List.of();
+        }
+        return Arrays.asList(getValue(prefix).get().split("\\s+"));
     }
 
     /**
