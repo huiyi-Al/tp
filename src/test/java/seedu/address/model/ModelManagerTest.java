@@ -3,6 +3,8 @@ package seedu.address.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_AC_SERVICE;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PLUMBING;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
@@ -17,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.NameContainsKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -87,6 +91,39 @@ public class ModelManagerTest {
     public void hasPerson_personInAddressBook_returnsTrue() {
         modelManager.addPerson(ALICE);
         assertTrue(modelManager.hasPerson(ALICE));
+    }
+
+    @Test
+    public void hasTag_nullTag_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.hasTag(null));
+    }
+
+    @Test
+    public void hasTag_tagNotInAddressBook_returnsFalse() {
+        assertFalse(modelManager.hasTag(new Tag(VALID_TAG_PLUMBING)));
+    }
+
+    @Test
+    public void hasTag_tagInAddressBook_returnsTrue() {
+        modelManager.addPerson(new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build());
+        assertTrue(modelManager.hasTag(new Tag(VALID_TAG_PLUMBING)));
+    }
+
+    @Test
+    public void setTag_validTag_updatesAddressBook() {
+        Tag oldTag = new Tag(VALID_TAG_PLUMBING);
+        Tag newTag = new Tag(VALID_TAG_AC_SERVICE);
+        modelManager.addPerson(new PersonBuilder().withName("Alice").withTags(VALID_TAG_PLUMBING).build());
+
+        modelManager.setTag(oldTag, newTag);
+
+        // Verify the tag is renamed in the global list
+        assertFalse(modelManager.hasTag(oldTag));
+        assertTrue(modelManager.hasTag(newTag));
+
+        // Verify the person in the filtered list reflects the change
+        Person alice = modelManager.getFilteredPersonList().get(0);
+        assertTrue(alice.getTags().contains(newTag));
     }
 
     @Test
