@@ -75,7 +75,10 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
-        assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+        assertThrows(ParseException.class, () ->
+                parser.parseCommand(ExitCommand.COMMAND_WORD + " 3"));
+        assertThrows(ParseException.class, () ->
+                parser.parseCommand(ExitCommand.COMMAND_WORD + " abc"));
     }
 
     @Test
