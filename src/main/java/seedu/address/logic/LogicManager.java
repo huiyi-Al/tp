@@ -36,7 +36,6 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    // Pending deletion state - stored in Logic, not Model
     private PendingDeletion pendingDeletion = null;
 
     /**

@@ -40,6 +40,7 @@ public class DeleteCommand extends Command {
      */
     public DeleteCommand(Index targetIndex) {
         logger.log(Level.INFO, "Creating DeleteCommand for index: " + targetIndex.getOneBased());
+        assert targetIndex != null : "Target index cannot be null";
         this.targetIndex = targetIndex;
     }
 
@@ -52,11 +53,15 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
+        assert lastShownList != null : "Filtered person list should not be null";
+
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+
+        assert personToDelete != null : "Person at valid index should not be null";
 
         throw new CommandException(String.format(MESSAGE_DELETE_CONFIRM,
                 personToDelete.getName().fullName,
