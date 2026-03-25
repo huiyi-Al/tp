@@ -216,6 +216,8 @@ Clears all entries from the address book.
 Format: `clear`
 * This command does not accept any arguments.
 * Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
+* **Two-step confirmation**: You will be prompted to confirm the clearing by typing `clear` again.
+* Any other command typed after the first `clear` will cancel the pending action.
 
 ### Exiting the program : `exit`
 
