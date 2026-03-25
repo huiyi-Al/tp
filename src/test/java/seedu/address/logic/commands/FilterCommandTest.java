@@ -53,7 +53,8 @@ public class FilterCommandTest {
     @Test
     public void execute_multipleTags_onePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
-        TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays.asList("AC-Service", "Plumbing"));
+        TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays
+                .asList("AC-Service", "Plumbing"));
         FilterCommand command = new FilterCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
