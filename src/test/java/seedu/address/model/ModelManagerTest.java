@@ -138,7 +138,7 @@ public class ModelManagerTest {
         modelManager.setSelectedPerson(personToDelete);
         assertEquals(ALICE, modelManager.getSelectedPerson().getValue());
     }
-    
+
     @Test
     public void deleteTag_selectedPersonAffected_refreshesSelectedPerson() {
         Tag tagToDelete = new Tag("ToDelete");
