@@ -1,6 +1,8 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -195,10 +197,22 @@ public class LogicManagerTest {
                 + PREFIX_EMAIL + personToDelete.getEmail().value + " "
                 + PREFIX_ADDRESS + personToDelete.getAddress().value);
 
-        assertThrows(CommandException.class, () -> logic.execute("delete 1"));
+        CommandResult firstResult = logic.execute("delete 1");
 
-        CommandResult result = logic.execute("delete 1");
+        String expectedConfirmMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
+                personToDelete.getName().fullName,
+                personToDelete.getPhone().value,
+                personToDelete.getEmail().value,
+                DeleteCommand.COMMAND_WORD,
+                1);
+        assertEquals(expectedConfirmMessage, firstResult.getFeedbackToUser());
+
+        assertTrue(firstResult.isPendingDeletion());
+
+        CommandResult secondResult = logic.execute("delete 1");
         assertEquals(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.formatBasic(personToDelete)), result.getFeedbackToUser());
+                Messages.formatBasic(personToDelete)), secondResult.getFeedbackToUser());
+
+        assertFalse(secondResult.isPendingDeletion());
     }
 }

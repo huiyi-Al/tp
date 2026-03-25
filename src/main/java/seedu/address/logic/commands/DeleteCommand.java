@@ -65,7 +65,6 @@ public class DeleteCommand extends Command {
                 COMMAND_WORD,
                 targetIndex.getOneBased());
 
-        // Return a PendingDeletionResult instead of throwing exception
         return new PendingDeletionResult(confirmMessage, personToDelete, targetIndex);
     }
 
