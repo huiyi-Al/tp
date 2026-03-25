@@ -38,25 +38,30 @@ public class DeleteCommand extends Command {
     private final Index targetIndex;
 
     public DeleteCommand(Index targetIndex) {
-        logger.log(Level.INFO, "Creating DeleteCommand for index: " + targetIndex.getOneBased());
+        logger.info("Creating DeleteCommand for index: " + targetIndex.getOneBased());
         this.targetIndex = targetIndex;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        logger.log(Level.INFO, "Executing delete command for index: " + targetIndex.getOneBased());
+        logger.info("Executing delete command for index: " + targetIndex.getOneBased());
 
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
+        assert lastShownList != null : "Filtered person list should not be null";
+
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            logger.log(Level.INFO, "Invalid index: " + targetIndex.getOneBased()
+            logger.info("Invalid index: " + targetIndex.getOneBased()
                     + " (list size: " + lastShownList.size() + ")");
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        logger.log(Level.INFO, "Creating pending deletion for: " + personToDelete.getName().fullName);
+
+        assert personToDelete != null : "Person at valid index should not be null";
+
+        logger.info("Creating pending deletion for: " + personToDelete.getName().fullName);
 
         String confirmMessage = String.format(MESSAGE_DELETE_CONFIRM,
                 personToDelete.getName().fullName,
@@ -65,6 +70,8 @@ public class DeleteCommand extends Command {
                 COMMAND_WORD,
                 targetIndex.getOneBased());
 
+        assert targetIndex.getOneBased() > 0 : "Target index must be positive";
+        
         return new PendingDeletionResult(confirmMessage, personToDelete, targetIndex);
     }
 
