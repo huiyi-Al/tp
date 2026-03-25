@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.predicates.TagsMatchKeywordsPredicate;
+import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
 /**
  * Finds and lists all persons in address book with specified tags.
@@ -21,9 +21,9 @@ public class FilterCommand extends Command {
             + "Parameters: " + PREFIX_TAG + "TAG [" + PREFIX_TAG + "MORE_TAGS]...\n"
             + "Example: " + COMMAND_WORD + PREFIX_TAG + "AC-Service " + PREFIX_TAG + "Plumbing";
 
-    private final TagsMatchKeywordsPredicate predicate;
+    private final TagsMatchAllKeywordsPredicate predicate;
 
-    public FilterCommand(TagsMatchKeywordsPredicate predicate) {
+    public FilterCommand(TagsMatchAllKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
 

@@ -1,7 +1,5 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -12,18 +10,14 @@ import seedu.address.commons.util.ToStringBuilder;
 public class CommandResult {
 
     private final String feedbackToUser;
-
-    /** Help information should be shown to the user. */
     private final boolean showHelp;
-
-    /** The application should exit. */
     private final boolean exit;
 
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
-        this.feedbackToUser = requireNonNull(feedbackToUser);
+        this.feedbackToUser = feedbackToUser;
         this.showHelp = showHelp;
         this.exit = exit;
     }
@@ -48,13 +42,20 @@ public class CommandResult {
         return exit;
     }
 
+    /**
+     * Returns true if this result represents a pending deletion.
+     * Overridden by PendingDeletionResult.
+     */
+    public boolean isPendingDeletion() {
+        return false;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof CommandResult)) {
             return false;
         }
@@ -78,5 +79,4 @@ public class CommandResult {
                 .add("exit", exit)
                 .toString();
     }
-
 }

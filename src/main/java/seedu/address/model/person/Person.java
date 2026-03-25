@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.log.LogHistory;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -24,19 +25,30 @@ public class Person {
     // Data fields
     private final Address address;
     private final Notes notes;
+    private final LogHistory logHistory;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Notes notes, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, notes, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Notes notes, LogHistory logHistory,
+            Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, notes, logHistory, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.notes = notes;
+        this.logHistory = logHistory;
         this.tags.addAll(tags);
+    }
+
+    /**
+     * Every field must be present and not null.
+     * Initializes person with an empty {@code LogHistory}.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Notes notes, Set<Tag> tags) {
+        this(name, phone, email, address, notes, new LogHistory(), tags);
     }
 
     public Name getName() {
@@ -57,6 +69,10 @@ public class Person {
 
     public Notes getNotes() {
         return notes;
+    }
+
+    public LogHistory getLogHistory() {
+        return logHistory;
     }
 
     /**
@@ -115,6 +131,7 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && notes.equals(otherPerson.notes)
+                && logHistory.equals(otherPerson.logHistory)
                 && tags.equals(otherPerson.tags);
     }
 
@@ -129,7 +146,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, notes, tags);
+        return Objects.hash(name, phone, email, address, notes, logHistory, tags);
     }
 
     @Override
@@ -140,6 +157,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("notes", notes)
+                .add("logCount", logHistory.size())
                 .add("tags", tags)
                 .toString();
     }

@@ -71,4 +71,8 @@ shadowJar {
     archiveFileName = 'linkline.jar'
 }
 
+run {
+    enableAssertions = true
+}
+
 defaultTasks 'clean', 'test'

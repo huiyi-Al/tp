@@ -16,6 +16,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -26,6 +28,9 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.log.LogEntry;
+import seedu.address.model.person.log.LogHistory;
+import seedu.address.model.person.log.LogMessage;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 
@@ -99,6 +104,30 @@ public class EditCommandTest {
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_editNonLogField_preservesExistingLogHistory() {
+        Model localModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person firstPerson = localModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LogEntry sampleLogEntry = new LogEntry(LocalDateTime.of(2026, 3, 23, 10, 0),
+                new LogMessage("Performed initial plumbing inspection."));
+        Person personWithLogs = new PersonBuilder(firstPerson)
+                .withLogHistory(new LogHistory().add(sampleLogEntry))
+                .build();
+        localModel.setPerson(firstPerson, personWithLogs);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withNotes(VALID_NOTES_BOB).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+        Person editedPerson = new PersonBuilder(personWithLogs).withNotes(VALID_NOTES_BOB).build();
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(localModel.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personWithLogs, editedPerson);
+
+        assertCommandSuccess(editCommand, localModel, expectedMessage, expectedModel);
+        assertEquals(personWithLogs.getLogHistory(),
+                localModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getLogHistory());
     }
 
     @Test

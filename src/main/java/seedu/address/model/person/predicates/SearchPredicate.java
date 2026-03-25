@@ -1,11 +1,13 @@
 package seedu.address.model.person.predicates;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -13,11 +15,15 @@ import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.model.person.Person;
 
 /**
- * Tests that a {@code Person}'s {@code name} or {@code phone number} can be matched by the predicates provided.
+ * Tests that a {@code Person}'s {@code name, phone number, email address, physical address, tags} can be matched by the
+ * predicates provided.
  */
 public class SearchPredicate implements Predicate<Person> {
     private final FullNamePredicate fullNamePredicate;
     private final PhoneNumberPredicate phoneNumberPredicate;
+    private final EmailAddressPredicate emailAddressPredicate;
+    private final PhysicalAddressPredicate physicalAddressPredicate;
+    private final TagsMatchOneKeywordPredicate tagsPredicate;
 
     /**
      * Creates a {@code SearchPredicate} that filters persons based on the provided argument map.
@@ -26,26 +32,44 @@ public class SearchPredicate implements Predicate<Person> {
      *                    corresponds to a field to filter on.
      *                    {@code PREFIX_NAME} for name substring matching.
      *                    {@code PREFIX_PHONE} for phone number matching.
+     *                    {@code PREFIX_EMAIL} for email address matching.
+     *                    {@code PREFIX_ADDRESS} for physical address matching.
+     *                    {@code PREFIX_TAG} for tags matching.
      *                    Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
         this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent()
-                ? new FullNamePredicate(Arrays.asList(argMultimap.getValue(PREFIX_NAME).get().split("\\s+")))
+                ? new FullNamePredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_NAME))
                 : new FullNamePredicate(new ArrayList<>());
         this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
-                ? new PhoneNumberPredicate(Arrays.asList(argMultimap.getValue(PREFIX_PHONE).get().split("\\s+")))
+                ? new PhoneNumberPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_PHONE))
                 : new PhoneNumberPredicate(new ArrayList<>());
+        this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
+                ? new EmailAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_EMAIL))
+                : new EmailAddressPredicate(new ArrayList<>());
+        this.physicalAddressPredicate = argMultimap.getValue(PREFIX_ADDRESS).isPresent()
+                ? new PhysicalAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_ADDRESS))
+                : new PhysicalAddressPredicate(new ArrayList<>());
+        this.tagsPredicate = argMultimap.getValue(PREFIX_TAG).isPresent()
+                ? new TagsMatchOneKeywordPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_TAG))
+                : new TagsMatchOneKeywordPredicate(new ArrayList<>());
     }
 
     @Override
     public boolean test(Person person) {
         boolean nameCondition = false;
         boolean phoneCondition = false;
+        boolean emailAddressCondition = false;
+        boolean physicalAddressCondition = false;
+        boolean tagsCondition = false;
 
         nameCondition = fullNamePredicate.test(person);
         phoneCondition = phoneNumberPredicate.test(person);
+        emailAddressCondition = emailAddressPredicate.test(person);
+        physicalAddressCondition = physicalAddressPredicate.test(person);
+        tagsCondition = tagsPredicate.test(person);
 
-        return nameCondition || phoneCondition;
+        return nameCondition || phoneCondition || emailAddressCondition || physicalAddressCondition || tagsCondition;
     }
 
     @Override
@@ -61,15 +85,21 @@ public class SearchPredicate implements Predicate<Person> {
 
         SearchPredicate otherSearchPredicate = (SearchPredicate) other;
         return Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
-                && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate);
+                && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate)
+                && Objects.equals(emailAddressPredicate, otherSearchPredicate.emailAddressPredicate)
+                && Objects.equals(physicalAddressPredicate, otherSearchPredicate.physicalAddressPredicate)
+                && Objects.equals(tagsPredicate, otherSearchPredicate.tagsPredicate);
     }
 
     @Override
     public String toString() {
         return MessageFormat.format(
-                "{0}, {1}",
+                "{0}, {1}, {2}, {3}, {4}",
                 fullNamePredicate.toString(),
-                phoneNumberPredicate.toString()
+                phoneNumberPredicate.toString(),
+                emailAddressPredicate.toString(),
+                physicalAddressPredicate.toString(),
+                tagsPredicate.toString()
         );
     }
 }

@@ -124,6 +124,7 @@ How the parsing works:
 The `Model` component,
 
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores each `Person`'s `LogHistory`, which contains zero or more `LogEntry` records.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -341,13 +342,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Actor:** `user`
 
 **MSS**
-1. `user` deletes a client via `Linkline` command by specifying the index of the target client.
-2. `Linkline` shows the client has been deleted and reduce the number of client in the list.
-3. Use case ends.
+1. `user` enters delete command with the index of the target client.
+2. `Linkline` displays the client's details and ask for confirmation.
+3. `user` enters the same delete command again.
+4. `Linkline` deletes the client and confirms the deletion.
+5. Use case ends.
 
 **Extensions**
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
+    * Use case ends.
+* 2a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending deletion and executes the new command normally.
     * Use case ends.
 
 #### Use Case: UC06 - List Clients
@@ -482,15 +488,19 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: `delete 1`<br>
+      Expected: Expected: No person is deleted. Confirmation message with the person's details is shown. Status bar remains the same. Pending deletion state is set for index 1.
+
+   1. Test case: `delete 1` (immediately after the above) <br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
+   1. Test case: `delete 1` then `list` then `delete 1` <br>
+      Expected: First `delete 1` shows confirmation. `list` cancels the pending deletion. Second `delete 1` shows confirmation again (not auto-deleted).
+   
    1. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
-
-1. _{ more test cases …​ }_
 
 ### Saving data
 

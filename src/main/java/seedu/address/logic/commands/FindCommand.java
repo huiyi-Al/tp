@@ -1,8 +1,11 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.text.MessageFormat;
 
@@ -13,8 +16,10 @@ import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
  * Finds and lists all persons in address book based on following criteria:
- * 1. Full name contains any of the argument keywords.
- * 2. Phone number contains any of the numbers given.
+ * 1. Full name contains any of the space-separated queries as substrings.
+ * 2. Phone number contains any of the space-separated numbers given.
+ * 3. Email address contains any of the space-separated queries as substrings.
+ * 4. Physical address contains any of the space-separated queries as substrings.
  * Keyword matching is case-insensitive.
  */
 public class FindCommand extends Command {
@@ -22,11 +27,13 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = MessageFormat.format(
-            "{0}: Finds all persons whose names contain any of the specified substrings (case-insensitive) "
-                    + "and displays them as a list with index numbers.\n"
-                    + "Parameters: {1}substring [OPTIONAL_SUBSTRINGS] {2}number [OPTIONAL_NUMBERS]\n"
-                    + "Example: {0} {1}david {2}123",
-            COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE
+            """
+                    {0}: Finds all persons whose details contain any of the given queries
+                    and displays them as a list with index numbers.
+                    Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail
+                    [OPTIONAL_SUBEMAILS] {4}subAddresses [OPTIONAL_SUBADDRESSES] {5}tags [OPTIONAL_TAGS]
+                    Example: {0} {1}david {2}123 {3}d@gmail {4}Woodlands {5}Friend""",
+            COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG
     );
 
     private final SearchPredicate searchPredicate;

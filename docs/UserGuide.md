@@ -68,10 +68,6 @@ can get your contact management tasks done faster than traditional GUI apps.
   e.g. if the command specifies `--name=NAME --phone=PHONE_NUMBER`, `--phone=PHONE_NUMBER --name=NAME` is also
   acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be
-  ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
   as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
@@ -83,6 +79,9 @@ Shows a message explaining how to access the help page.
 ![help message](images/helpMessage.png)
 
 Format: `help`
+
+* This command does not accept any arguments. 
+* Entering `help` with additional parameters (e.g., `help 123`) will return an error message.
 
 ### Adding a person: `add`
 
@@ -108,6 +107,8 @@ Examples:
 Shows a sorted list of all persons in the address book.
 
 Format: `list`
+* This command does not accept any arguments.
+* Entering `list` with additional parameters (e.g., `list 123`) will return an error message.
 
 ### Editing a person : `edit`
 
@@ -156,18 +157,26 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified person from the address book with confirmation.
 
 Format: `delete INDEX`
 
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* **Two-step confirmation**: You will be prompted to confirm the deletion by typing the same command again.
+* Any other command typed after the first `delete` will cancel the pending deletion.
 
 Examples:
 
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2`
+    * Shows confimation message with the person's details.
+    * Typing `delete 2` again confirms and deletes the 2nd person.
+* `find Betsy` followed by `delete 1`
+    * Shows confimation message for the 1st person in the search results.
+    * Typing `delete 1` again deletes that person.
+* `delete 1` followed by `list`
+    * The pending deletion is cancelled. The list command executes normally.
 
 ### Copying a person's address: `copyaddr`
 
@@ -205,12 +214,16 @@ Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 Clears all entries from the address book.
 
 Format: `clear`
+* This command does not accept any arguments.
+* Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
+* This command does not accept any arguments.
+* Entering `exit` with additional parameters (e.g., `exit 123`) will return an error message.
 
 ### Saving the data
 

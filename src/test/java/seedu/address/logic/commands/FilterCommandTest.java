@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.predicates.TagsMatchKeywordsPredicate;
+import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
 public class FilterCommandTest {
 
@@ -25,10 +25,10 @@ public class FilterCommandTest {
 
     @Test
     public void equals() {
-        TagsMatchKeywordsPredicate firstPredicate =
-                new TagsMatchKeywordsPredicate(Collections.singletonList("AC-Service"));
-        TagsMatchKeywordsPredicate secondPredicate =
-                new TagsMatchKeywordsPredicate(Collections.singletonList("Plumbing"));
+        TagsMatchAllKeywordsPredicate firstPredicate =
+                new TagsMatchAllKeywordsPredicate(Collections.singletonList("AC-Service"));
+        TagsMatchAllKeywordsPredicate secondPredicate =
+                new TagsMatchAllKeywordsPredicate(Collections.singletonList("Plumbing"));
 
         FilterCommand filterFirstCommand = new FilterCommand(firstPredicate);
         FilterCommand filterSecondCommand = new FilterCommand(secondPredicate);
@@ -53,7 +53,8 @@ public class FilterCommandTest {
     @Test
     public void execute_multipleTags_onePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
-        TagsMatchKeywordsPredicate predicate = new TagsMatchKeywordsPredicate(Arrays.asList("AC-Service", "Plumbing"));
+        TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays
+                .asList("AC-Service", "Plumbing"));
         FilterCommand command = new FilterCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -64,8 +65,8 @@ public class FilterCommandTest {
     public void execute_tagDoesNotExist_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         // Filtering for a tag that no one has
-        TagsMatchKeywordsPredicate predicate =
-                new TagsMatchKeywordsPredicate(Collections.singletonList("NonExistentTag"));
+        TagsMatchAllKeywordsPredicate predicate =
+                new TagsMatchAllKeywordsPredicate(Collections.singletonList("NonExistentTag"));
         FilterCommand command = new FilterCommand(predicate);
 
         expectedModel.updateFilteredPersonList(predicate);
@@ -75,7 +76,7 @@ public class FilterCommandTest {
 
     @Test
     public void toStringMethod() {
-        TagsMatchKeywordsPredicate predicate = new TagsMatchKeywordsPredicate(Arrays.asList("AC-Service"));
+        TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays.asList("AC-Service"));
         FilterCommand filterCommand = new FilterCommand(predicate);
         String expected = FilterCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, filterCommand.toString());

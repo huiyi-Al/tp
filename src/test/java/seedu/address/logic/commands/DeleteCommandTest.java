@@ -3,8 +3,8 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -28,17 +29,29 @@ public class DeleteCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_validIndexUnfilteredList_success() {
+    public void execute_validIndexUnfilteredList_showsConfirmation() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
+                personToDelete.getName().fullName,
+                personToDelete.getPhone().value,
+                personToDelete.getEmail().value,
+                DeleteCommand.COMMAND_WORD,
+                INDEX_FIRST_PERSON.getOneBased());
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.deletePerson(personToDelete);
+        try {
+            CommandResult result = deleteCommand.execute(model);
+            assertTrue(result.isPendingDeletion());
+            assertEquals(expectedMessage, result.getFeedbackToUser());
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+            assertTrue(result instanceof PendingDeletionResult);
+            PendingDeletionResult pendingResult = (PendingDeletionResult) result;
+            assertEquals(personToDelete, pendingResult.getPersonToDelete());
+            assertEquals(INDEX_FIRST_PERSON, pendingResult.getTargetIndex());
+        } catch (CommandException e) {
+            fail("Should not throw CommandException, should return PendingDeletionResult");
+        }
     }
 
     @Test
@@ -50,20 +63,26 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_validIndexFilteredList_success() {
+    public void execute_validIndexFilteredList_showsConfirmation() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
+                personToDelete.getName().fullName,
+                personToDelete.getPhone().value,
+                personToDelete.getEmail().value,
+                DeleteCommand.COMMAND_WORD,
+                INDEX_FIRST_PERSON.getOneBased());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.deletePerson(personToDelete);
-        showNoPerson(expectedModel);
-
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        try {
+            CommandResult result = deleteCommand.execute(model);
+            assertTrue(result.isPendingDeletion());
+            assertEquals(expectedMessage, result.getFeedbackToUser());
+        } catch (CommandException e) {
+            fail("Should not throw CommandException, should return PendingDeletionResult");
+        }
     }
 
     @Test
@@ -107,14 +126,5 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
         assertEquals(expected, deleteCommand.toString());
-    }
-
-    /**
-     * Updates {@code model}'s filtered list to show no one.
-     */
-    private void showNoPerson(Model model) {
-        model.updateFilteredPersonList(p -> false);
-
-        assertTrue(model.getFilteredPersonList().isEmpty());
     }
 }
