@@ -14,13 +14,12 @@ public class RenameTagCommand extends Command {
     public static final String COMMAND_WORD = "renametag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Renames an existing tag globally.\n"
+            + ": Renames an existing tag globally. Existing values will be overwritten by the input values\n"
+            + "Exactly two tags must be provided as parameters"
             + "Parameters: --tag=[OLD_TAG] --tag=[NEW_TAG]\n"
             + "Example: " + COMMAND_WORD + " --tag=Plumbing --tag=Pipe-Repair";
 
     public static final String MESSAGE_SUCCESS = "Updated Tag: %1$s to %2$s";
-    public static final String MESSAGE_MISSING_TAGS = "Exactly two tags must be provided: "
-            + "one for the old tag and one for the new tag.";
     public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";
     public static final String MESSAGE_DUPLICATE_TAG = "The tag '%1$s' already exists. "
             + "To merge tags, please edit individual persons manually.";
