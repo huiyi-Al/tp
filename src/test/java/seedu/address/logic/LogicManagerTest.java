@@ -197,6 +197,7 @@ public class LogicManagerTest {
                 + PREFIX_EMAIL + personToDelete.getEmail().value + " "
                 + PREFIX_ADDRESS + personToDelete.getAddress().value);
 
+        // First delete - should return confirmation message with pending action
         CommandResult firstResult = logic.execute("delete 1");
 
         String expectedConfirmMessage = String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
@@ -207,12 +208,16 @@ public class LogicManagerTest {
                 1);
         assertEquals(expectedConfirmMessage, firstResult.getFeedbackToUser());
 
-        assertTrue(firstResult.isPendingDeletion());
+        // Check that it requires confirmation and has a pending action
+        assertTrue(firstResult.requiresConfirmation());
+        assertTrue(firstResult.getPendingAction().isPresent());
 
+        // Second delete - should confirm and delete
         CommandResult secondResult = logic.execute("delete 1");
         assertEquals(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.formatBasic(personToDelete)), secondResult.getFeedbackToUser());
 
-        assertFalse(secondResult.isPendingDeletion());
+        // Check that it no longer requires confirmation
+        assertFalse(secondResult.requiresConfirmation());
     }
 }

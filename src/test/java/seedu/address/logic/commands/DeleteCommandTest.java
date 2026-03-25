@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.PendingAction;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -42,15 +43,17 @@ public class DeleteCommandTest {
 
         try {
             CommandResult result = deleteCommand.execute(model);
-            assertTrue(result.isPendingDeletion());
+
+            assertTrue(result.requiresConfirmation());
             assertEquals(expectedMessage, result.getFeedbackToUser());
 
-            assertTrue(result instanceof PendingDeletionResult);
-            PendingDeletionResult pendingResult = (PendingDeletionResult) result;
-            assertEquals(personToDelete, pendingResult.getPersonToDelete());
-            assertEquals(INDEX_FIRST_PERSON, pendingResult.getTargetIndex());
+            assertTrue(result.getPendingAction().isPresent());
+            PendingAction pendingAction = result.getPendingAction().get();
+
+            assertTrue(pendingAction.matches(deleteCommand));
+
         } catch (CommandException e) {
-            fail("Should not throw CommandException, should return PendingDeletionResult");
+            fail("Should not throw CommandException, should return CommandResult with PendingAction");
         }
     }
 
@@ -78,10 +81,16 @@ public class DeleteCommandTest {
 
         try {
             CommandResult result = deleteCommand.execute(model);
-            assertTrue(result.isPendingDeletion());
+
+            // Check using requiresConfirmation() instead of isPendingDeletion()
+            assertTrue(result.requiresConfirmation());
             assertEquals(expectedMessage, result.getFeedbackToUser());
+
+            // Verify pending action exists
+            assertTrue(result.getPendingAction().isPresent());
+
         } catch (CommandException e) {
-            fail("Should not throw CommandException, should return PendingDeletionResult");
+            fail("Should not throw CommandException, should return CommandResult with PendingAction");
         }
     }
 
