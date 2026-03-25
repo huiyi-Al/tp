@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PLUMBING;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.BOB;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -120,8 +121,8 @@ public class AddressBookTest {
         Tag oldTag = new Tag("OldTag");
         Tag newTag = new Tag("NewTag");
 
-        Person alice = new PersonBuilder().withName("Alice").withTags("OldTag").build();
-        Person bob = new PersonBuilder().withName("Bob").withTags("OldTag", "Other").build();
+        Person alice = new PersonBuilder(ALICE).withTags("OldTag").build();
+        Person bob = new PersonBuilder(BOB).withTags("OldTag", "Other").build();
 
         addressBook.addPerson(alice);
         addressBook.addPerson(bob);

@@ -34,14 +34,6 @@ public class RenameTagCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 
-        Person editedAlice = new PersonBuilder(ALICE).withTags("Aircon-Repair").build();
-        Person editedBenson = new PersonBuilder(BENSON).withTags("Plumbing", "Aircon-Repair").build();
-        Person editedDaniel = new PersonBuilder(DANIEL).withTags("Aircon-Repair").build();
-
-        expectedModel.setPerson(ALICE, editedAlice);
-        expectedModel.setPerson(BENSON, editedBenson);
-        expectedModel.setPerson(DANIEL, editedDaniel);
-
         expectedModel.setTag(oldTag, newTag);
 
         assertCommandSuccess(renameTagCommand, model, expectedMessage, expectedModel);
