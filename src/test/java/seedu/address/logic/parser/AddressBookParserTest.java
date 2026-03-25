@@ -28,11 +28,13 @@ import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RenameTagCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.SearchPredicate;
 import seedu.address.model.person.predicates.TagsMatchKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -145,5 +147,16 @@ public class AddressBookParserTest {
         FilterCommand command = (FilterCommand) parser.parseCommand(userInput);
 
         assertEquals(new FilterCommand(new TagsMatchKeywordsPredicate(keywords)), command);
+    }
+
+    @Test
+    public void parseCommand_renameTag() throws Exception {
+        Tag oldTag = new Tag("Old");
+        Tag newTag = new Tag("New");
+
+        RenameTagCommand command = (RenameTagCommand) parser.parseCommand(
+                RenameTagCommand.COMMAND_WORD + " --tag=" + oldTag.tagName + " --tag=" + newTag.tagName);
+        
+        assertEquals(new RenameTagCommand(oldTag, newTag), command);
     }
 }

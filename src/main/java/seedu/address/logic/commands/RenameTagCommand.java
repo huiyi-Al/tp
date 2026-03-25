@@ -11,6 +11,7 @@ import seedu.address.model.tag.Tag;
  * Renames an existing tag globally in the address book.
  */
 public class RenameTagCommand extends Command {
+
     public static final String COMMAND_WORD = "renametag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
