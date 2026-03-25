@@ -20,7 +20,10 @@ public class CommandResult {
      * Constructs a {@code CommandResult} for normal commands.
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
-        this(feedbackToUser, showHelp, exit, null);
+        this.feedbackToUser = feedbackToUser;
+        this.showHelp = showHelp;
+        this.exit = exit;
+        this.pendingAction = null;
     }
 
     /**
