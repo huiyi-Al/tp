@@ -18,8 +18,6 @@ import seedu.address.model.person.Person;
  */
 public class DeleteCommand extends Command {
 
-    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
-
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -34,8 +32,15 @@ public class DeleteCommand extends Command {
                     + "Type '%4$s %5$d' again to confirm.\n"
                     + "Any other command will cancel this pending deletion.";
 
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
+
     private final Index targetIndex;
 
+    /**
+     * Constructs a {@code DeleteCommand} to delete the person at the specified index.
+     *
+     * @param targetIndex The 1-based index of the person in the displayed person list to be deleted.
+     */
     public DeleteCommand(Index targetIndex) {
         logger.info("Creating DeleteCommand for index: " + targetIndex.getOneBased());
         this.targetIndex = targetIndex;
