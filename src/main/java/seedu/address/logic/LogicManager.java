@@ -11,11 +11,10 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.PendingDeletionResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.logic.pending.PendingAction;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
@@ -35,8 +34,7 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    // Pending deletion state
-    private PendingDeletionResult pendingDeletion = null;
+    private PendingAction pendingAction = null;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -54,35 +52,28 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        // Check for pending deletion confirmation
-        if (pendingDeletion != null) {
-            String trimmedCommand = commandText.trim();
-            String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " "
-                    + pendingDeletion.getTargetIndex().getOneBased();
+        Command command = addressBookParser.parseCommand(commandText);
 
-            if (trimmedCommand.equals(expectedConfirmCommand)) {
-                // User confirmed deletion
-                Person personToDelete = pendingDeletion.getPersonToDelete();
-                model.deletePerson(personToDelete);
-                pendingDeletion = null;
+        // Check if there's a pending action waiting for confirmation
+        if (pendingAction != null) {
+            if (pendingAction.matches(command)) {
+                // User confirmed - complete the pending action
+                CommandResult result = pendingAction.complete(model);
+                pendingAction = null;
                 saveAddressBook();
-                return new CommandResult(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                        formatPersonBasic(personToDelete)));
+                return result;
             } else {
-                // User cancelled by typing another command
-                logger.info("Cancelling pending deletion");
-                pendingDeletion = null;
+                // User typed another command - just clear pending and continue
+                pendingAction = null;
                 // Continue to execute the new command
             }
         }
 
-        // Parse and execute the command
-        Command command = addressBookParser.parseCommand(commandText);
         CommandResult result = command.execute(model);
 
-        // If this is a pending deletion result, store it and return the confirmation message
-        if (result.isPendingDeletion()) {
-            pendingDeletion = (PendingDeletionResult) result;
+        // If the result has a pending action, store it
+        if (result.hasPendingAction()) {
+            pendingAction = result.getPendingAction().get();
             return result;
         }
 
@@ -99,11 +90,6 @@ public class LogicManager implements Logic {
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
-    }
-
-    private String formatPersonBasic(Person person) {
-        return person.getName().fullName + "; Phone: " + person.getPhone().value
-                + "; Email: " + person.getEmail().value;
     }
 
     @Override

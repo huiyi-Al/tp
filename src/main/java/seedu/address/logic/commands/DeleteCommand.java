@@ -10,6 +10,8 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.pending.DeletePendingAction;
+import seedu.address.logic.pending.PendingAction;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -39,11 +41,19 @@ public class DeleteCommand extends Command {
     /**
      * Constructs a {@code DeleteCommand} to delete the person at the specified index.
      *
+     * <p>Note: This command requires two-step confirmation. The first execution will
+     * return a {@link PendingAction} with a confirmation message. The second execution
+     * with the same index will complete the deletion.</p>
+     *
      * @param targetIndex The 1-based index of the person in the displayed person list to be deleted.
      */
     public DeleteCommand(Index targetIndex) {
         logger.info("Creating DeleteCommand for index: " + targetIndex.getOneBased());
         this.targetIndex = targetIndex;
+    }
+
+    public Index getTargetIndex() {
+        return targetIndex;
     }
 
     @Override
@@ -67,16 +77,11 @@ public class DeleteCommand extends Command {
 
         logger.info("Creating pending deletion for: " + personToDelete.getName().fullName);
 
-        String confirmMessage = String.format(MESSAGE_DELETE_CONFIRM,
-                personToDelete.getName().fullName,
-                personToDelete.getPhone().value,
-                personToDelete.getEmail().value,
-                COMMAND_WORD,
-                targetIndex.getOneBased());
+        PendingAction pendingAction = new DeletePendingAction(personToDelete, targetIndex);
 
-        assert targetIndex.getOneBased() > 0 : "Target index must be positive";
+        assert pendingAction != null : "PendingAction should not be null";
 
-        return new PendingDeletionResult(confirmMessage, personToDelete, targetIndex);
+        return new CommandResult(pendingAction.getConfirmationMessage(), pendingAction);
     }
 
     @Override

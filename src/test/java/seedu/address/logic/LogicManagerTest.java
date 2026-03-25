@@ -207,12 +207,13 @@ public class LogicManagerTest {
                 1);
         assertEquals(expectedConfirmMessage, firstResult.getFeedbackToUser());
 
-        assertTrue(firstResult.isPendingDeletion());
+        assertTrue(firstResult.hasPendingAction());
+        assertTrue(firstResult.getPendingAction().isPresent());
 
         CommandResult secondResult = logic.execute("delete 1");
         assertEquals(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.formatBasic(personToDelete)), secondResult.getFeedbackToUser());
 
-        assertFalse(secondResult.isPendingDeletion());
+        assertFalse(secondResult.hasPendingAction());
     }
 }
