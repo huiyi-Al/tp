@@ -38,6 +38,12 @@ public class LogicManager implements Logic {
     // Pending deletion state
     private PendingDeletionResult pendingDeletion = null;
 
+    /**
+     * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
+     *
+     * @param model The model component that holds the address book data in memory.
+     * @param storage The storage component that handles reading from and writing to disk.
+     */
     public LogicManager(Model model, Storage storage) {
         this.model = model;
         this.storage = storage;
@@ -51,7 +57,8 @@ public class LogicManager implements Logic {
         // Check for pending deletion confirmation
         if (pendingDeletion != null) {
             String trimmedCommand = commandText.trim();
-            String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " " + pendingDeletion.getTargetIndex().getOneBased();
+            String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " "
+                    + pendingDeletion.getTargetIndex().getOneBased();
 
             if (trimmedCommand.equals(expectedConfirmCommand)) {
                 // User confirmed deletion
