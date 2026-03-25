@@ -157,18 +157,26 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified person from the address book with confirmation.
 
 Format: `delete INDEX`
 
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* **Two-step confirmation**: You will be prompted to confirm the deletion by typing the same command again.
+* Any other command typed after the first `delete` will cancel the pending deletion.
 
 Examples:
 
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2`
+    * Shows confimation message with the person's details.
+    * Typing `delete 2` again confirms and deletes the 2nd person.
+* `find Betsy` followed by `delete 1`
+    * Shows confimation message for the 1st person in the search results.
+    * Typing `delete 1` again deletes that person.
+* `delete 1` followed by `list`
+    * The pending deletion is cancelled. The list command executes normally.
 
 ### Copying a person's address: `copyaddr`
 

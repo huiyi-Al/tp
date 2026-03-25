@@ -50,4 +50,11 @@ public class Messages {
         return builder.toString();
     }
 
+    /**
+     * Formats a {@code Person} with basic info (name, phone, email) for confirmation messages.
+     */
+    public static String formatBasic(Person person) {
+        return person.getName().fullName + "; Phone: " + person.getPhone().value
+                + "; Email: " + person.getEmail().value;
+    }
 }
