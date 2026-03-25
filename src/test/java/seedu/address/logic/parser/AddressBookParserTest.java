@@ -30,6 +30,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.LogAddCommand;
+import seedu.address.logic.commands.LogDeleteCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
@@ -178,5 +179,13 @@ public class AddressBookParserTest {
         LogAddCommand command = (LogAddCommand) parser.parseCommand(
                 LogAddCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " " + message);
         assertEquals(new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(message)), command);
+    }
+
+    @Test
+    public void parseCommand_logDelete() throws Exception {
+        LogDeleteCommand command = (LogDeleteCommand) parser.parseCommand(
+                LogDeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
+                        + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new LogDeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON), command);
     }
 }
