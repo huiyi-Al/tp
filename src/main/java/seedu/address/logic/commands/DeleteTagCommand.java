@@ -37,7 +37,7 @@ public class DeleteTagCommand extends Command {
         }
 
         model.deleteTag(targetTag);
-        return new CommandResult(String.format(MESSAGE_DELETE_TAG_SUCCESS, targetTag));
+        return new CommandResult(String.format(MESSAGE_DELETE_TAG_SUCCESS, targetTag.tagName));
     }
 
     @Override

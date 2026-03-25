@@ -22,8 +22,7 @@ public class RenameTagCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Updated Tag: %1$s to %2$s";
     public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";
-    public static final String MESSAGE_DUPLICATE_TAG = "The tag '%1$s' already exists. "
-            + "To merge tags, please edit individual persons manually.";
+    public static final String MESSAGE_DUPLICATE_TAG = "The tag '%1$s' already exists.";
 
     private final Tag oldTag;
     private final Tag newTag;
@@ -53,10 +52,7 @@ public class RenameTagCommand extends Command {
 
         model.setTag(oldTag, newTag);
 
-        // Refresh the filtered person list to show updated tags in the UI
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-
-        return new CommandResult(String.format(MESSAGE_SUCCESS, oldTag, newTag));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, oldTag.tagName, newTag.tagName));
     }
 
     @Override

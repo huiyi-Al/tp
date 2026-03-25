@@ -141,8 +141,16 @@ public class ModelManager implements Model {
 
         addressBook.setTag(target, editedTag);
 
-        // refresh UI
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        Person currentlySelected = selectedPerson.getValue();
+        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
+
+            selectedPerson.setValue(null);
+
+            getFilteredPersonList().stream()
+                    .filter(p -> p.isSamePerson(currentlySelected))
+                    .findFirst()
+                    .ifPresent(selectedPerson::setValue);
+        }
     }
 
     @Override
@@ -150,7 +158,15 @@ public class ModelManager implements Model {
         requireNonNull(target);
         addressBook.removeTag(target);
 
-        // refresh UI
+        Person currentlySelected = selectedPerson.getValue();
+        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
+            selectedPerson.setValue(null);
+            getFilteredPersonList().stream()
+                    .filter(p -> p.isSamePerson(currentlySelected))
+                    .findFirst()
+                    .ifPresent(selectedPerson::setValue);
+        }
+
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
