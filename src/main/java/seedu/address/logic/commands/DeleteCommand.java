@@ -10,6 +10,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
+import seedu.address.logic.PendingAction;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -17,7 +18,7 @@ import seedu.address.model.person.Person;
 /**
  * Deletes a person identified using its displayed index from the address book.
  */
-public class DeleteCommand extends ConfirmableCommand {
+public class DeleteCommand extends Command {
 
     private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
@@ -43,43 +44,44 @@ public class DeleteCommand extends ConfirmableCommand {
         this.targetIndex = targetIndex;
     }
 
+    public Index getTargetIndex() {
+        return targetIndex;
+    }
+
     @Override
-    public void prepare(Model model) throws CommandException {
+    public CommandResult execute(Model model) throws CommandException {
+        logger.log(Level.INFO, "Executing delete command for index: " + targetIndex.getOneBased());
+
+        requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
+
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             logger.log(Level.INFO, "Invalid index: " + targetIndex.getOneBased()
                     + " (list size: " + lastShownList.size() + ")");
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
-        this.personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        logger.log(Level.INFO, "Prepared deletion for: " + personToDelete.getName().fullName);
-    }
 
-    @Override
-    public String getConfirmationMessage() {
-        return String.format(MESSAGE_DELETE_CONFIRM,
+        this.personToDelete = lastShownList.get(targetIndex.getZeroBased());
+        logger.log(Level.INFO, "Pending deletion for: " + personToDelete.getName().fullName);
+
+        String confirmMessage = String.format(MESSAGE_DELETE_CONFIRM,
                 personToDelete.getName().fullName,
                 personToDelete.getPhone().value,
                 personToDelete.getEmail().value,
                 COMMAND_WORD,
                 targetIndex.getOneBased());
+
+        // Return a CommandResult with PendingAction that stores this command
+        return new CommandResult(confirmMessage, new PendingAction(this, confirmMessage));
     }
 
-    @Override
+    /**
+     * Called when the command is confirmed.
+     */
     public CommandResult executeConfirmed(Model model) throws CommandException {
         model.deletePerson(personToDelete);
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
                 formatPersonBasic(personToDelete)));
-    }
-
-    @Override
-    public String getCommandWord() {
-        return COMMAND_WORD;
-    }
-
-    @Override
-    public int getConfirmationIndex() {
-        return targetIndex.getOneBased();
     }
 
     private String formatPersonBasic(Person person) {

@@ -11,7 +11,6 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ConfirmableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -34,7 +33,7 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    private ConfirmableCommand pendingCommand = null;
+    private seedu.address.logic.PendingAction pendingAction = null;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -52,37 +51,36 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        // Check if there's a pending command waiting for confirmation
-        if (pendingCommand != null) {
-            Command command = addressBookParser.parseCommand(commandText);
+        Command command = addressBookParser.parseCommand(commandText);
 
-            if (pendingCommand.matches(command)) {
-                // User confirmed the pending command
-                CommandResult result = pendingCommand.executeConfirmed(model);
-                pendingCommand = null;
+        // Check if there's a pending action waiting for confirmation
+        if (pendingAction != null) {
+            if (pendingAction.matches(command)) {
+                // User confirmed
+                CommandResult result = pendingAction.executeConfirmed(model);
+                pendingAction = null;
                 saveAddressBook();
                 return result;
             } else {
                 // User cancelled by typing another command
-                pendingCommand = null;
+                pendingAction = null;
                 // Continue to execute the new command
             }
         }
 
-        // Parse and execute the command normally
-        Command command = addressBookParser.parseCommand(commandText);
+        // Execute the command
+        CommandResult result = command.execute(model);
 
-        // If it's a confirmable command, prepare and store it as pending
-        if (command instanceof ConfirmableCommand) {
-            ConfirmableCommand confirmable = (ConfirmableCommand) command;
-            confirmable.prepare(model);  // Prepare (e.g., fetch person to delete)
-            pendingCommand = confirmable;
-            return new CommandResult(confirmable.getConfirmationMessage());
+        // If the result has a pending action, store it
+        if (result.requiresConfirmation()) {
+            pendingAction = result.getPendingAction().get();
         }
 
-        // Normal command execution
-        CommandResult result = command.execute(model);
-        saveAddressBook();
+        // Save for normal commands
+        if (!result.requiresConfirmation()) {
+            saveAddressBook();
+        }
+
         return result;
     }
 

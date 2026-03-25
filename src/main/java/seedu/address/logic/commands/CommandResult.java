@@ -1,8 +1,10 @@
 package seedu.address.logic.commands;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.PendingAction;
 
 /**
  * Represents the result of a command execution.
@@ -12,22 +14,25 @@ public class CommandResult {
     private final String feedbackToUser;
     private final boolean showHelp;
     private final boolean exit;
+    private final PendingAction pendingAction;
 
-    /**
-     * Constructs a {@code CommandResult} with the specified fields.
-     */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
+        this(feedbackToUser, showHelp, exit, null);
+    }
+
+    public CommandResult(String feedbackToUser) {
+        this(feedbackToUser, false, false, null);
+    }
+
+    public CommandResult(String feedbackToUser, PendingAction pendingAction) {
+        this(feedbackToUser, false, false, pendingAction);
+    }
+
+    private CommandResult(String feedbackToUser, boolean showHelp, boolean exit, PendingAction pendingAction) {
         this.feedbackToUser = feedbackToUser;
         this.showHelp = showHelp;
         this.exit = exit;
-    }
-
-    /**
-     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser},
-     * and other fields set to their default value.
-     */
-    public CommandResult(String feedbackToUser) {
-        this(feedbackToUser, false, false);
+        this.pendingAction = pendingAction;
     }
 
     public String getFeedbackToUser() {
@@ -42,12 +47,12 @@ public class CommandResult {
         return exit;
     }
 
-    /**
-     * Returns true if this result represents a pending deletion.
-     * Overridden by PendingDeletionResult.
-     */
-    public boolean isPendingDeletion() {
-        return false;
+    public boolean requiresConfirmation() {
+        return pendingAction != null;
+    }
+
+    public Optional<PendingAction> getPendingAction() {
+        return Optional.ofNullable(pendingAction);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class CommandResult {
             return true;
         }
 
+        // instanceof handles nulls
         if (!(other instanceof CommandResult)) {
             return false;
         }

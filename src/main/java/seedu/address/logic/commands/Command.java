@@ -17,4 +17,16 @@ public abstract class Command {
      */
     public abstract CommandResult execute(Model model) throws CommandException;
 
+    /**
+     * Executes the confirmed command (called after user confirmation).
+     * Default implementation throws an exception.
+     * Override in commands that require confirmation.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return feedback message of the operation result for display
+     * @throws CommandException If an error occurs during command execution.
+     */
+    public CommandResult executeConfirmed(Model model) throws CommandException {
+        throw new CommandException("This command does not support confirmation");
+    }
 }
