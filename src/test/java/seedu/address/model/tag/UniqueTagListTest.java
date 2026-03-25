@@ -20,6 +20,7 @@ public class UniqueTagListTest {
     private final UniqueTagList uniqueTagList = new UniqueTagList();
     private final Tag plumbingTag = new Tag(VALID_TAG_PLUMBING);
     private final Tag electricalTag = new Tag(VALID_TAG_AC_SERVICE);
+    private final Tag plumbingTagCaps = new Tag("PLUMBING");
 
     @Test
     public void contains_nullTag_throwsNullPointerException() {
@@ -121,6 +122,40 @@ public class UniqueTagListTest {
     public void setTags_listWithDuplicateTags_throwsDuplicateTagException() {
         List<Tag> listWithDuplicateTags = Arrays.asList(plumbingTag, plumbingTag);
         assertThrows(DuplicateTagException.class, () -> uniqueTagList.setTags(listWithDuplicateTags));
+    }
+
+    @Test
+    public void setTags_listWithCaseInsensitiveDuplicateTags_throwsDuplicateTagException() {
+        List<Tag> listWithDuplicateTags = Arrays.asList(plumbingTag, plumbingTagCaps);
+        assertThrows(DuplicateTagException.class, () -> uniqueTagList.setTags(listWithDuplicateTags));
+    }
+
+    @Test
+    public void add_duplicateCaseInsensitive_throwsDuplicateTagException() {
+        uniqueTagList.add(plumbingTag);
+        // Adding the same name with different case
+        assertThrows(DuplicateTagException.class, () -> uniqueTagList.add(plumbingTagCaps));
+    }
+
+    @Test
+    public void setTag_renameCaseOnly_success() {
+        Tag oldTag = plumbingTagCaps;
+        Tag newTag = plumbingTag;
+        uniqueTagList.add(oldTag);
+
+        // Renaming "plumbing" to "Plumbing"
+        uniqueTagList.setTag(oldTag, newTag);
+
+        assertTrue(uniqueTagList.contains(newTag));
+        assertEquals(VALID_TAG_PLUMBING, uniqueTagList.asUnmodifiableObservableList().get(0).tagName);
+    }
+
+    @Test
+    public void remove_caseInsensitive_success() {
+        uniqueTagList.add(plumbingTag);
+        // Removing using a different case
+        uniqueTagList.remove(plumbingTagCaps);
+        assertEquals(0, uniqueTagList.asUnmodifiableObservableList().size());
     }
 
     @Test
