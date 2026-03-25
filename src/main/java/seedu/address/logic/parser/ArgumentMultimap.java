@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class ArgumentMultimap {
 
-    /** Prefixes mapped to their respective arguments**/
+    /**
+     * Prefixes mapped to their respective arguments
+     **/
     private final Map<Prefix, List<String>> argMultimap = new HashMap<>();
 
     /**
@@ -36,11 +39,28 @@ public class ArgumentMultimap {
     }
 
     /**
+     * Clears all {@code prefix} key-value mappings in the map.
+     */
+    public void clear() {
+        argMultimap.clear();
+    }
+
+    /**
      * Returns the last value of {@code prefix}.
      */
     public Optional<String> getValue(Prefix prefix) {
         List<String> values = getAllValues(prefix);
         return values.isEmpty() ? Optional.empty() : Optional.of(values.get(values.size() - 1));
+    }
+
+    /**
+     * Returns the last value of {@code prefix}, separated by whitespaces
+     */
+    public List<String> getValueWhitespaceSeparated(Prefix prefix) {
+        if (getValue(prefix).isEmpty()) {
+            return List.of();
+        }
+        return Arrays.asList(getValue(prefix).get().split("\\s+"));
     }
 
     /**
