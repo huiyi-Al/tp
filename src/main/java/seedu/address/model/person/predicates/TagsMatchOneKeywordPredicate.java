@@ -7,12 +7,12 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 
 /**
- * Tests that a {@code Person}'s {@code Tag} matches all of the keywords given.
+ * Tests that a {@code Person}'s {@code Tag} matches at least one of the keywords given.
  */
-public class TagsMatchKeywordsPredicate implements Predicate<Person> {
+public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
     private final List<String> tagKeywords;
 
-    public TagsMatchKeywordsPredicate(List<String> tagKeywords) {
+    public TagsMatchOneKeywordPredicate(List<String> tagKeywords) {
         this.tagKeywords = tagKeywords;
     }
 
@@ -22,8 +22,8 @@ public class TagsMatchKeywordsPredicate implements Predicate<Person> {
             return false;
         }
         return tagKeywords.stream()
-                .allMatch(keyword -> person.getTags().stream()
-                                .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword)));
+                .anyMatch(tagKeyword -> person.getTags().stream()
+                        .anyMatch(tag -> tag.tagName.equalsIgnoreCase(tagKeyword)));
     }
 
     @Override
@@ -33,16 +33,17 @@ public class TagsMatchKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof TagsMatchKeywordsPredicate)) {
+        if (!(other instanceof TagsMatchOneKeywordPredicate)) {
             return false;
         }
 
-        TagsMatchKeywordsPredicate otherTagContainsKeywordsPredicate = (TagsMatchKeywordsPredicate) other;
-        return tagKeywords.equals(otherTagContainsKeywordsPredicate.tagKeywords);
+        TagsMatchOneKeywordPredicate otherPredicate = (TagsMatchOneKeywordPredicate) other;
+        return tagKeywords.equals(otherPredicate.tagKeywords);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("tag keywords", tagKeywords).toString();
+        return new ToStringBuilder(this).add("tagKeywords", tagKeywords)
+                .toString();
     }
 }
