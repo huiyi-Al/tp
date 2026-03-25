@@ -156,7 +156,7 @@ public class AddressBookParserTest {
 
         RenameTagCommand command = (RenameTagCommand) parser.parseCommand(
                 RenameTagCommand.COMMAND_WORD + " --tag=" + oldTag.tagName + " --tag=" + newTag.tagName);
-        
+
         assertEquals(new RenameTagCommand(oldTag, newTag), command);
     }
 }

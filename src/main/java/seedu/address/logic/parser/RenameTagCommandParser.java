@@ -25,8 +25,8 @@ public class RenameTagCommandParser implements Parser<RenameTagCommand> {
 
         List<String> tagNames = argMultimap.getAllValues(PREFIX_TAG);
 
-        // Validate that exactly two tags were provided
-        if (tagNames.size() != 2) {
+        // Validate that exactly two tags were provided and no preamble
+        if (tagNames.size() != 2 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, RenameTagCommand.MESSAGE_USAGE));
         }

@@ -38,6 +38,20 @@ public class RenameTagCommandParserTest {
     }
 
     @Test
+    public void parse_invalidPreamble_failure() {
+        String message = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RenameTagCommand.MESSAGE_USAGE);
+
+        // preamble with a number
+        assertParseFailure(parser, "1 --tag=Old --tag=New", message);
+
+        // preamble with a string
+        assertParseFailure(parser, "random --tag=Old --tag=New", message);
+
+        // preamble with special character
+        assertParseFailure(parser, "i/string --tag=Old --tag=New", message);
+    }
+
+    @Test
     public void parse_invalidTagValues_failure() {
         // Tag too long (> 50 chars)
         String longTagName = "a".repeat(51);
