@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FilterCommand;
-import seedu.address.model.person.predicates.TagsMatchKeywordsPredicate;
+import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
 public class FilterCommandParserTest {
 
@@ -45,12 +45,12 @@ public class FilterCommandParserTest {
     public void parse_validArgs_returnsFilterCommand() {
         // Single tag
         FilterCommand expectedFilterCommand =
-                new FilterCommand(new TagsMatchKeywordsPredicate(Arrays.asList("Plumbing")));
+                new FilterCommand(new TagsMatchAllKeywordsPredicate(Arrays.asList("Plumbing")));
         assertParseSuccess(parser, " --tag=Plumbing", expectedFilterCommand);
 
         // Multiple tags with whitespaces
         expectedFilterCommand =
-                new FilterCommand(new TagsMatchKeywordsPredicate(Arrays.asList("AC-Service", "Electrical")));
+                new FilterCommand(new TagsMatchAllKeywordsPredicate(Arrays.asList("AC-Service", "Electrical")));
         assertParseSuccess(parser, " --tag=AC-Service --tag=Electrical", expectedFilterCommand);
 
         // Case with trailing/leading spaces around prefix

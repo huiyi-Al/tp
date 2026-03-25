@@ -4,6 +4,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.model.person.Person;
 
 /**
- * Tests that a {@code Person}'s {@code name, phone number, email address, physical address} can be matched by the
+ * Tests that a {@code Person}'s {@code name, phone number, email address, physical address, tags} can be matched by the
  * predicates provided.
  */
 public class SearchPredicate implements Predicate<Person> {
@@ -22,6 +23,7 @@ public class SearchPredicate implements Predicate<Person> {
     private final PhoneNumberPredicate phoneNumberPredicate;
     private final EmailAddressPredicate emailAddressPredicate;
     private final PhysicalAddressPredicate physicalAddressPredicate;
+    private final TagsMatchOneKeywordPredicate tagsPredicate;
 
     /**
      * Creates a {@code SearchPredicate} that filters persons based on the provided argument map.
@@ -31,6 +33,8 @@ public class SearchPredicate implements Predicate<Person> {
      *                    {@code PREFIX_NAME} for name substring matching.
      *                    {@code PREFIX_PHONE} for phone number matching.
      *                    {@code PREFIX_EMAIL} for email address matching.
+     *                    {@code PREFIX_ADDRESS} for physical address matching.
+     *                    {@code PREFIX_TAG} for tags matching.
      *                    Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
@@ -46,6 +50,9 @@ public class SearchPredicate implements Predicate<Person> {
         this.physicalAddressPredicate = argMultimap.getValue(PREFIX_ADDRESS).isPresent()
                 ? new PhysicalAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_ADDRESS))
                 : new PhysicalAddressPredicate(new ArrayList<>());
+        this.tagsPredicate = argMultimap.getValue(PREFIX_TAG).isPresent()
+                ? new TagsMatchOneKeywordPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_TAG))
+                : new TagsMatchOneKeywordPredicate(new ArrayList<>());
     }
 
     @Override
@@ -54,13 +61,15 @@ public class SearchPredicate implements Predicate<Person> {
         boolean phoneCondition = false;
         boolean emailAddressCondition = false;
         boolean physicalAddressCondition = false;
+        boolean tagsCondition = false;
 
         nameCondition = fullNamePredicate.test(person);
         phoneCondition = phoneNumberPredicate.test(person);
         emailAddressCondition = emailAddressPredicate.test(person);
         physicalAddressCondition = physicalAddressPredicate.test(person);
+        tagsCondition = tagsPredicate.test(person);
 
-        return nameCondition || phoneCondition || emailAddressCondition || physicalAddressCondition;
+        return nameCondition || phoneCondition || emailAddressCondition || physicalAddressCondition || tagsCondition;
     }
 
     @Override
@@ -78,17 +87,19 @@ public class SearchPredicate implements Predicate<Person> {
         return Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
                 && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate)
                 && Objects.equals(emailAddressPredicate, otherSearchPredicate.emailAddressPredicate)
-                && Objects.equals(physicalAddressPredicate, otherSearchPredicate.physicalAddressPredicate);
+                && Objects.equals(physicalAddressPredicate, otherSearchPredicate.physicalAddressPredicate)
+                && Objects.equals(tagsPredicate, otherSearchPredicate.tagsPredicate);
     }
 
     @Override
     public String toString() {
         return MessageFormat.format(
-                "{0}, {1}, {2}, {3}",
+                "{0}, {1}, {2}, {3}, {4}",
                 fullNamePredicate.toString(),
                 phoneNumberPredicate.toString(),
                 emailAddressPredicate.toString(),
-                physicalAddressPredicate.toString()
+                physicalAddressPredicate.toString(),
+                tagsPredicate.toString()
         );
     }
 }
