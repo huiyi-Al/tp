@@ -21,6 +21,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CopyAddrCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -150,7 +151,7 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_renameTag() throws Exception {
+    public void parseCommand_renametag() throws Exception {
         Tag oldTag = new Tag("Old");
         Tag newTag = new Tag("New");
 
@@ -158,5 +159,14 @@ public class AddressBookParserTest {
                 RenameTagCommand.COMMAND_WORD + " --tag=" + oldTag.tagName + " --tag=" + newTag.tagName);
 
         assertEquals(new RenameTagCommand(oldTag, newTag), command);
+    }
+
+    @Test
+    public void parseCommand_deletetag() throws Exception {
+        Tag tag = new Tag("Plumbing");
+        String userInput = DeleteTagCommand.COMMAND_WORD + " " + tag.tagName;
+        DeleteTagCommand command = (DeleteTagCommand) parser.parseCommand(userInput);
+
+        assertEquals(new DeleteTagCommand(tag), command);
     }
 }
