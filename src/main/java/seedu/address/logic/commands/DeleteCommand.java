@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,20 +39,20 @@ public class DeleteCommand extends ConfirmableCommand {
     private Person personToDelete;
 
     public DeleteCommand(Index targetIndex) {
-        logger.info("Creating DeleteCommand for index: " + targetIndex.getOneBased());
+        logger.log(Level.INFO, "Creating DeleteCommand for index: " + targetIndex.getOneBased());
         this.targetIndex = targetIndex;
     }
 
+    @Override
     public void prepare(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            logger.info("Invalid index: " + targetIndex.getOneBased()
+            logger.log(Level.INFO, "Invalid index: " + targetIndex.getOneBased()
                     + " (list size: " + lastShownList.size() + ")");
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
         this.personToDelete = lastShownList.get(targetIndex.getZeroBased());
-
-        assert personToDelete != null : "Person at valid index should not be null";
+        logger.log(Level.INFO, "Prepared deletion for: " + personToDelete.getName().fullName);
     }
 
     @Override
