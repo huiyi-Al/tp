@@ -2,19 +2,17 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.predicates.FullNamePredicate;
-import seedu.address.model.person.predicates.PhoneNumberPredicate;
 import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
@@ -36,7 +34,8 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL));
+        List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_ADDRESS));
         trimmedArgs = " " + trimmedArgs; // To allow prefix on first character to be detected
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
 
@@ -55,17 +54,6 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
-
-        String expectedFormatString = "{0}'{subNames='{1}'}', {2}'{subNumbers='{3}'}'";
-        String expectedEmpty = MessageFormat.format(
-                expectedFormatString,
-                FullNamePredicate.class.getCanonicalName(),
-                new ArrayList<>(),
-                PhoneNumberPredicate.class.getCanonicalName(),
-                new ArrayList<>()
-        );
-        System.out.println(expectedEmpty);
-        System.out.println(new SearchPredicate((argMultimap)));
 
         return new FindCommand(new SearchPredicate(argMultimap));
     }
