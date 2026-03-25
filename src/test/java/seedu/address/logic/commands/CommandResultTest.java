@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.pending.DeletePendingAction;
+import seedu.address.logic.pending.PendingAction;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 

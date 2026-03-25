@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.commands.PendingAction;
+import seedu.address.logic.pending.PendingAction;
 
 /**
  * Represents the result of a command execution.

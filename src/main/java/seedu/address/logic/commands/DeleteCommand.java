@@ -3,14 +3,15 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.pending.DeletePendingAction;
+import seedu.address.logic.pending.PendingAction;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -18,8 +19,6 @@ import seedu.address.model.person.Person;
  * Deletes a person identified using its displayed index from the address book.
  */
 public class DeleteCommand extends Command {
-
-    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
     public static final String COMMAND_WORD = "delete";
 
@@ -35,8 +34,19 @@ public class DeleteCommand extends Command {
                     + "Type '%4$s %5$d' again to confirm.\n"
                     + "Any other command will cancel this pending deletion.";
 
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
+
     private final Index targetIndex;
 
+    /**
+     * Constructs a {@code DeleteCommand} to delete the person at the specified index.
+     *
+     * <p>Note: This command requires two-step confirmation. The first execution will
+     * return a {@link PendingAction} with a confirmation message. The second execution
+     * with the same index will complete the deletion.</p>
+     *
+     * @param targetIndex The 1-based index of the person in the displayed person list to be deleted.
+     */
     public DeleteCommand(Index targetIndex) {
         logger.info("Creating DeleteCommand for index: " + targetIndex.getOneBased());
         this.targetIndex = targetIndex;
