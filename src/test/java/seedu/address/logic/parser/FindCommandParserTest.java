@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -28,9 +29,11 @@ import seedu.address.model.person.predicates.SearchPredicate;
  *   <li>Valid name w/ same case, same expected command.</li>
  *   <li>Valid name w/ different case, different expected command.</li>
  *   <li>Valid phone, same expected command.</li>
- *   <li>Valid email no @ or ., same expected command.</li>
- *   <li>Valid email w/ @ and ., same expected command.</li>
- *   <li>Valid email with different case, different expected command.</li>
+ *   <li>Valid email address no @ or ., same expected command.</li>
+ *   <li>Valid email address w/ @ and ., same expected command.</li>
+ *   <li>Valid email address with different case, different expected command.</li>
+ *   <li>Valid physical address w/ same case, same expected command.</li>
+ *   <li>Valid physical address w/ different case, different expected command.</li>
  *   <li>Valid all fields expected order, same expected command.</li>
  *   <li>Valid all fields scrambled order, same expected command.</li>
  * </ul>
@@ -48,6 +51,9 @@ public class FindCommandParserTest {
     private static final String TEST_EMAIL1 = MessageFormat.format("{0}{1}@test.com", TEST_NAME1, TEST_PHONE1);
     private static final String TEST_EMAIL2 = MessageFormat.format("{0}{1}@test.com", TEST_NAME2, TEST_PHONE2);
     private static final String TEST_MULTIEMAIL1 = MessageFormat.format("{0} {1}", TEST_EMAIL1, TEST_EMAIL2);
+    private static final String TEST_ADDRESS1 = "Geylang";
+    private static final String TEST_ADDRESS2 = "Tampines";
+    private static final String TEST_MULTIADDRESS1 = MessageFormat.format("{0} {1}", TEST_ADDRESS1, TEST_ADDRESS2);
 
     private final ArgumentMultimap argMultimap;
     private final FindCommandParser parser;
@@ -165,6 +171,28 @@ public class FindCommandParserTest {
         expected = generateFindCommand();
 
         assertParseDifferent(parser, MessageFormat.format("{0}{1}", PREFIX_EMAIL, TEST_MULTIEMAIL1), expected);
+    }
+
+    @Test
+    public void parse_validAddressSameCase_returnsSameFindCommand() {
+        argMultimap.clear();
+        argMultimap.put(PREFIX_ADDRESS, TEST_MULTIADDRESS1);
+        expected = generateFindCommand();
+
+        // No leading and trailing whitespaces
+        assertParseSuccess(parser, MessageFormat.format("{0}{1}", PREFIX_ADDRESS, TEST_MULTIADDRESS1), expected);
+        // Multiple whitespaces between keywords
+        assertParseSuccess(parser, MessageFormat.format("{0} \t{1} \t \n {2}\n", PREFIX_ADDRESS, TEST_ADDRESS1,
+                TEST_ADDRESS2), expected);
+    }
+
+    @Test
+    public void parse_validAddressDifferentCase_returnsDifferentFindCommand() {
+        argMultimap.clear();
+        argMultimap.put(PREFIX_ADDRESS, TEST_MULTIADDRESS1.toUpperCase());
+        expected = generateFindCommand();
+
+        assertParseDifferent(parser, MessageFormat.format("{0}{1}", PREFIX_ADDRESS, TEST_MULTIADDRESS1), expected);
     }
 
     @Test
