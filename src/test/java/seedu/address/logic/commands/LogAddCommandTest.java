@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -104,5 +105,15 @@ public class LogAddCommandTest {
         assertFalse(firstCommand.equals(null));
         assertFalse(firstCommand.equals(1));
         assertFalse(firstCommand.equals(secondCommand));
+    }
+
+    @Test
+    public void toStringMethod() {
+        Index personIndex = Index.fromOneBased(1);
+        LogMessage logMessage = new LogMessage("Observed leakage beneath sink during site visit.");
+        LogAddCommand command = new LogAddCommand(personIndex, logMessage);
+        String expected = LogAddCommand.class.getCanonicalName()
+                + "{personIndex=" + personIndex + ", logMessage=" + logMessage + "}";
+        assertEquals(expected, command.toString());
     }
 }
