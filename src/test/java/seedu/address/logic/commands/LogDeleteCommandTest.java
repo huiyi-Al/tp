@@ -115,12 +115,14 @@ public class LogDeleteCommandTest {
         LogDeleteCommand firstCommand = new LogDeleteCommand(INDEX_FIRST_PERSON, Index.fromOneBased(1));
         LogDeleteCommand firstCommandCopy = new LogDeleteCommand(INDEX_FIRST_PERSON, Index.fromOneBased(1));
         LogDeleteCommand secondCommand = new LogDeleteCommand(INDEX_FIRST_PERSON, Index.fromOneBased(2));
+        LogDeleteCommand thirdCommand = new LogDeleteCommand(INDEX_SECOND_PERSON, Index.fromOneBased(1));
 
         assertTrue(firstCommand.equals(firstCommandCopy));
         assertTrue(firstCommand.equals(firstCommand));
         assertFalse(firstCommand.equals(null));
         assertFalse(firstCommand.equals(1));
         assertFalse(firstCommand.equals(secondCommand));
+        assertFalse(firstCommand.equals(thirdCommand));
     }
 
     @Test
