@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -19,56 +19,54 @@ import seedu.address.model.person.Person;
  */
 public class DeleteCommand extends Command {
 
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
+
     public static final String COMMAND_WORD = "delete";
+
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
             + "Parameters: INDEX\n"
             + "Example: " + COMMAND_WORD + " 1\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
+
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete %1$s (%2$s, %3$s)?\n"
                     + "Type '%4$s %5$d' again to confirm.\n"
                     + "Any other command will cancel this pending deletion.";
-    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
+
     private final Index targetIndex;
 
-    /**
-     * Constructs a {@code DeleteCommand} to delete the person at the specified index.
-     *
-     * @param targetIndex The 1-based index of the person in the displayed person list to be deleted.
-     */
     public DeleteCommand(Index targetIndex) {
         logger.log(Level.INFO, "Creating DeleteCommand for index: " + targetIndex.getOneBased());
-        assert targetIndex != null : "Target index cannot be null";
         this.targetIndex = targetIndex;
-    }
-
-    public Index getTargetIndex() {
-        return targetIndex;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        logger.log(Level.INFO, "Executing delete command for index: " + targetIndex.getOneBased());
+
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        assert lastShownList != null : "Filtered person list should not be null";
-
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            logger.log(Level.INFO, "Invalid index: " + targetIndex.getOneBased()
+                    + " (list size: " + lastShownList.size() + ")");
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+        logger.log(Level.INFO, "Creating pending deletion for: " + personToDelete.getName().fullName);
 
-        assert personToDelete != null : "Person at valid index should not be null";
-
-        throw new CommandException(String.format(MESSAGE_DELETE_CONFIRM,
+        String confirmMessage = String.format(MESSAGE_DELETE_CONFIRM,
                 personToDelete.getName().fullName,
                 personToDelete.getPhone().value,
                 personToDelete.getEmail().value,
                 COMMAND_WORD,
-                targetIndex.getOneBased()));
+                targetIndex.getOneBased());
+
+        // Return a PendingDeletionResult instead of throwing exception
+        return new PendingDeletionResult(confirmMessage, personToDelete, targetIndex);
     }
 
     @Override
@@ -77,10 +75,11 @@ public class DeleteCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof DeleteCommand otherDeleteCommand)) {
+        if (!(other instanceof DeleteCommand)) {
             return false;
         }
 
+        DeleteCommand otherDeleteCommand = (DeleteCommand) other;
         return targetIndex.equals(otherDeleteCommand.targetIndex);
     }
 

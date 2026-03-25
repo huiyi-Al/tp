@@ -3,7 +3,6 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.beans.value.ObservableValue;
@@ -13,6 +12,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.PendingDeletionResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -26,7 +26,6 @@ import seedu.address.storage.Storage;
  */
 public class LogicManager implements Logic {
     public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
-
     public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
             "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
 
@@ -36,11 +35,9 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    private PendingDeletion pendingDeletion = null;
+    // Pending deletion state
+    private PendingDeletionResult pendingDeletion = null;
 
-    /**
-     * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
-     */
     public LogicManager(Model model, Storage storage) {
         this.model = model;
         this.storage = storage;
@@ -51,84 +48,55 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        // Check if there's a pending deletion FIRST (before parsing)
+        // Check for pending deletion confirmation
         if (pendingDeletion != null) {
             String trimmedCommand = commandText.trim();
-            String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " " + pendingDeletion.getIndex().getOneBased();
+            String expectedConfirmCommand = DeleteCommand.COMMAND_WORD + " " + pendingDeletion.getTargetIndex().getOneBased();
 
             if (trimmedCommand.equals(expectedConfirmCommand)) {
                 // User confirmed deletion
-                logger.info("User confirmed deletion of index: " + pendingDeletion.getIndex().getOneBased());
-                Person personToDelete = pendingDeletion.getPerson();
+                Person personToDelete = pendingDeletion.getPersonToDelete();
                 model.deletePerson(personToDelete);
                 pendingDeletion = null;
-
-                try {
-                    storage.saveAddressBook(model.getAddressBook());
-                } catch (AccessDeniedException e) {
-                    throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
-                } catch (IOException ioe) {
-                    throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
-                }
-
+                saveAddressBook();
                 return new CommandResult(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                        Messages.formatBasic(personToDelete)));
+                        formatPersonBasic(personToDelete)));
             } else {
-                // Any other command cancels the pending deletion
-                logger.info("User cancelled pending deletion by typing: " + commandText);
+                // User cancelled by typing another command
+                logger.info("Cancelling pending deletion");
                 pendingDeletion = null;
                 // Continue to execute the new command
             }
         }
 
-        // Normal command execution
-        try {
-            Command command = addressBookParser.parseCommand(commandText);
+        // Parse and execute the command
+        Command command = addressBookParser.parseCommand(commandText);
+        CommandResult result = command.execute(model);
 
-            // If it's a delete command, we need to handle it specially
-            if (command instanceof DeleteCommand) {
-                DeleteCommand deleteCommand = (DeleteCommand) command;
-                List<Person> lastShownList = model.getFilteredPersonList();
-                int index = deleteCommand.getTargetIndex().getZeroBased();
-
-                if (index >= lastShownList.size()) {
-                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-                }
-
-                Person personToDelete = lastShownList.get(index);
-
-                // Set pending deletion
-                pendingDeletion = new PendingDeletion(deleteCommand.getTargetIndex(), personToDelete);
-
-                // Throw exception with confirmation message (but pending deletion is already set!)
-                throw new CommandException(String.format(DeleteCommand.MESSAGE_DELETE_CONFIRM,
-                        personToDelete.getName().fullName,
-                        personToDelete.getPhone().value,
-                        personToDelete.getEmail().value,
-                        DeleteCommand.COMMAND_WORD,
-                        deleteCommand.getTargetIndex().getOneBased()));
-            }
-
-            // For non-delete commands, execute normally
-            CommandResult commandResult = command.execute(model);
-
-            try {
-                storage.saveAddressBook(model.getAddressBook());
-            } catch (AccessDeniedException e) {
-                throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
-            } catch (IOException ioe) {
-                throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
-            }
-
-            return commandResult;
-        } catch (CommandException | ParseException e) {
-            // MESSAGE_DELETE_CONFIRM may be different
-            // so check for first few words of error message instead
-            if (!(e instanceof CommandException && e.getMessage().contains("Are you sure"))) {
-                pendingDeletion = null;
-            }
-            throw e;
+        // If this is a pending deletion result, store it and return the confirmation message
+        if (result.isPendingDeletion()) {
+            pendingDeletion = (PendingDeletionResult) result;
+            return result;
         }
+
+        // Normal command result
+        saveAddressBook();
+        return result;
+    }
+
+    private void saveAddressBook() throws CommandException {
+        try {
+            storage.saveAddressBook(model.getAddressBook());
+        } catch (AccessDeniedException e) {
+            throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
+        } catch (IOException ioe) {
+            throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+        }
+    }
+
+    private String formatPersonBasic(Person person) {
+        return person.getName().fullName + "; Phone: " + person.getPhone().value
+                + "; Email: " + person.getEmail().value;
     }
 
     @Override
