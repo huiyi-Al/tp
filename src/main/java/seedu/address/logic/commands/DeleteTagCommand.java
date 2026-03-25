@@ -23,6 +23,11 @@ public class DeleteTagCommand extends Command {
 
     private final Tag targetTag;
 
+    /**
+     * Constructs a {@code DeleteTagCommand} to delete the specified tag.
+     *
+     * @param targetTag The tag to be deleted.
+     */
     public DeleteTagCommand(Tag targetTag) {
         requireNonNull(targetTag);
         this.targetTag = targetTag;
