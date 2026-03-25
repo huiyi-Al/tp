@@ -3,13 +3,13 @@ package seedu.address.model.person.predicates;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +37,8 @@ import seedu.address.testutil.PersonBuilder;
  *   <li>Testing a person whose email does not match, returns false.</li>
  *   <li>Testing a person whose phone matches, returns true.</li>
  *   <li>Testing a person whose phone does not match, returns false.</li>
+ *   <li>Testing a person whose physical address matches (same case), returns true.</li>
+ *   <li>Testing a person whose physical address matches (different case), returns true.</li>
  *   <li>Testing a person where all fields match, returns true.</li>
  *   <li>Testing a person where no fields match, returns false.</li>
  *   <li>String representation with an empty argument map, matches expected format.</li>
@@ -44,24 +46,30 @@ import seedu.address.testutil.PersonBuilder;
  * </ul>
  */
 public class SearchPredicateTest {
-
-    private static final String EXPECTED_TO_STRING_FORMAT =
-            "{0}'{subNames='{1}'}', {2}'{subNumbers='{3}'}', {4}'{subEmailAddresses='{5}'}'";
-
+    private static final String EXPECTED_TO_STRING_FORMAT = """
+            {0}'{subNames='{1}'}', \
+            {2}'{subNumbers='{3}'}', \
+            {4}'{subEmailAddresses='{5}'}', \
+            {6}'{subPhysicalAddresses='{7}'}'\
+            """;
     private static final Person TEST_PERSON_NAME_MATCH_ONLY =
             new PersonBuilder().withName("Alan").withPhone("92355671").build();
     private static final Person TEST_PERSON_PHONE_MATCH_ONLY =
             new PersonBuilder().withName("Cassie").withPhone("91237452").build();
     private static final Person TEST_PERSON_EMAIL_MATCH_ONLY =
             new PersonBuilder().withName("Elaine").withPhone("82473774").withEmail("elaine03@nus.org").build();
+    private static final Person TEST_PERSON_ADDRESS_MATCH_ONLY =
+            new PersonBuilder().withName("Fred").withPhone("84567813").withAddress("Bishan").build();
     private static final Person TEST_PERSON_ALL_FIELDS_MATCH =
-            new PersonBuilder().withName("Bertha").withPhone("84567342").build();
+            new PersonBuilder().withName("Bertha").withPhone("84567342").withEmail("b@nus.edu")
+                    .withAddress("Woodgrove").build();
     private static final Person TEST_PERSON_NO_FIELDS_MATCH =
             new PersonBuilder().withName("David").withPhone("98765432").build();
 
     private static final String TEST_NAME_QUERY = "al er";
     private static final String TEST_PHONE_QUERY = "123 456";
-    private static final String TEST_EMAIL_QUERY = "3@nus.org";
+    private static final String TEST_EMAIL_QUERY = "3@nus.org edu";
+    private static final String TEST_ADDRESS_QUERY = "bis ood";
     private static final String TEST_NAME_QUERY_ALTERNATIVE = "qw er";
 
     private static final ArgumentMultimap TEST_ARGMAP_EMPTY;
@@ -84,6 +92,12 @@ public class SearchPredicateTest {
 
     private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY_UPPERCASE;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY_UPPERCASE;
+
+    private static final ArgumentMultimap TEST_ARGMAP_ADDRESS_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_ADDRESS_ONLY;
+
+    private static final ArgumentMultimap TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_ADDRESS_ONLY_UPPERCASE;
 
     private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
@@ -115,6 +129,14 @@ public class SearchPredicateTest {
         TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
         TEST_ARGMAP_PHONE_ONLY.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
+
+        TEST_ARGMAP_ADDRESS_ONLY = new ArgumentMultimap();
+        TEST_ARGMAP_ADDRESS_ONLY.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
+        TEST_SEARCH_PREDICATE_ADDRESS_ONLY = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY);
+
+        TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE = new ArgumentMultimap();
+        TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY.toUpperCase());
+        TEST_SEARCH_PREDICATE_ADDRESS_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE);
 
         TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
@@ -170,6 +192,8 @@ public class SearchPredicateTest {
         assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_NO_FIELDS_MATCH));
         assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_NAME_MATCH_ONLY));
         assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_PHONE_MATCH_ONLY));
+        assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_EMAIL_MATCH_ONLY));
+        assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_ADDRESS_MATCH_ONLY));
         assertFalse(TEST_SEARCH_PREDICATE_EMPTY.test(TEST_PERSON_ALL_FIELDS_MATCH));
     }
 
@@ -230,6 +254,26 @@ public class SearchPredicateTest {
     }
 
     @Test
+    public void test_onlyAddressMatchesSameCase_addressPredicateReturnsTrue() {
+        assertTrue(TEST_SEARCH_PREDICATE_ADDRESS_ONLY.test(TEST_PERSON_ADDRESS_MATCH_ONLY));
+    }
+
+    @Test
+    public void test_onlyAddressMatchesDifferentCase_addressPredicateReturnsTrue() {
+        assertTrue(TEST_SEARCH_PREDICATE_ADDRESS_ONLY_UPPERCASE.test(TEST_PERSON_ADDRESS_MATCH_ONLY));
+    }
+
+    @Test
+    public void test_onlyAddressMatches_allPresentPredicateReturnsTrue() {
+        assertTrue(TEST_SEARCH_PREDICATE_ALL_PRESENT.test(TEST_PERSON_ADDRESS_MATCH_ONLY));
+    }
+
+    @Test
+    public void test_addressDoesNotMatch_addressPredicateReturnsFalse() {
+        assertFalse(TEST_SEARCH_PREDICATE_ADDRESS_ONLY.test(TEST_PERSON_PHONE_MATCH_ONLY));
+    }
+
+    @Test
     public void test_phoneDoesNotMatch_phonePredicateReturnsFalse() {
         assertFalse(TEST_SEARCH_PREDICATE_PHONE_ONLY.test(TEST_PERSON_NAME_MATCH_ONLY));
     }
@@ -242,6 +286,16 @@ public class SearchPredicateTest {
     @Test
     public void test_allFieldsMatch_phonePredicateReturnsTrue() {
         assertTrue(TEST_SEARCH_PREDICATE_PHONE_ONLY.test(TEST_PERSON_ALL_FIELDS_MATCH));
+    }
+
+    @Test
+    public void test_allFieldsMatch_emailPredicateReturnsTrue() {
+        assertTrue(TEST_SEARCH_PREDICATE_EMAIL_ONLY.test(TEST_PERSON_ALL_FIELDS_MATCH));
+    }
+
+    @Test
+    public void test_allFieldsMatch_addressPredicateReturnsTrue() {
+        assertTrue(TEST_SEARCH_PREDICATE_ADDRESS_ONLY.test(TEST_PERSON_ALL_FIELDS_MATCH));
     }
 
     @Test
@@ -263,6 +317,8 @@ public class SearchPredicateTest {
                 PhoneNumberPredicate.class.getCanonicalName(),
                 new ArrayList<>(),
                 EmailAddressPredicate.class.getCanonicalName(),
+                new ArrayList<>(),
+                PhysicalAddressPredicate.class.getCanonicalName(),
                 new ArrayList<>()
         );
         assertEquals(expected, TEST_SEARCH_PREDICATE_EMPTY.toString());
@@ -273,11 +329,13 @@ public class SearchPredicateTest {
         String expected = MessageFormat.format(
                 EXPECTED_TO_STRING_FORMAT,
                 FullNamePredicate.class.getCanonicalName(),
-                Arrays.asList(TEST_ARGMAP_ALL_PRESENT.getValue(PREFIX_NAME).get().split("\\s+")),
+                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_NAME),
                 PhoneNumberPredicate.class.getCanonicalName(),
-                Arrays.asList(TEST_ARGMAP_ALL_PRESENT.getValue(PREFIX_PHONE).get().split("\\s+")),
+                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_PHONE),
                 EmailAddressPredicate.class.getCanonicalName(),
-                Arrays.asList(TEST_ARGMAP_ALL_PRESENT.getValue(PREFIX_EMAIL).get().split("\\s+"))
+                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_EMAIL),
+                PhysicalAddressPredicate.class.getCanonicalName(),
+                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_ADDRESS)
         );
         assertEquals(expected, TEST_SEARCH_PREDICATE_ALL_PRESENT.toString());
     }

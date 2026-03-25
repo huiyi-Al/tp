@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.ELLE;
@@ -43,7 +46,9 @@ import seedu.address.model.person.predicates.SearchPredicate;
  *   <li>Executing with multiple name tokens (same case), finds all matching persons.</li>
  *   <li>Executing with multiple name tokens (mixed case), finds all matching persons.</li>
  *   <li>Executing with multiple phone tokens, finds all matching persons.</li>
- *   <li>Executing with both name and phone tokens, finds union of all matching persons.</li>
+ *   <li>Executing with multiple email address tokens, finds all matching persons.</li>
+ *   <li>Executing with multiple physical address tokens, finds all matching persons.</li>
+ *   <li>Executing with all types of tokens, finds union of all matching persons.</li>
  *   <li>String representation matches expected format.</li>
  * </ul>
  */
@@ -52,6 +57,7 @@ public class FindCommandTest {
     private static final String TEST_NAME_QUERY = String.join(" ", "KUrZ", "ElLe", "kuNz");
     private static final String TEST_PHONE_QUERY = String.join(" ", "535", "442");
     private static final String TEST_EMAIL_QUERY = String.join(" ", "r@e", "a@e");
+    private static final String TEST_ADDRESS_QUERY = String.join(" ", "Jurong", "clEmenti");
 
     private static final Model MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private static final Model EXPECTED_MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -71,6 +77,10 @@ public class FindCommandTest {
     private static final ArgumentMultimap TEST_ARGMAP_EMAIL_ONLY;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_EMAIL_ONLY;
     private static final FindCommand TEST_FIND_COMMAND_EMAIL_ONLY;
+
+    private static final ArgumentMultimap TEST_ARGMAP_ADDRESS_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_ADDRESS_ONLY;
+    private static final FindCommand TEST_FIND_COMMAND_ADDRESS_ONLY;
 
     private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
@@ -96,10 +106,16 @@ public class FindCommandTest {
         TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
         TEST_FIND_COMMAND_EMAIL_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
 
+        TEST_ARGMAP_ADDRESS_ONLY = new ArgumentMultimap();
+        TEST_ARGMAP_ADDRESS_ONLY.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
+        TEST_SEARCH_PREDICATE_ADDRESS_ONLY = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY);
+        TEST_FIND_COMMAND_ADDRESS_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_ADDRESS_ONLY);
+
         TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_PHONE, TEST_PHONE_QUERY);
         TEST_ARGMAP_ALL_PRESENT.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
+        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
         TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
         TEST_FIND_COMMAND_ALL_PRESENT = new FindCommand(TEST_SEARCH_PREDICATE_ALL_PRESENT);
     }
@@ -173,9 +189,19 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_multipleSubPhysicalAddresses_multiplePersonsFound() {
+        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_ADDRESS_ONLY);
+        Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON));
+
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
+        assertCommandSuccess(TEST_FIND_COMMAND_ADDRESS_ONLY, MODEL, expectedMessage, EXPECTED_MODEL);
+        assertEquals(expectedFound, new HashSet<>(MODEL.getFilteredPersonList()));
+    }
+
+    @Test
     public void execute_allPresent_multiplePersonsUnion() {
         EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_ALL_PRESENT);
-        Set<Person> expectedFound = new HashSet<>(Arrays.asList(CARL, GEORGE, ELLE, FIONA, DANIEL));
+        Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON, CARL, GEORGE, ELLE, FIONA, DANIEL));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
         assertCommandSuccess(TEST_FIND_COMMAND_ALL_PRESENT, MODEL, expectedMessage, EXPECTED_MODEL);
