@@ -136,6 +136,7 @@ public class UniqueTagList implements Iterable<Tag> {
      */
     private boolean tagsAreUnique(List<Tag> tags) {
         return tags.size() == tags.stream()
+                .map(tag -> tag.tagName.toLowerCase())
                 .distinct()
                 .count();
     }
