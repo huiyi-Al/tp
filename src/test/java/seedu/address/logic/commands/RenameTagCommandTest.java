@@ -25,7 +25,7 @@ public class RenameTagCommandTest {
         Tag newTag = new Tag("Aircon-Repair");
         RenameTagCommand renameTagCommand = new RenameTagCommand(oldTag, newTag);
 
-        String expectedMessage = String.format(RenameTagCommand.MESSAGE_SUCCESS, oldTag, newTag);
+        String expectedMessage = String.format(RenameTagCommand.MESSAGE_SUCCESS, oldTag.tagName, newTag.tagName);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 

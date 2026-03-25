@@ -27,7 +27,7 @@ public class DeleteTagCommandTest {
         Tag tagToDelete = new Tag("Plumbing");
         DeleteTagCommand deleteTagCommand = new DeleteTagCommand(tagToDelete);
 
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_DELETE_TAG_SUCCESS, tagToDelete);
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_DELETE_TAG_SUCCESS, tagToDelete.tagName);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTag(tagToDelete);
