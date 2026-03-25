@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_AC_SERVICE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PLUMBING;
@@ -136,6 +137,30 @@ public class ModelManagerTest {
         Person personToDelete = ALICE;
         modelManager.setSelectedPerson(personToDelete);
         assertEquals(ALICE, modelManager.getSelectedPerson().getValue());
+    }
+    
+    @Test
+    public void deleteTag_selectedPersonAffected_refreshesSelectedPerson() {
+        Tag tagToDelete = new Tag("ToDelete");
+        Person personWithTag = new PersonBuilder(ALICE).withTags("ToDelete").build();
+
+        modelManager.addPerson(personWithTag);
+        modelManager.setSelectedPerson(personWithTag);
+
+        // Ensure the person is currently selected
+        assertEquals(personWithTag, modelManager.getSelectedPerson().getValue());
+
+        // Execute delete
+        modelManager.deleteTag(tagToDelete);
+
+        // The selected person should no longer be the exact same object (it was nulled and replaced)
+        assertNotSame(personWithTag, modelManager.getSelectedPerson().getValue());
+
+        // The new selected person should NOT have the deleted tag
+        assertFalse(modelManager.getSelectedPerson().getValue().getTags().contains(tagToDelete));
+
+        // The identity (name/phone) should remain the same
+        assertTrue(modelManager.getSelectedPerson().getValue().isSamePerson(personWithTag));
     }
 
     @Test

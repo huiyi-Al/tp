@@ -159,6 +159,12 @@ public class UniqueTagListTest {
     }
 
     @Test
+    public void remove_tagDoesNotExist_throwsTagNotFoundException() {
+        UniqueTagList uniqueTagList = new UniqueTagList();
+        assertThrows(TagNotFoundException.class, () -> uniqueTagList.remove(new Tag("NonExistent")));
+    }
+
+    @Test
     public void asUnmodifiableObservableList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, ()
                 -> uniqueTagList.asUnmodifiableObservableList().remove(0));

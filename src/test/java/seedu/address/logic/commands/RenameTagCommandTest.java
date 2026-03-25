@@ -1,5 +1,8 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -52,5 +55,38 @@ public class RenameTagCommandTest {
 
         assertCommandFailure(renameTagCommand, model,
                 String.format(RenameTagCommand.MESSAGE_DUPLICATE_TAG, "Plumbing"));
+    }
+
+    @Test
+    public void equals() {
+        Tag firstTag = new Tag("First");
+        Tag secondTag = new Tag("Second");
+        RenameTagCommand renameFirstToSecond = new RenameTagCommand(firstTag, secondTag);
+        RenameTagCommand renameSecondToFirst = new RenameTagCommand(secondTag, firstTag);
+
+        // same object -> returns true
+        assertTrue(renameFirstToSecond.equals(renameFirstToSecond));
+
+        // same values -> returns true
+        RenameTagCommand renameFirstToSecondCopy = new RenameTagCommand(firstTag, secondTag);
+        assertTrue(renameFirstToSecond.equals(renameFirstToSecondCopy));
+
+        // different types -> returns false
+        assertFalse(renameFirstToSecond.equals(1));
+
+        // null -> returns false
+        assertFalse(renameFirstToSecond.equals(null));
+
+        // different tags -> returns false
+        assertFalse(renameFirstToSecond.equals(renameSecondToFirst));
+    }
+
+    @Test
+    public void toStringMethod() {
+        Tag oldTag = new Tag("Old");
+        Tag newTag = new Tag("New");
+        RenameTagCommand renameTagCommand = new RenameTagCommand(oldTag, newTag);
+        String expected = RenameTagCommand.class.getCanonicalName() + "{oldTag=" + oldTag + ", newTag=" + newTag + "}";
+        assertEquals(expected, renameTagCommand.toString());
     }
 }
