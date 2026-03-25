@@ -1,12 +1,15 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
@@ -139,40 +142,52 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Every person currently holding {@code target} will be updated to hold {@code editedTag}.
      */
     public void setTag(Tag target, Tag editedTag) {
-        requireNonNull(target);
-        requireNonNull(editedTag);
+        requireAllNonNull(target, editedTag);
 
         tags.setTag(target, editedTag);
 
-        List<Person> updatedPersonList = new ArrayList<>();
-        for (Person person : persons) {
-            if (person.getTags().contains(target)) {
-                updatedPersonList.add(createUpdatedPersonWithNewTag(person, target, editedTag));
-            } else {
-                updatedPersonList.add(person);
-            }
-        }
-
-        persons.setPersons(updatedPersonList);
+        updatePersonsWithTag(target, tagsSet -> {
+            tagsSet.remove(target);
+            tagsSet.add(editedTag);
+            return tagsSet;
+        });
     }
 
     /**
-     * Helper method to create a new Person instance with the {@code editedTag}.
-     * Maintains immutability of the Person class.
+     * Removes {@code key} from this {@code AddressBook}. Any persons with this tag will have this tag removed.
+     * {@code key} must exist in the address book.
      */
-    private Person createUpdatedPersonWithNewTag(Person person, Tag target, Tag editedTag) {
-        Set<Tag> updatedTags = new HashSet<>(person.getTags());
-        updatedTags.remove(target);
-        updatedTags.add(editedTag);
+    public void removeTag(Tag key) {
+        requireNonNull(key);
+        tags.remove(key);
 
-        return new Person(
-                person.getName(),
-                person.getPhone(),
-                person.getEmail(),
-                person.getAddress(),
-                person.getNotes(),
-                updatedTags
-        );
+        updatePersonsWithTag(key, tagsSet -> {
+            tagsSet.remove(key);
+            return tagsSet;
+        });
+    }
+
+    /**
+     * Helper method to create a new Person instance for setTag and removeTag.
+     */
+    private void updatePersonsWithTag(Tag target, UnaryOperator<Set<Tag>> tagTransformer) {
+        List<Person> updatedPersonList = persons.asUnmodifiableObservableList().stream()
+                .map(person -> {
+                    if (!person.getTags().contains(target)) {
+                        return person;
+                    }
+                    Set<Tag> updatedTags = new HashSet<>(person.getTags());
+                    // tagTransformer decides if we rename or remove the tag
+                    tagTransformer.apply(updatedTags);
+
+                    return new Person(
+                            person.getName(), person.getPhone(), person.getEmail(),
+                            person.getAddress(), person.getNotes(), updatedTags
+                    );
+                })
+                .collect(Collectors.toList());
+
+        persons.setPersons(updatedPersonList);
     }
 
     /**
