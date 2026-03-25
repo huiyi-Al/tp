@@ -1,33 +1,26 @@
-package seedu.address.logic;
+package seedu.address.logic.commands;
 
-import seedu.address.logic.commands.Command;
-import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
 /**
  * Represents an action pending confirmation.
+ * Returned by commands that require confirmation before execution.
  */
-public class PendingAction {
+public interface PendingAction {
 
-    private final Command command;
-    private final String confirmationMessage;
+    /**
+     * Returns true if the given command matches this pending action.
+     */
+    boolean matches(Command nextCommand);
 
-    public PendingAction(Command command, String confirmationMessage) {
-        this.command = command;
-        this.confirmationMessage = confirmationMessage;
-    }
+    /**
+     * Executes the confirmed action.
+     */
+    CommandResult complete(Model model) throws CommandException;
 
-    public boolean matches(Command other) {
-        return command.equals(other);
-    }
-
-    public CommandResult executeConfirmed(Model model) throws CommandException {
-        // The command knows how to confirm itself
-        return command.executeConfirmed(model);
-    }
-
-    public String getConfirmationMessage() {
-        return confirmationMessage;
-    }
+    /**
+     * Returns the confirmation message to show to the user.
+     */
+    String getConfirmationMessage();
 }

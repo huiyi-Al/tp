@@ -11,6 +11,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.PendingAction;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -33,7 +34,7 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final AddressBookParser addressBookParser;
 
-    private seedu.address.logic.PendingAction pendingAction = null;
+    private PendingAction pendingAction = null;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -56,31 +57,28 @@ public class LogicManager implements Logic {
         // Check if there's a pending action waiting for confirmation
         if (pendingAction != null) {
             if (pendingAction.matches(command)) {
-                // User confirmed
-                CommandResult result = pendingAction.executeConfirmed(model);
+                // User confirmed - complete the pending action
+                CommandResult result = pendingAction.complete(model);
                 pendingAction = null;
                 saveAddressBook();
                 return result;
             } else {
-                // User cancelled by typing another command
+                // User typed another command - just clear pending and continue
                 pendingAction = null;
                 // Continue to execute the new command
             }
         }
 
-        // Execute the command
         CommandResult result = command.execute(model);
 
         // If the result has a pending action, store it
-        if (result.requiresConfirmation()) {
+        if (result.hasPendingAction()) {
             pendingAction = result.getPendingAction().get();
+            return result;
         }
 
-        // Save for normal commands
-        if (!result.requiresConfirmation()) {
-            saveAddressBook();
-        }
-
+        // Normal command result
+        saveAddressBook();
         return result;
     }
 

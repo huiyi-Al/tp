@@ -10,7 +10,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
-import seedu.address.logic.PendingAction;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -37,7 +36,6 @@ public class DeleteCommand extends Command {
                     + "Any other command will cancel this pending deletion.";
 
     private final Index targetIndex;
-    private Person personToDelete;
 
     public DeleteCommand(Index targetIndex) {
         logger.log(Level.INFO, "Creating DeleteCommand for index: " + targetIndex.getOneBased());
@@ -61,32 +59,11 @@ public class DeleteCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        this.personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        logger.log(Level.INFO, "Pending deletion for: " + personToDelete.getName().fullName);
+        Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+        logger.log(Level.INFO, "Creating pending deletion for: " + personToDelete.getName().fullName);
 
-        String confirmMessage = String.format(MESSAGE_DELETE_CONFIRM,
-                personToDelete.getName().fullName,
-                personToDelete.getPhone().value,
-                personToDelete.getEmail().value,
-                COMMAND_WORD,
-                targetIndex.getOneBased());
-
-        // Return a CommandResult with PendingAction that stores this command
-        return new CommandResult(confirmMessage, new PendingAction(this, confirmMessage));
-    }
-
-    /**
-     * Called when the command is confirmed.
-     */
-    public CommandResult executeConfirmed(Model model) throws CommandException {
-        model.deletePerson(personToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
-                formatPersonBasic(personToDelete)));
-    }
-
-    private String formatPersonBasic(Person person) {
-        return person.getName().fullName + "; Phone: " + person.getPhone().value
-                + "; Email: " + person.getEmail().value;
+        PendingAction pendingAction = new DeletePendingAction(personToDelete, targetIndex);
+        return new CommandResult(pendingAction.getConfirmationMessage(), pendingAction);
     }
 
     @Override

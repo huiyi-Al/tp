@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.PendingAction;
+import seedu.address.logic.commands.PendingAction;
 
 /**
  * Represents the result of a command execution.
@@ -16,14 +16,23 @@ public class CommandResult {
     private final boolean exit;
     private final PendingAction pendingAction;
 
+    /**
+     * Constructs a {@code CommandResult} for normal commands.
+     */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
         this(feedbackToUser, showHelp, exit, null);
     }
 
+    /**
+     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser}.
+     */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false, null);
     }
 
+    /**
+     * Constructs a {@code CommandResult} that requires confirmation.
+     */
     public CommandResult(String feedbackToUser, PendingAction pendingAction) {
         this(feedbackToUser, false, false, pendingAction);
     }
@@ -47,7 +56,7 @@ public class CommandResult {
         return exit;
     }
 
-    public boolean requiresConfirmation() {
+    public boolean hasPendingAction() {
         return pendingAction != null;
     }
 
@@ -61,7 +70,6 @@ public class CommandResult {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof CommandResult)) {
             return false;
         }
@@ -69,12 +77,13 @@ public class CommandResult {
         CommandResult otherCommandResult = (CommandResult) other;
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && showHelp == otherCommandResult.showHelp
-                && exit == otherCommandResult.exit;
+                && exit == otherCommandResult.exit
+                && Objects.equals(pendingAction, otherCommandResult.pendingAction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit);
+        return Objects.hash(feedbackToUser, showHelp, exit, pendingAction);
     }
 
     @Override
@@ -83,6 +92,7 @@ public class CommandResult {
                 .add("feedbackToUser", feedbackToUser)
                 .add("showHelp", showHelp)
                 .add("exit", exit)
+                .add("pendingAction", getPendingAction())
                 .toString();
     }
 }

@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
+import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
+
 public class CommandResultTest {
     @Test
     public void equals() {
@@ -57,7 +61,19 @@ public class CommandResultTest {
         CommandResult commandResult = new CommandResult("feedback");
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
-                + ", exit=" + commandResult.isExit() + "}";
+                + ", exit=" + commandResult.isExit() + ", pendingAction=" + commandResult.getPendingAction() + "}";
+        assertEquals(expected, commandResult.toString());
+    }
+
+    @Test
+    public void toStringMethod_withPendingAction() {
+        Person person = new PersonBuilder().withName("Test User").build();
+        PendingAction pendingAction = new DeletePendingAction(person, Index.fromOneBased(1));
+        CommandResult commandResult = new CommandResult("confirmation message", pendingAction);
+
+        String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
+                + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
+                + ", exit=" + commandResult.isExit() + ", pendingAction=" + commandResult.getPendingAction() + "}";
         assertEquals(expected, commandResult.toString());
     }
 }
