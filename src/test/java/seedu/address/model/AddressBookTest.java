@@ -27,6 +27,7 @@ import seedu.address.testutil.PersonBuilder;
 public class AddressBookTest {
 
     private final AddressBook addressBook = new AddressBook();
+    private static final Person ALICE_WITH_PLUMBING_TAG = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
 
     @Test
     public void constructor() {
@@ -108,9 +109,8 @@ public class AddressBookTest {
     @Test
     public void addPerson_personWithNewTags_addsTagsToGlobalList() {
         Tag newTag = new Tag(VALID_TAG_PLUMBING);
-        Person aliceWithNewTag = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
 
-        addressBook.addPerson(aliceWithNewTag);
+        addressBook.addPerson(ALICE_WITH_PLUMBING_TAG);
 
         assertTrue(addressBook.hasTag(newTag));
         assertTrue(addressBook.getTagList().contains(newTag));
@@ -140,6 +140,25 @@ public class AddressBookTest {
 
         assertTrue(addressBook.getPersonList().get(1).getTags().contains(newTag));
         assertTrue(addressBook.getPersonList().get(1).getTags().contains(new Tag("Other")));
+    }
+
+    @Test
+    public void removePerson_lastPersonWithTag_tagRemoved() {
+        addressBook.addPerson(ALICE_WITH_PLUMBING_TAG);
+        assertTrue(addressBook.hasTag(new Tag("Plumbing")));
+
+        addressBook.removePerson(ALICE_WITH_PLUMBING_TAG);
+        assertFalse(addressBook.hasTag(new Tag("Plumbing")));
+    }
+
+    @Test
+    public void removePerson_tagStillUsedByOthers_tagNotRemoved() {
+        Person bobWithPlumbingTag = new PersonBuilder(BOB).withTags(VALID_TAG_PLUMBING).build();
+        addressBook.addPerson(ALICE_WITH_PLUMBING_TAG);
+        addressBook.addPerson(bobWithPlumbingTag);
+
+        addressBook.removePerson(ALICE_WITH_PLUMBING_TAG);
+        assertTrue(addressBook.hasTag(new Tag(VALID_TAG_PLUMBING)));
     }
 
     @Test
