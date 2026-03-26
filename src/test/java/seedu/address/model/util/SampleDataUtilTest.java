@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,19 @@ public class SampleDataUtilTest {
 
         // Roy Balakrishnan has notes
         assertEquals("Call 5 minutes before arriving", samplePersons[5].getNotes().value);
+    }
+
+    @Test
+    public void getSamplePersons_somePersonsContainSampleLogs() {
+        Person[] samplePersons = SampleDataUtil.getSamplePersons();
+
+        assertEquals(2, samplePersons[0].getLogHistory().size());
+        assertEquals(LocalDateTime.of(2026, 3, 11, 15, 45),
+                samplePersons[0].getLogHistory().asUnmodifiableList().get(0).getTimestamp());
+
+        assertEquals(1, samplePersons[1].getLogHistory().size());
+        assertTrue(samplePersons[2].getLogHistory().isEmpty());
+        assertEquals(2, samplePersons[5].getLogHistory().size());
     }
 
     @Test
