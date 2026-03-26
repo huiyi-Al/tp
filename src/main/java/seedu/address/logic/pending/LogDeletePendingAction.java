@@ -22,6 +22,21 @@ public class LogDeletePendingAction implements PendingAction {
     private final LogHistory originalLogHistory;
     private final String confirmationMessage;
 
+    /**
+     * Constructs a {@code LogDeletePendingAction} for the specified person and log entry.
+     *
+     * <p>This constructor prepares the pending action by:
+     * <ul>
+     *   <li>Storing the person and indices for later matching</li>
+     *   <li>Retrieving the target log entry from the log history</li>
+     *   <li>Generating a confirmation message with the log details</li>
+     * </ul>
+     *
+     * @param person The person whose log entry is to be deleted.
+     * @param personIndex The 1-based index of the person in the displayed list.
+     * @param logIndex The 1-based index of the log entry in the person's log history.
+     * @param logHistory The current log history of the person (used to retrieve the log entry).
+     */
     public LogDeletePendingAction(Person person, Index personIndex, Index logIndex, LogHistory logHistory) {
         this.person = person;
         this.personIndex = personIndex;
