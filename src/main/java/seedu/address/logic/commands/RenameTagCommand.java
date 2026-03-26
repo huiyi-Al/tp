@@ -15,8 +15,8 @@ public class RenameTagCommand extends Command {
     public static final String COMMAND_WORD = "renametag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Renames an existing tag globally. Existing values will be overwritten by the input values\n"
-            + "Exactly two tags must be provided as parameters"
+            + ": Renames an existing tag globally. Existing values will be overwritten by the input values.\n"
+            + "Exactly two tags must be provided as parameters."
             + "Parameters: --tag=OLD_TAG --tag=NEW_TAG\n"
             + "Example: " + COMMAND_WORD + " --tag=Plumbing --tag=Pipe-Repair";
 

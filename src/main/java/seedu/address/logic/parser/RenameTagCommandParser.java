@@ -36,7 +36,7 @@ public class RenameTagCommandParser implements Parser<RenameTagCommand> {
             Tag newTag = ParserUtil.parseTag(tagNames.get(1));
             return new RenameTagCommand(oldTag, newTag);
         } catch (ParseException pe) {
-            throw new ParseException(pe.getMessage());
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, pe.getMessage()));
         }
     }
 }

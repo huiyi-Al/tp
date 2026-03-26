@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +57,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setPersons(List<Person> persons) {
         this.persons.setPersons(persons);
+        rebuildTagList();
     }
 
     /**
@@ -73,7 +75,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
-        setTags(newData.getTagList());
+        rebuildTagList();
     }
 
     //// person-level operations
@@ -93,7 +95,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addPerson(Person p) {
         persons.add(p);
-        updateTagList(p);
+        rebuildTagList();
     }
 
     /**
@@ -105,7 +107,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedPerson);
 
         persons.setPerson(target, editedPerson);
-        updateTagList(editedPerson);
+        rebuildTagList();
     }
 
     /**
@@ -114,6 +116,19 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+        rebuildTagList();
+    }
+
+    /**
+     * Updates the internal UniqueTagList when a person is added, edited or removed to ensure that the internal
+     * UniqueTagList contains all tags present in a person.
+     */
+    private void rebuildTagList() {
+        Set<Tag> tagsInUse = persons.asUnmodifiableObservableList().stream()
+                .flatMap(person -> person.getTags().stream())
+                .collect(Collectors.toSet());
+
+        tags.setTags(new ArrayList<>(tagsInUse));
     }
 
     //// tag-level operations
@@ -187,18 +202,6 @@ public class AddressBook implements ReadOnlyAddressBook {
                 .collect(Collectors.toList());
 
         persons.setPersons(updatedPersonList);
-    }
-
-    /**
-     * Updates the internal UniqueTagList when a person is added or edited to ensure that the internal UniqueTagList
-     * contains all tags present in a person.
-     */
-    private void updateTagList(Person person) {
-        person.getTags().forEach(tag -> {
-            if (!tags.contains(tag)) {
-                tags.add(tag);
-            }
-        });
     }
 
     //// util methods

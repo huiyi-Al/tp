@@ -30,7 +30,7 @@ public class DeleteTagCommandParser implements Parser<DeleteTagCommand> {
             Tag targetTag = ParserUtil.parseTag(trimmedArgs);
             return new DeleteTagCommand(targetTag);
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTagCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, pe.getMessage()));
         }
     }
 }

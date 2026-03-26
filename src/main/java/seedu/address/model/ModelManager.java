@@ -140,24 +140,26 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedTag);
 
         addressBook.setTag(target, editedTag);
+        refreshSelectedPersonIfTagAffected(target);
 
-        Person currentlySelected = selectedPerson.getValue();
-        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
-
-            selectedPerson.setValue(null);
-
-            getFilteredPersonList().stream()
-                    .filter(p -> p.isSamePerson(currentlySelected))
-                    .findFirst()
-                    .ifPresent(selectedPerson::setValue);
-        }
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
     public void deleteTag(Tag target) {
         requireNonNull(target);
-        addressBook.removeTag(target);
 
+        addressBook.removeTag(target);
+        refreshSelectedPersonIfTagAffected(target);
+
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    }
+
+    /**
+     * Refreshes the {@code selectedPerson} if they are currently assigned the given {@code target} tag.
+     * Ensures the Details View reflects changes made to tags (e.g., renaming or deleting).
+     */
+    private void refreshSelectedPersonIfTagAffected(Tag target) {
         Person currentlySelected = selectedPerson.getValue();
         if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
             selectedPerson.setValue(null);
@@ -166,8 +168,6 @@ public class ModelManager implements Model {
                     .findFirst()
                     .ifPresent(selectedPerson::setValue);
         }
-
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     //=========== Filtered Person List Accessors =============================================================
