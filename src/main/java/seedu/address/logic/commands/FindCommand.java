@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -36,39 +37,63 @@ public class FindCommand extends Command {
             COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG
     );
 
+    private static final Logger logger = Logger.getLogger(FindCommand.class.getName());
+
     private final SearchPredicate searchPredicate;
 
+    /**
+     * Constructs a {@code FindCommand} with the specified {@code SearchPredicate}.
+     *
+     * @param searchPredicate the predicate used to search for people
+     */
     public FindCommand(SearchPredicate searchPredicate) {
+        logger.info("Initializing FindCommand");
         this.searchPredicate = searchPredicate;
+        logger.fine(MessageFormat.format("SearchPredicate set: {0}", searchPredicate));
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        logger.fine(MessageFormat.format("Executing FindCommand with predicate: {0}", searchPredicate));
+
         model.updateFilteredPersonList(searchPredicate);
+        int resultSize = model.getFilteredPersonList().size();
+
+        logger.fine(MessageFormat.format("Filtered person list size: {0}", resultSize));
+
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultSize));
     }
 
     @Override
     public boolean equals(Object other) {
+        logger.fine(MessageFormat.format("Checking equality with object: {0}", other));
+
         if (other == this) {
+            logger.fine("Objects are the same instance");
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof FindCommand)) {
+            logger.fine("Object is not instance of FindCommand");
             return false;
         }
 
         FindCommand otherFindCommand = (FindCommand) other;
-        return searchPredicate.equals(otherFindCommand.searchPredicate);
+        boolean result = searchPredicate.equals(otherFindCommand.searchPredicate);
+
+        logger.fine(MessageFormat.format("Equality result: {0}", result));
+        return result;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        String result = new ToStringBuilder(this)
                 .add("searchPredicate", searchPredicate)
                 .toString();
+
+        logger.fine(MessageFormat.format("toString result: {0}", result));
+        return result;
     }
 }
