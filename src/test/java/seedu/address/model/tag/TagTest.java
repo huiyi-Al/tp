@@ -1,6 +1,8 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -39,4 +41,42 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("a".repeat(50))); // exactly 50 characters
     }
 
+    @Test
+    public void equals_caseInsensitive() {
+        Tag tag = new Tag("Plumbing");
+
+        // same object -> returns true
+        assertTrue(tag.equals(tag));
+
+        // same values, same case -> returns true
+        assertTrue(tag.equals(new Tag("Plumbing")));
+
+        // same values, different case -> returns true
+        assertTrue(tag.equals(new Tag("plumbing")));
+        assertTrue(tag.equals(new Tag("PLUMBING")));
+        assertTrue(tag.equals(new Tag("pLuMbInG")));
+
+        // different types -> returns false
+        assertFalse(tag.equals(1));
+
+        // null -> returns false
+        assertFalse(tag.equals(null));
+
+        // different values -> returns false
+        assertFalse(tag.equals(new Tag("Electrical")));
+    }
+
+    @Test
+    public void hashCode_caseInsensitive() {
+        Tag tag1 = new Tag("Plumbing");
+        Tag tag2 = new Tag("plumbing");
+        Tag tag3 = new Tag("PLUMBING");
+
+        // All should have the same hash code regardless of capitalisatoin
+        assertEquals(tag1.hashCode(), tag2.hashCode());
+        assertEquals(tag2.hashCode(), tag3.hashCode());
+
+        // Different tags should have different hash codes
+        assertNotEquals(tag1.hashCode(), new Tag("Electrical").hashCode());
+    }
 }

@@ -23,6 +23,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CopyAddrCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -32,12 +33,14 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.LogAddCommand;
 import seedu.address.logic.commands.LogDeleteCommand;
+import seedu.address.logic.commands.RenameTagCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.log.LogMessage;
 import seedu.address.model.person.predicates.SearchPredicate;
 import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -192,5 +195,25 @@ public class AddressBookParserTest {
                 LogDeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " "
                         + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new LogDeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_renametag() throws Exception {
+        Tag oldTag = new Tag("Old");
+        Tag newTag = new Tag("New");
+
+        RenameTagCommand command = (RenameTagCommand) parser.parseCommand(
+                RenameTagCommand.COMMAND_WORD + " --tag=" + oldTag.tagName + " --tag=" + newTag.tagName);
+
+        assertEquals(new RenameTagCommand(oldTag, newTag), command);
+    }
+
+    @Test
+    public void parseCommand_deletetag() throws Exception {
+        Tag tag = new Tag("Plumbing");
+        String userInput = DeleteTagCommand.COMMAND_WORD + " " + tag.tagName;
+        DeleteTagCommand command = (DeleteTagCommand) parser.parseCommand(userInput);
+
+        assertEquals(new DeleteTagCommand(tag), command);
     }
 }

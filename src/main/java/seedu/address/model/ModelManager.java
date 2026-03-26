@@ -14,6 +14,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -92,6 +93,7 @@ public class ModelManager implements Model {
         return addressBook;
     }
 
+    // Person Operations
     @Override
     public boolean hasPerson(Person person) {
         requireNonNull(person);
@@ -123,6 +125,48 @@ public class ModelManager implements Model {
 
         if (target.equals(selectedPerson.get())) {
             selectedPerson.set(editedPerson);
+        }
+    }
+
+    // Tag Operations
+    @Override
+    public boolean hasTag(Tag tag) {
+        requireNonNull(tag);
+        return addressBook.hasTag(tag);
+    }
+
+    @Override
+    public void setTag(Tag target, Tag editedTag) {
+        requireAllNonNull(target, editedTag);
+
+        addressBook.setTag(target, editedTag);
+        refreshSelectedPersonIfTagAffected(target);
+
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    }
+
+    @Override
+    public void deleteTag(Tag target) {
+        requireNonNull(target);
+
+        addressBook.removeTag(target);
+        refreshSelectedPersonIfTagAffected(target);
+
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    }
+
+    /**
+     * Refreshes the {@code selectedPerson} if they are currently assigned the given {@code target} tag.
+     * Ensures the Details View reflects changes made to tags (e.g., renaming or deleting).
+     */
+    private void refreshSelectedPersonIfTagAffected(Tag target) {
+        Person currentlySelected = selectedPerson.getValue();
+        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
+            selectedPerson.setValue(null);
+            getFilteredPersonList().stream()
+                    .filter(p -> p.isSamePerson(currentlySelected))
+                    .findFirst()
+                    .ifPresent(selectedPerson::setValue);
         }
     }
 
@@ -169,5 +213,4 @@ public class ModelManager implements Model {
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
-
 }

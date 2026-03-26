@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * The API of the Model component.
@@ -14,6 +15,9 @@ import seedu.address.model.person.Person;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+
+    /** {@code Predicate} that always evaluate to true for tags */
+    Predicate<Tag> PREDICATE_SHOW_ALL_TAGS = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
@@ -76,6 +80,24 @@ public interface Model {
      * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
+
+    /**
+     * Returns true if a tag equal to {@code tag} exists in the address book.
+     */
+    boolean hasTag(Tag tag);
+
+    /**
+     * Updates the tag {@code target} to {@code editedTag} globally.
+     * {@code target} must exist in the UniqueTagList.
+     * The {@code editedTag} must not be the same as another existing tag in the UniqueTagList.
+     */
+    void setTag(Tag target, Tag editedTag);
+
+    /**
+     * Deletes the given tag {@code target} globally from the address book.
+     * The tag must exist in the address book.
+     */
+    void deleteTag(Tag target);
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
