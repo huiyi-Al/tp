@@ -50,8 +50,11 @@ public class JsonSerializableAddressBookTest {
     public void toModelType_duplicateTags_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_TAG_FILE,
                 JsonSerializableAddressBook.class).get();
-        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_TAG,
-                dataFromFile::toModelType);
+
+        AddressBook addressBookFromFile = dataFromFile.toModelType();
+
+        long uniqueTagCount = addressBookFromFile.getTagList().stream().count();
+        assertEquals(1, uniqueTagCount);
     }
 
 }

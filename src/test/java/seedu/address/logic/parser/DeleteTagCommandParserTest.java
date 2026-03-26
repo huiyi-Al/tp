@@ -27,13 +27,11 @@ public class DeleteTagCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTagCommand.MESSAGE_USAGE);
-
         // empty string
-        assertParseFailure(parser, " ", expectedMessage);
+        assertParseFailure(parser, " ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTagCommand.MESSAGE_USAGE));
 
         // tag > 50 characters
         String longTag = "a".repeat(51);
-        assertParseFailure(parser, longTag, expectedMessage);
+        assertParseFailure(parser, longTag, String.format(MESSAGE_INVALID_COMMAND_FORMAT, Tag.MESSAGE_CONSTRAINTS));
     }
 }

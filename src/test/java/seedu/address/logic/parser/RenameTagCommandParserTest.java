@@ -53,11 +53,13 @@ public class RenameTagCommandParserTest {
 
     @Test
     public void parse_invalidTagValues_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, Tag.MESSAGE_CONSTRAINTS);
+
         // Tag too long (> 50 chars)
         String longTagName = "a".repeat(51);
-        assertParseFailure(parser, " --tag=Valid --tag=" + longTagName, Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " --tag=Valid --tag=" + longTagName, expectedMessage);
 
         // Blank tag
-        assertParseFailure(parser, " --tag=Valid --tag=", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " --tag=Valid --tag=", expectedMessage);
     }
 }
