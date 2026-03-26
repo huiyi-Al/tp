@@ -26,8 +26,8 @@ import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
 
-    private final AddressBook addressBook = new AddressBook();
     private static final Person ALICE_WITH_PLUMBING_TAG = new PersonBuilder(ALICE).withTags(VALID_TAG_PLUMBING).build();
+    private final AddressBook addressBook = new AddressBook();
 
     @Test
     public void constructor() {
