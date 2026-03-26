@@ -18,14 +18,17 @@ public class LogDeleteCommandParser implements Parser<LogDeleteCommand> {
      */
     public LogDeleteCommand parse(String args) throws ParseException {
         try {
-            String[] parts = args.trim().split("\\s+");
-            if (parts.length < 2) {
+            String trimmedArgs = args.trim();
+            String[] parts = trimmedArgs.split("\\s+");
+
+            if (parts.length != 2) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
             }
 
             Index personIndex = ParserUtil.parseIndex(parts[0]);
             Index logIndex = ParserUtil.parseIndex(parts[1]);
+
             return new LogDeleteCommand(personIndex, logIndex);
         } catch (ParseException pe) {
             throw new ParseException(
