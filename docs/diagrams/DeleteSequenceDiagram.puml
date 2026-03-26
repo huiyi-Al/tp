@@ -2,16 +2,19 @@
 !include style.puml
 skinparam ArrowFontStyle plain
 
+title First Delete: delete 1 (Create Pending Action)
+
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":DeleteCommandParser" as DeleteCommandParser LOGIC_COLOR
-participant "d:DeleteCommand" as DeleteCommand LOGIC_COLOR
-participant "r:CommandResult" as CommandResult LOGIC_COLOR
+participant "command:DeleteCommand" as DeleteCommand LOGIC_COLOR
+participant "result:CommandResult" as CommandResult LOGIC_COLOR
+participant "pendingAction:DeletePendingAction" as DeletePendingAction LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
-participant "m:Model" as Model MODEL_COLOR
+participant "model:Model" as Model MODEL_COLOR
 end box
 
 [-> LogicManager : execute("delete 1")
@@ -23,7 +26,6 @@ activate AddressBookParser
 create DeleteCommandParser
 AddressBookParser -> DeleteCommandParser
 activate DeleteCommandParser
-
 DeleteCommandParser --> AddressBookParser
 deactivate DeleteCommandParser
 
@@ -34,37 +36,59 @@ create DeleteCommand
 DeleteCommandParser -> DeleteCommand
 activate DeleteCommand
 
-DeleteCommand --> DeleteCommandParser :
+DeleteCommand --> DeleteCommandParser : command
 deactivate DeleteCommand
 
-DeleteCommandParser --> AddressBookParser : d
+DeleteCommandParser --> AddressBookParser : command
 deactivate DeleteCommandParser
-'Hidden arrow to position the destroy marker below the end of the activation bar.
-DeleteCommandParser -[hidden]-> AddressBookParser
 destroy DeleteCommandParser
 
-AddressBookParser --> LogicManager : d
+AddressBookParser --> LogicManager : command
 deactivate AddressBookParser
 
-LogicManager -> DeleteCommand : execute(m)
+note right of LogicManager : pendingAction == null
+
+LogicManager -> DeleteCommand : execute(model)
 activate DeleteCommand
 
-DeleteCommand -> Model : deletePerson(1)
+DeleteCommand -> Model : getFilteredPersonList()
 activate Model
-
-Model --> DeleteCommand
+Model --> DeleteCommand : personList
 deactivate Model
+
+DeleteCommand -> Model : get(0)
+activate Model
+Model --> DeleteCommand : personToDelete
+deactivate Model
+
+create DeletePendingAction
+DeleteCommand -> DeletePendingAction
+activate DeletePendingAction
+DeletePendingAction --> DeleteCommand : pendingAction
+deactivate DeletePendingAction
 
 create CommandResult
 DeleteCommand -> CommandResult
 activate CommandResult
 
-CommandResult --> DeleteCommand
+CommandResult --> DeleteCommand : result
 deactivate CommandResult
 
-DeleteCommand --> LogicManager : r
+DeleteCommand --> LogicManager : result
 deactivate DeleteCommand
 
-[<--LogicManager
+LogicManager -> CommandResult : hasPendingAction()
+activate CommandResult
+CommandResult --> LogicManager : true
+deactivate CommandResult
+
+LogicManager -> CommandResult : getPendingAction()
+activate CommandResult
+CommandResult --> LogicManager : pendingAction
+deactivate CommandResult
+
+note right of LogicManager : store pendingAction
+
+[<-- LogicManager : confirmationMessage
 deactivate LogicManager
 @enduml
