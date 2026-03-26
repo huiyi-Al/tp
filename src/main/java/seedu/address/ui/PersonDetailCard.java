@@ -42,7 +42,9 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
-    private Label notes;
+    private Label notesPrefix;
+    @FXML
+    private Label notesValue;
     @FXML
     private Label logsHeader;
     @FXML
@@ -62,12 +64,27 @@ public class PersonDetailCard extends UiPart<Region> {
         phone.setText("Phone number : " + person.getPhone().value);
         address.setText("Address : " + person.getAddress().value);
         email.setText("Email address : " + person.getEmail().value);
-        notes.setText("Notes : " + person.getNotes().value);
+        initializeNotes(person);
         initializeLogSummary(person);
 
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    private void initializeNotes(Person person) {
+        notesPrefix.setText("Notes :");
+        String notesText = person.getNotes().value;
+        if (notesText.isBlank()) {
+            notesValue.setText("No notes");
+            if (!notesValue.getStyleClass().contains("note-empty-text")) {
+                notesValue.getStyleClass().add("note-empty-text");
+            }
+            return;
+        }
+
+        notesValue.setText(notesText);
+        notesValue.getStyleClass().remove("note-empty-text");
     }
 
     private void initializeLogSummary(Person person) {
