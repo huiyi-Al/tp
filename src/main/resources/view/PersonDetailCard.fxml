@@ -51,14 +51,15 @@
                   </image>
                </ImageView>
             </graphic></Label>
-            <Label fx:id="notes" styleClass="card_small_label, emoji-label" text="\$notes">
-            <graphic>
+            <HBox alignment="CENTER_LEFT" spacing="4.0">
                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../images/note.png" />
                   </image>
                </ImageView>
-            </graphic></Label>
+               <Label fx:id="notesPrefix" styleClass="card_small_label" text="Notes :" />
+               <Label fx:id="notesValue" styleClass="card_small_label" text="\$notes" />
+            </HBox>
             <Separator styleClass="dotted-separator" />
             <Label fx:id="logsHeader" styleClass="card_small_label, emoji-label" text="Logs (0)">
                <graphic>

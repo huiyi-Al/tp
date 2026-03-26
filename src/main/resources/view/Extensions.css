@@ -55,3 +55,9 @@
     -fx-font-style: italic;
     -fx-text-fill: #ababab;
 }
+
+.note-empty-text {
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-text-fill: #ababab;
+}
