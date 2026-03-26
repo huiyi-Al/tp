@@ -47,7 +47,7 @@ public class JsonSerializableAddressBookTest {
     }
 
     @Test
-    public void toModelType_duplicateTags_throwsIllegalValueException() throws Exception {
+    public void toModelType_duplicateTags_mergesDuplicateTags() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_TAG_FILE,
                 JsonSerializableAddressBook.class).get();
 

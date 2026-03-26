@@ -64,15 +64,6 @@ class JsonSerializableAddressBook {
             addressBook.addPerson(person);
         }
 
-        if (tags != null) {
-            for (JsonAdaptedTag jsonAdaptedTag : tags) {
-                Tag tag = jsonAdaptedTag.toModelType();
-                if (!addressBook.hasTag(tag)) {
-                    addressBook.addTag(tag);
-                }
-            }
-        }
-
         return addressBook;
     }
 
