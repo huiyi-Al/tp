@@ -52,34 +52,42 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        Command command = addressBookParser.parseCommand(commandText);
+        try {
+            Command command = addressBookParser.parseCommand(commandText);
 
-        // Check if there's a pending action waiting for confirmation
-        if (pendingAction != null) {
-            if (pendingAction.matches(command)) {
-                // User confirmed - complete the pending action
-                CommandResult result = pendingAction.complete(model);
-                pendingAction = null;
-                saveAddressBook();
-                return result;
-            } else {
-                // User typed another command - just clear pending and continue
-                pendingAction = null;
-                // Continue to execute the new command
+            // Check if there's a pending action waiting for confirmation
+            if (pendingAction != null) {
+                if (pendingAction.matches(command)) {
+                    // User confirmed
+                    CommandResult result = pendingAction.complete(model);
+                    pendingAction = null;
+                    saveAddressBook();
+                    return result;
+                } else {
+                    // User typed another command - clear pending
+                    pendingAction = null;
+                    // Continue to execute the new command
+                }
             }
-        }
 
-        CommandResult result = command.execute(model);
+            // Execute the command
+            CommandResult result = command.execute(model);
 
-        // If the result has a pending action, store it
-        if (result.hasPendingAction()) {
-            pendingAction = result.getPendingAction().get();
+            // If the result has a pending action, store it
+            if (result.hasPendingAction()) {
+                pendingAction = result.getPendingAction().get();
+                return result;
+            }
+
+            // Normal command result
+            saveAddressBook();
             return result;
-        }
 
-        // Normal command result
-        saveAddressBook();
-        return result;
+        } catch (ParseException | CommandException e) {
+            // Clear pending action on any error (invalid command or command execution error)
+            pendingAction = null;
+            throw e;
+        }
     }
 
     private void saveAddressBook() throws CommandException {

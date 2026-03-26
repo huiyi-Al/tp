@@ -8,6 +8,8 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.pending.LogDeletePendingAction;
+import seedu.address.logic.pending.PendingAction;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.log.LogHistory;
@@ -23,9 +25,16 @@ public class LogDeleteCommand extends Command {
             + ": Deletes a log entry from the client identified by the index number used "
             + "in the displayed person list.\n"
             + "Parameters: PERSON_INDEX LOG_INDEX\n"
-            + "Example: " + COMMAND_WORD + " 2 1";
+            + "Example: " + COMMAND_WORD + " 2 1\n"
+            + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_SUCCESS = "Deleted log %1$d from client: %2$s";
+    public static final String MESSAGE_DELETE_CONFIRM =
+            "Are you sure you want to delete log #%2$d from client %1$s?\n"
+                    + "Log: %3$s\n"
+                    + "Type '%4$s %5$d %6$d' again to confirm.\n"
+                    + "Any other command will cancel this pending action.";
+
     public static final String MESSAGE_NO_LOGS = "This client has no logs.";
     public static final String MESSAGE_INVALID_LOG_DISPLAYED_INDEX =
             "The log index provided is invalid for the selected client.";
@@ -43,6 +52,14 @@ public class LogDeleteCommand extends Command {
         this.logIndex = logIndex;
     }
 
+    public Index getPersonIndex() {
+        return personIndex;
+    }
+
+    public Index getLogIndex() {
+        return logIndex;
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -54,6 +71,7 @@ public class LogDeleteCommand extends Command {
 
         Person targetPerson = lastShownList.get(personIndex.getZeroBased());
         LogHistory logHistory = targetPerson.getLogHistory();
+
         if (logHistory.isEmpty()) {
             throw new CommandException(MESSAGE_NO_LOGS);
         }
@@ -61,25 +79,8 @@ public class LogDeleteCommand extends Command {
             throw new CommandException(MESSAGE_INVALID_LOG_DISPLAYED_INDEX);
         }
 
-        LogHistory updatedLogHistory = logHistory.delete(logIndex);
-        Person editedPerson = createPersonWithUpdatedLogHistory(targetPerson, updatedLogHistory);
-        model.setPerson(targetPerson, editedPerson);
-
-        return new CommandResult(String.format(MESSAGE_SUCCESS, logIndex.getOneBased(), editedPerson.getName()));
-    }
-
-    /**
-     * Creates a copy of {@code original} with only log history changed to {@code updatedLogHistory}.
-     */
-    private static Person createPersonWithUpdatedLogHistory(Person original, LogHistory updatedLogHistory) {
-        return new Person(
-                original.getName(),
-                original.getPhone(),
-                original.getEmail(),
-                original.getAddress(),
-                original.getNotes(),
-                updatedLogHistory,
-                original.getTags());
+        PendingAction pendingAction = new LogDeletePendingAction(targetPerson, personIndex, logIndex, logHistory);
+        return new CommandResult(pendingAction.getConfirmationMessage(), pendingAction);
     }
 
     @Override
