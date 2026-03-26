@@ -73,19 +73,18 @@ public class PersonDetailCard extends UiPart<Region> {
     }
 
     private void initializeNotes(Person person) {
-        String NOTE_EMPTY_TEXT_STYLE = "note-empty-text";
         notesPrefix.setText("Notes :");
         String notesText = person.getNotes().value;
         if (notesText.isBlank()) {
             notesValue.setText("No notes");
-            if (!notesValue.getStyleClass().contains(NOTE_EMPTY_TEXT_STYLE)) {
-                notesValue.getStyleClass().add(NOTE_EMPTY_TEXT_STYLE);
+            if (!notesValue.getStyleClass().contains("note-empty-text")) {
+                notesValue.getStyleClass().add("note-empty-text");
             }
             return;
         }
 
         notesValue.setText(notesText);
-        notesValue.getStyleClass().remove(NOTE_EMPTY_TEXT_STYLE);
+        notesValue.getStyleClass().remove("note-empty-text");
     }
 
     private void initializeLogSummary(Person person) {
