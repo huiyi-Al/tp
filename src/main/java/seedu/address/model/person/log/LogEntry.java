@@ -3,6 +3,7 @@ package seedu.address.model.person.log;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -11,6 +12,8 @@ import seedu.address.commons.util.ToStringBuilder;
  * Represents an immutable timestamped log entry.
  */
 public class LogEntry {
+    private static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private final LocalDateTime timestamp;
     private final LogMessage message;
 
@@ -32,6 +35,16 @@ public class LogEntry {
 
     public LogMessage getMessage() {
         return message;
+    }
+
+    /**
+     * Returns the description of the log entry for display.
+     * Includes the timestamp and the message content.
+     *
+     * @return Formatted string with timestamp and message.
+     */
+    public String getDescription() {
+        return timestamp.format(DISPLAY_FORMATTER) + ": " + message.value;
     }
 
     @Override
