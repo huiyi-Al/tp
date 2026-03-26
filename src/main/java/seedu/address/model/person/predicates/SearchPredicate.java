@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import seedu.address.logic.parser.ArgumentMultimap;
 import seedu.address.model.person.Person;
@@ -19,6 +20,8 @@ import seedu.address.model.person.Person;
  * predicates provided.
  */
 public class SearchPredicate implements Predicate<Person> {
+    private static final Logger logger = Logger.getLogger(SearchPredicate.class.getName());
+
     private final FullNamePredicate fullNamePredicate;
     private final PhoneNumberPredicate phoneNumberPredicate;
     private final EmailAddressPredicate emailAddressPredicate;
@@ -38,62 +41,88 @@ public class SearchPredicate implements Predicate<Person> {
      *                    Prefixes absent from the map are not filtered on.
      */
     public SearchPredicate(ArgumentMultimap argMultimap) {
+        logger.info("Initializing SearchPredicate");
+
         this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent()
                 ? new FullNamePredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_NAME))
                 : new FullNamePredicate(new ArrayList<>());
+        logger.fine(MessageFormat.format("FullNamePredicate initialized: {0}", fullNamePredicate));
+
         this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
                 ? new PhoneNumberPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_PHONE))
                 : new PhoneNumberPredicate(new ArrayList<>());
+        logger.fine(MessageFormat.format("PhoneNumberPredicate initialized: {0}", phoneNumberPredicate));
+
         this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
                 ? new EmailAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_EMAIL))
                 : new EmailAddressPredicate(new ArrayList<>());
+        logger.fine(MessageFormat.format("EmailAddressPredicate initialized: {0}", emailAddressPredicate));
+
         this.physicalAddressPredicate = argMultimap.getValue(PREFIX_ADDRESS).isPresent()
                 ? new PhysicalAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_ADDRESS))
                 : new PhysicalAddressPredicate(new ArrayList<>());
+        logger.fine(MessageFormat.format("PhysicalAddressPredicate initialized: {0}", physicalAddressPredicate));
+
         this.tagsPredicate = argMultimap.getValue(PREFIX_TAG).isPresent()
                 ? new TagsMatchOneKeywordPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_TAG))
                 : new TagsMatchOneKeywordPredicate(new ArrayList<>());
+        logger.fine(MessageFormat.format("TagsPredicate initialized: {0}", tagsPredicate));
     }
 
     @Override
     public boolean test(Person person) {
-        boolean nameCondition = false;
-        boolean phoneCondition = false;
-        boolean emailAddressCondition = false;
-        boolean physicalAddressCondition = false;
-        boolean tagsCondition = false;
+        logger.fine(MessageFormat.format("Testing person: {0}", person));
 
-        nameCondition = fullNamePredicate.test(person);
-        phoneCondition = phoneNumberPredicate.test(person);
-        emailAddressCondition = emailAddressPredicate.test(person);
-        physicalAddressCondition = physicalAddressPredicate.test(person);
-        tagsCondition = tagsPredicate.test(person);
+        boolean nameCondition = fullNamePredicate.test(person);
+        logger.fine(MessageFormat.format("Name condition: {0}", nameCondition));
 
-        return nameCondition || phoneCondition || emailAddressCondition || physicalAddressCondition || tagsCondition;
+        boolean phoneCondition = phoneNumberPredicate.test(person);
+        logger.fine(MessageFormat.format("Phone condition: {0}", phoneCondition));
+
+        boolean emailAddressCondition = emailAddressPredicate.test(person);
+        logger.fine(MessageFormat.format("Email condition: {0}", emailAddressCondition));
+
+        boolean physicalAddressCondition = physicalAddressPredicate.test(person);
+        logger.fine(MessageFormat.format("Address condition: {0}", physicalAddressCondition));
+
+        boolean tagsCondition = tagsPredicate.test(person);
+        logger.fine(MessageFormat.format("Tags condition: {0}", tagsCondition));
+
+        boolean result = nameCondition || phoneCondition || emailAddressCondition
+                || physicalAddressCondition || tagsCondition;
+
+        logger.fine(MessageFormat.format("Final result: {0}", result));
+        return result;
     }
 
     @Override
     public boolean equals(Object other) {
+        logger.fine(MessageFormat.format("Checking equality with object: {0}", other));
+
         if (other == this) {
+            logger.fine("Objects are the same instance");
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof SearchPredicate)) {
+            logger.fine("Object is not instance of SearchPredicate");
             return false;
         }
 
         SearchPredicate otherSearchPredicate = (SearchPredicate) other;
-        return Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
+        boolean result = Objects.equals(fullNamePredicate, otherSearchPredicate.fullNamePredicate)
                 && Objects.equals(phoneNumberPredicate, otherSearchPredicate.phoneNumberPredicate)
                 && Objects.equals(emailAddressPredicate, otherSearchPredicate.emailAddressPredicate)
                 && Objects.equals(physicalAddressPredicate, otherSearchPredicate.physicalAddressPredicate)
                 && Objects.equals(tagsPredicate, otherSearchPredicate.tagsPredicate);
+
+        logger.fine(MessageFormat.format("Equality result: {0}", result));
+        return result;
     }
 
     @Override
     public String toString() {
-        return MessageFormat.format(
+        String result = MessageFormat.format(
                 "{0}, {1}, {2}, {3}, {4}",
                 fullNamePredicate.toString(),
                 phoneNumberPredicate.toString(),
@@ -101,5 +130,7 @@ public class SearchPredicate implements Predicate<Person> {
                 physicalAddressPredicate.toString(),
                 tagsPredicate.toString()
         );
+        logger.fine(MessageFormat.format("toString result: {0}", result));
+        return result;
     }
 }
