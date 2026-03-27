@@ -16,7 +16,9 @@ public class RenameTagCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Renames an existing tag globally. Existing values will be overwritten by the input values.\n"
-            + "Exactly two tags must be provided as parameters."
+            + "Exactly two tags must be provided as parameters.\n"
+            + "Tags are case-insensitive. OLD_TAG must exist in the address book and NEW_TAG cannot already"
+            + " exist in the address book.\n"
             + "Parameters: --tag=OLD_TAG --tag=NEW_TAG\n"
             + "Example: " + COMMAND_WORD + " --tag=Plumbing --tag=Pipe-Repair";
 
