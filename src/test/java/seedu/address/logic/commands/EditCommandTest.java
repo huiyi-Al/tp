@@ -17,9 +17,11 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.time.LocalDateTime;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -93,6 +95,9 @@ public class EditCommandTest {
     public void execute_filteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
+        Predicate<Person> currentPredicate =
+                (Predicate<Person>) ((FilteredList<Person>) model.getFilteredPersonList()).getPredicate();
+
         Person personInFilteredList = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder(personInFilteredList).withName(VALID_NAME_BOB).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
@@ -102,6 +107,8 @@ public class EditCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
+
+        expectedModel.updateFilteredPersonList(currentPredicate);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
