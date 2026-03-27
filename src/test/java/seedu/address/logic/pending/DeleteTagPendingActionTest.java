@@ -16,8 +16,6 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.model.tag.Tag;
-import seedu.address.testutil.PersonBuilder;
-import seedu.address.testutil.TypicalIndexes;
 
 public class DeleteTagPendingActionTest {
 
@@ -38,7 +36,7 @@ public class DeleteTagPendingActionTest {
 
     @Test
     public void matches_differentTag_returnsFalse() {
-            DeleteTagCommand differentCommand = new DeleteTagCommand(new Tag(VALID_TAG_AC_SERVICE));
+        DeleteTagCommand differentCommand = new DeleteTagCommand(new Tag(VALID_TAG_AC_SERVICE));
         assertFalse(pendingAction.matches(differentCommand));
     }
 
