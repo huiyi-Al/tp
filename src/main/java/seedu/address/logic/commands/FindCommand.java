@@ -29,9 +29,9 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = MessageFormat.format(
             """
-                    {0}: Finds all persons whose details contain any of the given queries
+                    {0}: Finds all persons whose details contain any of the given queries \
                     and displays them as a list with index numbers.
-                    Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail
+                    Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail \
                     [OPTIONAL_SUBEMAILS] {4}subAddresses [OPTIONAL_SUBADDRESSES] {5}tags [OPTIONAL_TAGS]
                     Example: {0} {1}david {2}123 {3}d@gmail {4}Woodlands {5}Friend""",
             COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG
