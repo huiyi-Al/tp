@@ -17,12 +17,11 @@ public class RenameTagCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Renames an existing tag globally. Existing values will be overwritten by the input values.\n"
             + "Exactly two tags must be provided as parameters.\n"
-            + "Tags are case-insensitive. OLD_TAG must exist in the address book and NEW_TAG cannot already"
-            + " exist in the address book.\n"
+            + "Tags are case-insensitive.\n"
             + "Parameters: --tag=OLD_TAG --tag=NEW_TAG\n"
             + "Example: " + COMMAND_WORD + " --tag=Plumbing --tag=Pipe-Repair";
 
-    public static final String MESSAGE_SUCCESS = "Updated Tag: %1$s to %2$s";
+    public static final String MESSAGE_SUCCESS = "Renamed Tag: %1$s to %2$s";
     public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";
     public static final String MESSAGE_DUPLICATE_TAG = "The tag '%1$s' already exists.";
 
