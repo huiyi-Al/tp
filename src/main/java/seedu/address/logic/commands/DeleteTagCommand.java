@@ -27,7 +27,8 @@ public class DeleteTagCommand extends Command {
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tag: %1$s";
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete tag %1$s?\n"
-                    + "Type '%2$s %1$s' again to confirm.\n"
+                    + "Type '%2$s %1$s' again to confirm. "
+                    + "(Leading/trailing spaces and spaces between the command word and tag are ignored)\n"
                     + "Any other command will cancel this pending deletion.";
 
     public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";

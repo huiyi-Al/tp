@@ -20,7 +20,8 @@ public class ClearCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_CLEAR_CONFIRM =
             "Are you sure you want to clear all entries from the address book?\n"
-                    + "Type 'clear' again to confirm.\n"
+                    + "Type 'clear' again to confirm."
+                    + "(Any leading/trailing spaces will be trimmed)\n"
                     + "Any other command will cancel this pending action.";
 
     @Override

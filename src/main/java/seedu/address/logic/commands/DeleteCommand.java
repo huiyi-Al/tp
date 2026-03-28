@@ -32,8 +32,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete %1$s (%2$s, %3$s)?\n"
                     + "Type '%4$s %5$d' again to confirm. "
-                    + "(Any whitespace will be trimmed, and numbers with leading zeros (e.g., '0%5$d', '00%5$d') "
-                    + "will also confirm the deletion)\n"
+                    + "(Leading/trailing spaces and spaces between the command word and index are ignored, "
+                    + "numbers with leading zeros (e.g., '0%5$d') also confirm the deletion)\n"
                     + "Any other command will cancel this pending deletion.";
 
     private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
