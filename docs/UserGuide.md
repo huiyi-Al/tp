@@ -142,11 +142,12 @@ Finds persons whose names / phone numbers / email address / physical address / t
 specified per field. A by-name sorted list of such persons is returned.
 
 Format:
-`find [--name=SUBNAME [MORE_SUBNAMES]] [--phone=SUBNUMBER [MORE_SUBNUMBERS]] [--email=SUBEMAIL [MORE_SUBEMAILS]] [--address=SUBADDRESS [MORE_SUBADDRESS]] [--tag=TAG [MORE_TAGS]]`
+`find [--name=SUBNAME [--name=MORE_SUBNAMES]] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS]] [--email=SUBEMAIL [--email=MORE_SUBEMAILS]] [--address=SUBADDRESS [--address=MORE_SUBADDRESS]] [--tag=TAG [--tag=MORE_TAGS]]`
 
 * At least one of the optional fields must be provided.
 * If a field is specified, it must not be empty.
-* Multiple keywords can be provided, separated by spaces.
+* A field can be specified as many times as keywords are required, but it can never take more than one keyword at a
+  time.
 * The order in which the fields are specified does not matter.
 * Only the fields specified are searched against.
 * In all fields, the search is case-insensitive. e.g. In name field, `hans` will match `Hans`.
@@ -162,16 +163,25 @@ Examples:
 
 * `find` is not a valid command as no fields are provided.
 * `find --name=Alice --phone= --email=gmail.com` is not a valid command as phone field is specified but empty.
-* `find --name=jon Jack` can return persons with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
+* `find --name=Alice Bob` is not a valid command as name field has more than one keyword provided at once.
+  `find --name=Alice --name=Bob` is the correct way to write the command.
+* `find --name=jon --name=Jack` can return persons with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
 * `find --phone=1234` can return persons with numbers `91234567` and `94561234`.
 * `find --email=.edu` can return persons with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.
 * `find --address=Street` can return persons with physical addresses `Woodlands Street`, `Admiralty Street`
 * `find --tag=friend` can return persons with tag `Friend`, but not `ExFriend`,
-* `find --name=James Jake --phone=123 4567 --email=@yahoo.com --address=Street Avenue Boulevard --tag=Friend` is a valid
-  combination of all fields.
-* `find --phone=123 4567 --name=James Jake --tag=Friend --email=@yahoo.com --address=Street Avenue Boulevard` will
-  return the same results as the previous command.<br>
-  ![find command result](images/findCommandResult.png)
+*
+
+`find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend`
+is a valid
+combination of all fields.
+
+*
+
+`find --phone=123 --phone=4567 --name=James --name=Jake --tag=Friend --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
+will
+return the same results as the previous command.<br>
+![find command result](images/findCommandResult.png)
 
 ### Deleting a person : `delete`
 
@@ -316,17 +326,17 @@ the data of your previous LinkLine home folder.
 
 ## Command summary
 
- Action           | Format, Examples                                                                                                                                                                                                                                                                                         
-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- **Add**          | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits`                    
- **Clear**        | `clear`                                                                                                                                                                                                                                                                                                  
- **Copy Address** | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                                                  
- **Delete**       | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                                      
- **Delete Tag**   | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                      
- **Edit**         | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                      
- **Filter**       | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                                     
- **Find**         | `find [--name=SUBNAME [MORE_SUBNAMES]] [--phone=SUBNUMBER [MORE_SUBNUMBERS]] [--email=SUBEMAIL [MORE_SUBEMAILS]] [--address=SUBADDRESS [MORE_SUBADDRESS]] [--tag=TAG [MORE_TAGS]]`<br> e.g., `find --name=James Jake --phone=123 4567 --email=@yahoo.com --address=Street Avenue Boulevard --tag=Friend` 
- **Help**         | `help`                                                                                                                                                                                                                                                                                                   
- **List**         | `list`                                                                                                                                                                                                                                                                                                   
- **Rename Tag**   | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                       
- **View**         | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                          
+ Action           | Format, Examples                                                                                                                                                                                                                                                                                                                                                                   
+------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ **Add**          | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits`                                                                                              
+ **Clear**        | `clear`                                                                                                                                                                                                                                                                                                                                                                            
+ **Copy Address** | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                                                                                                                            
+ **Delete**       | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                                                                                                                
+ **Delete Tag**   | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                                                                                                
+ **Edit**         | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                                                                                                
+ **Filter**       | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                                                                                                               
+ **Find**         | `find [--name=SUBNAME [--name=MORE_SUBNAMES]] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS]] [--email=SUBEMAIL [--email=MORE_SUBEMAILS]] [--address=SUBADDRESS [--address=MORE_SUBADDRESS]] [--tag=TAG [--tag=MORE_TAGS]]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend` 
+ **Help**         | `help`                                                                                                                                                                                                                                                                                                                                                                             
+ **List**         | `list`                                                                                                                                                                                                                                                                                                                                                                             
+ **Rename Tag**   | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                 
+ **View**         | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                    

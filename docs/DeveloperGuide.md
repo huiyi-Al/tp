@@ -341,6 +341,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1b. The search command has at least one specified field with no keywords (is empty).
     * `Linkline` gives a warning to `user` that command entered is in an invalid format.
     * Use case ends.
+* 1c. The search command has at least one specified field with more than one keyword at once.
+    * `Linkline` gives a warning to `user` that command entered is in an invalid format.
+    * Use case ends.
 
 #### Use Case: UC03 - Navigate to client address.
 

@@ -75,8 +75,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         boolean anyPrefixMultipleQuery = expectedPrefixes.stream()
-                .allMatch(p -> argMultimap.getValue(p).isEmpty() || argMultimap.getAllValues(p).stream()
-                        .anyMatch(v -> v.matches(".*\\s.*")));
+                .anyMatch(p -> argMultimap.getAllValues(p).stream().anyMatch(v -> v
+                        .matches(".*\\s.*")));
         if (anyPrefixMultipleQuery) {
             logger.warning("Validation failed: some prefixes have multiple queries");
             throw new ParseException(
