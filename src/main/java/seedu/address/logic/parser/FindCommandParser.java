@@ -58,9 +58,14 @@ public class FindCommandParser implements Parser<FindCommand> {
                 trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
         logger.fine(MessageFormat.format("ArgumentMultimap created: {0}", argMultimap));
 
+        if (!argMultimap.getPreamble().isEmpty()) {
+            logger.warning("Validation failed: preamble given");
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
         boolean nonePresent = expectedPrefixes.stream()
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
-
         if (nonePresent) {
             logger.warning("Validation failed: no prefixes present");
             throw new ParseException(
@@ -69,7 +74,6 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         boolean anyPresentButEmpty = expectedPrefixes.stream()
                 .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-
         if (anyPresentButEmpty) {
             logger.warning("Validation failed: some prefixes have empty values");
             throw new ParseException(

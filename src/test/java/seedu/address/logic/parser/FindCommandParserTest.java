@@ -82,31 +82,23 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_preambleAndValidFieldCorrectOrder_returnsSameFindCommand() {
-        argMultimap.clear();
-        argMultimap.put(PREFIX_NAME, TEST_NAME2);
-        expected = generateFindCommand();
-
+    public void parse_preambleAndValidFieldCorrectOrder_throwsParseException() {
         // No leading and trailing whitespaces
-        assertParseSuccess(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME3, PREFIX_NAME, TEST_NAME2),
-                expected);
+        assertParseFailure(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME3, PREFIX_NAME, TEST_NAME2),
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         // Multiple whitespaces between keywords
-        assertParseSuccess(parser, MessageFormat.format("\n {0} \n {1}\t{2}\t", TEST_NAME3, PREFIX_NAME,
-                TEST_NAME2), expected);
+        assertParseFailure(parser, MessageFormat.format("\n {0} \n {1}\t{2}\t", TEST_NAME3, PREFIX_NAME,
+                TEST_NAME2), String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_preambleAndValidFieldWrongOrder_throwsParseException() {
-        argMultimap.clear();
-        argMultimap.put(PREFIX_NAME, TEST_NAME2);
-        expected = generateFindCommand();
-
         // No leading and trailing whitespaces
-        assertParseDifferent(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME2, PREFIX_NAME, TEST_NAME3),
-                expected);
+        assertParseFailure(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME2, PREFIX_NAME, TEST_NAME3),
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         // Multiple whitespaces between keywords
-        assertParseDifferent(parser, MessageFormat.format("\t{0}\t {1} \n{2}\n", TEST_NAME2, PREFIX_NAME,
-                TEST_NAME3), expected);
+        assertParseFailure(parser, MessageFormat.format("\t{0}\t {1} \n{2}\n", TEST_NAME2, PREFIX_NAME,
+                TEST_NAME3), String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test

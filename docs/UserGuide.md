@@ -144,6 +144,7 @@ specified per field. A by-name sorted list of such persons is returned.
 Format:
 `find [--name=SUBNAME [MORE_SUBNAMES]] [--phone=SUBNUMBER [MORE_SUBNUMBERS]] [--email=SUBEMAIL [MORE_SUBEMAILS]] [--address=SUBADDRESS [MORE_SUBADDRESS]] [--tag=TAG [MORE_TAGS]]`
 
+* Any preamble given will result in an error.
 * At least one of the optional fields must be provided.
 * If a field is specified, it must not be empty.
 * Multiple keywords can be provided, separated by spaces.
