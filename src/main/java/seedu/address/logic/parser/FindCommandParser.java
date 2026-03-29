@@ -28,8 +28,8 @@ public class FindCommandParser implements Parser<FindCommand> {
     /**
      * Parses the given {@code args} to return a {@code FindCommand} object for execution.
      * <p>
-     * Validates that at least one valid prefix is present and that no provided
-     * prefix has an empty value. Constructs a {@code SearchPredicate} based on the
+     * Validates that at least one valid prefix is present, no provided prefix has an empty value,
+     * and each prefix contains only one query. Constructs a {@code SearchPredicate} based on the
      * parsed arguments and returns a new {@code FindCommand} with that predicate.
      *
      * @param args the raw input string containing search keywords and prefixes
@@ -60,7 +60,6 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         boolean nonePresent = expectedPrefixes.stream()
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
-
         if (nonePresent) {
             logger.warning("Validation failed: no prefixes present");
             throw new ParseException(
@@ -69,9 +68,17 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         boolean anyPresentButEmpty = expectedPrefixes.stream()
                 .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-
         if (anyPresentButEmpty) {
             logger.warning("Validation failed: some prefixes have empty values");
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        boolean anyPrefixMultipleQuery = expectedPrefixes.stream()
+                .allMatch(p -> argMultimap.getValue(p).isEmpty() || argMultimap.getAllValues(p).stream()
+                        .anyMatch(v -> v.matches(".*\\s.*")));
+        if (anyPrefixMultipleQuery) {
+            logger.warning("Validation failed: some prefixes have multiple queries");
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
