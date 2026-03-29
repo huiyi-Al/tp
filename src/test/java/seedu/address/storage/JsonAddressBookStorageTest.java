@@ -18,6 +18,8 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
@@ -58,6 +60,23 @@ public class JsonAddressBookStorageTest {
     @Test
     public void readAddressBook_invalidAndValidPersonAddressBook_throwDataLoadingException() {
         assertThrows(DataLoadingException.class, () -> readAddressBook("invalidAndValidPersonAddressBook.json"));
+    }
+
+    @Test
+    public void readAddressBook_whitespacePaddedAddressBook_valuesAreTrimmed() throws Exception {
+        ReadOnlyAddressBook readBack = readAddressBook("whitespacePaddedAddressBook.json").get();
+        Person person = readBack.getPersonList().get(0);
+
+        assertEquals("Alice Pauline", person.getName().fullName);
+        assertEquals("94351253", person.getPhone().value);
+        assertEquals("alice@example.com", person.getEmail().value);
+        assertEquals("123, Jurong West Ave 6, #08-111", person.getAddress().value);
+        assertEquals("", person.getNotes().value);
+        assertEquals(1, person.getLogHistory().size());
+        assertEquals("Observed intermittent leakage below sink cabinet.",
+                person.getLogHistory().asUnmodifiableList().get(0).getMessage().value);
+        assertEquals(1, person.getTags().size());
+        assertEquals(new Tag("AC-Service"), person.getTags().iterator().next());
     }
 
     @Test

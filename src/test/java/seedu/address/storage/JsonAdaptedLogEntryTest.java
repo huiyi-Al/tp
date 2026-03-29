@@ -16,11 +16,18 @@ public class JsonAdaptedLogEntryTest {
     private static final String VALID_TIMESTAMP = "2026-03-22T14:05:31";
     private static final String INVALID_TIMESTAMP = "22-03-2026 14:05:31";
     private static final String VALID_MESSAGE = "Observed leakage below sink cabinet.";
-    private static final String INVALID_MESSAGE = "  leading whitespace";
+    private static final String INVALID_MESSAGE = "   ";
 
     @Test
     public void toModelType_validLogEntryDetails_returnsLogEntry() throws Exception {
         JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, VALID_MESSAGE);
+        LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP), new LogMessage(VALID_MESSAGE));
+        assertEquals(expectedLogEntry, logEntry.toModelType());
+    }
+
+    @Test
+    public void toModelType_validLogEntryDetailsWithWhitespace_returnsTrimmedLogEntry() throws Exception {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(" " + VALID_TIMESTAMP + " ", " " + VALID_MESSAGE + " ");
         LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP), new LogMessage(VALID_MESSAGE));
         assertEquals(expectedLogEntry, logEntry.toModelType());
     }
