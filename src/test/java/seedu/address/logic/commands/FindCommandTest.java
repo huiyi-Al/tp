@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -27,6 +28,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.ArgumentMultimap;
+import seedu.address.logic.parser.ArgumentTokenizer;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -43,21 +45,30 @@ import seedu.address.model.person.predicates.SearchPredicate;
  *   <li>Equality between object and a different type, returns false.</li>
  *   <li>Equality between object and null, returns false.</li>
  *   <li>Executing with an empty predicate, finds no persons.</li>
- *   <li>Executing with multiple name tokens (same case), finds all matching persons.</li>
- *   <li>Executing with multiple name tokens (mixed case), finds all matching persons.</li>
+ *   <li>Executing with multiple name tokens, finds all matching persons.</li>
  *   <li>Executing with multiple phone tokens, finds all matching persons.</li>
  *   <li>Executing with multiple email address tokens, finds all matching persons.</li>
  *   <li>Executing with multiple physical address tokens, finds all matching persons.</li>
+ *   <li>Executing with multiple tag tokens, finds all matching persons.</li>
  *   <li>Executing with all types of tokens, finds union of all matching persons.</li>
  *   <li>String representation matches expected format.</li>
  * </ul>
  */
 public class FindCommandTest {
 
-    private static final String TEST_NAME_QUERY = String.join(" ", "KUrZ", "ElLe", "kuNz");
-    private static final String TEST_PHONE_QUERY = String.join(" ", "535", "442");
-    private static final String TEST_EMAIL_QUERY = String.join(" ", "r@e", "a@e");
-    private static final String TEST_ADDRESS_QUERY = String.join(" ", "Jurong", "clEmenti");
+    private static final String TEST_NAME_QUERY = MessageFormat
+            .format(" {0}{1} {0}{2} {0}{3}", PREFIX_NAME, "KUrZ", "ElLe", "kuNz");
+    private static final String TEST_PHONE_QUERY = MessageFormat
+            .format(" {0}{1} {0}{2}", PREFIX_PHONE, "535", "442");
+    private static final String TEST_EMAIL_QUERY = MessageFormat
+            .format(" {0}{1} {0}{2}", PREFIX_EMAIL, "r@e", "a@e");
+    private static final String TEST_ADDRESS_QUERY = MessageFormat
+            .format(" {0}{1} {0}{2}", PREFIX_ADDRESS, "Jurong", "clEmenti");
+    private static final String TEST_TAG_QUERY = MessageFormat
+            .format(" {0}{1} {0}{2}", PREFIX_TAG, "plumbing", "ac-Service");
+    private static final String TEST_ALL_QUERY = MessageFormat
+            .format("{0} {1} {2} {3} {4}", TEST_NAME_QUERY, TEST_PHONE_QUERY, TEST_EMAIL_QUERY,
+                    TEST_ADDRESS_QUERY, TEST_TAG_QUERY);
 
     private static final Model MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private static final Model EXPECTED_MODEL = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -82,6 +93,10 @@ public class FindCommandTest {
     private static final SearchPredicate TEST_SEARCH_PREDICATE_ADDRESS_ONLY;
     private static final FindCommand TEST_FIND_COMMAND_ADDRESS_ONLY;
 
+    private static final ArgumentMultimap TEST_ARGMAP_TAG_ONLY;
+    private static final SearchPredicate TEST_SEARCH_PREDICATE_TAG_ONLY;
+    private static final FindCommand TEST_FIND_COMMAND_TAG_ONLY;
+
     private static final ArgumentMultimap TEST_ARGMAP_ALL_PRESENT;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_ALL_PRESENT;
     private static final FindCommand TEST_FIND_COMMAND_ALL_PRESENT;
@@ -91,31 +106,28 @@ public class FindCommandTest {
         TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
         TEST_FIND_COMMAND_EMPTY = new FindCommand(TEST_SEARCH_PREDICATE_EMPTY);
 
-        TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_NAME_ONLY.put(PREFIX_NAME, TEST_NAME_QUERY);
+        TEST_ARGMAP_NAME_ONLY = ArgumentTokenizer.tokenize(TEST_NAME_QUERY, PREFIX_NAME);
         TEST_SEARCH_PREDICATE_NAME_ONLY = new SearchPredicate(TEST_ARGMAP_NAME_ONLY);
         TEST_FIND_COMMAND_NAME_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_NAME_ONLY);
 
-        TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_PHONE_ONLY.put(PREFIX_PHONE, TEST_PHONE_QUERY);
+        TEST_ARGMAP_PHONE_ONLY = ArgumentTokenizer.tokenize(TEST_PHONE_QUERY, PREFIX_PHONE);
         TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
         TEST_FIND_COMMAND_PHONE_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_PHONE_ONLY);
 
-        TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_EMAIL_ONLY.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
+        TEST_ARGMAP_EMAIL_ONLY = ArgumentTokenizer.tokenize(TEST_EMAIL_QUERY, PREFIX_EMAIL);
         TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
         TEST_FIND_COMMAND_EMAIL_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
 
-        TEST_ARGMAP_ADDRESS_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_ADDRESS_ONLY.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
+        TEST_ARGMAP_ADDRESS_ONLY = ArgumentTokenizer.tokenize(TEST_ADDRESS_QUERY, PREFIX_ADDRESS);
         TEST_SEARCH_PREDICATE_ADDRESS_ONLY = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY);
         TEST_FIND_COMMAND_ADDRESS_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_ADDRESS_ONLY);
 
-        TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_PHONE, TEST_PHONE_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
+        TEST_ARGMAP_TAG_ONLY = ArgumentTokenizer.tokenize(TEST_TAG_QUERY, PREFIX_TAG);
+        TEST_SEARCH_PREDICATE_TAG_ONLY = new SearchPredicate(TEST_ARGMAP_TAG_ONLY);
+        TEST_FIND_COMMAND_TAG_ONLY = new FindCommand(TEST_SEARCH_PREDICATE_TAG_ONLY);
+
+        TEST_ARGMAP_ALL_PRESENT = ArgumentTokenizer.tokenize(TEST_ALL_QUERY, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_ADDRESS, PREFIX_TAG);
         TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
         TEST_FIND_COMMAND_ALL_PRESENT = new FindCommand(TEST_SEARCH_PREDICATE_ALL_PRESENT);
     }
@@ -195,6 +207,16 @@ public class FindCommandTest {
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
         assertCommandSuccess(TEST_FIND_COMMAND_ADDRESS_ONLY, MODEL, expectedMessage, EXPECTED_MODEL);
+        assertEquals(expectedFound, new HashSet<>(MODEL.getFilteredPersonList()));
+    }
+
+    @Test
+    public void execute_multipleTag_multiplePersonsFound() {
+        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_TAG_ONLY);
+        Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON, DANIEL, ELLE));
+
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
+        assertCommandSuccess(TEST_FIND_COMMAND_TAG_ONLY, MODEL, expectedMessage, EXPECTED_MODEL);
         assertEquals(expectedFound, new HashSet<>(MODEL.getFilteredPersonList()));
     }
 
