@@ -22,7 +22,8 @@ public class CopyAddrCommand extends Command {
     public static final String COMMAND_WORD = "copyaddr";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Copies the address of the person identified by the index number used in the displayed person list.\n"
+            + ": Copies the address of the person identified by the "
+            + "index number used in the current displayed person list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 

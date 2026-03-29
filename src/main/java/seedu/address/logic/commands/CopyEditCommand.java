@@ -23,7 +23,8 @@ public class CopyEditCommand extends Command {
     public static final String COMMAND_WORD = "copyedit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Copies the edit command format for the client identified by the index number.\n"
+            + ": Copies the edit command format for the client identified by the "
+            + "index number in the current displayed person list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
