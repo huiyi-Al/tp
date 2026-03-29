@@ -35,19 +35,31 @@ public class CopyEditCommand extends Command {
     private static boolean simulateClipboardFailure = false;
     private final Index targetIndex;
 
+    /**
+     * Constructor for production use.
+     */
     public CopyEditCommand(Index targetIndex) {
         requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
     }
 
+    /**
+     * For testing only - sets test mode.
+     */
     public static void setTestMode(boolean testMode) {
         isTestMode = testMode;
     }
 
+    /**
+     * For testing only - sets whether to simulate clipboard failure.
+     */
     public static void setSimulateClipboardFailure(boolean simulateFailure) {
         simulateClipboardFailure = simulateFailure;
     }
 
+    /**
+     * For testing only - resets test flags.
+     */
     public static void resetTestFlags() {
         isTestMode = false;
         simulateClipboardFailure = false;
