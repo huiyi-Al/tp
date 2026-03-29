@@ -31,11 +31,26 @@ public class CopyEditCommand extends Command {
             + "\n(Press Ctrl+V or Cmd+V to paste)";
     public static final String MESSAGE_CLIPBOARD_UNAVAILABLE = "Could not access clipboard. Please copy manually.";
 
+    private static boolean isTestMode = false;
+    private static boolean simulateClipboardFailure = false;
     private final Index targetIndex;
 
     public CopyEditCommand(Index targetIndex) {
         requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
+    }
+
+    public static void setTestMode(boolean testMode) {
+        isTestMode = testMode;
+    }
+
+    public static void setSimulateClipboardFailure(boolean simulateFailure) {
+        simulateClipboardFailure = simulateFailure;
+    }
+
+    public static void resetTestFlags() {
+        isTestMode = false;
+        simulateClipboardFailure = false;
     }
 
     @Override
@@ -52,6 +67,15 @@ public class CopyEditCommand extends Command {
 
         String editCommand = generateEditCommand(personToCopy, personIndex);
 
+        // In test mode, skip real clipboard
+        if (isTestMode) {
+            if (simulateClipboardFailure) {
+                throw new CommandException(MESSAGE_CLIPBOARD_UNAVAILABLE);
+            }
+            return new CommandResult(String.format(MESSAGE_COPY_SUCCESS, personToCopy.getName().fullName, personIndex));
+        }
+
+        // Production code - real clipboard
         try {
             StringSelection stringSelection = new StringSelection(editCommand);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
