@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.CopyEditCommand;
 
-/**
- * As we are only doing white-box testing, our test cases do not cover path variations
- * outside of the CopyEditCommand code.
- */
 public class CopyEditCommandParserTest {
 
     private CopyEditCommandParser parser = new CopyEditCommandParser();
