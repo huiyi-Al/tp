@@ -1,0 +1,14 @@
+{
+  "persons": [ {
+    "name": " Alice Pauline ",
+    "phone": " 94351253 ",
+    "email": " alice@example.com ",
+    "address": " 123, Jurong West Ave 6, #08-111 ",
+    "notes": " ",
+    "logs": [ {
+      "timestamp": " 2026-03-22T14:05:31 ",
+      "message": " Observed intermittent leakage below sink cabinet. "
+    } ],
+    "tags": [ " AC-Service " ]
+  } ]
+}

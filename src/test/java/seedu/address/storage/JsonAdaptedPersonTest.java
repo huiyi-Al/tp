@@ -8,6 +8,7 @@ import static seedu.address.testutil.TypicalPersons.BENSON;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,9 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.log.LogEntry;
+import seedu.address.model.person.log.LogMessage;
+import seedu.address.model.tag.Tag;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "a".repeat(101);
@@ -45,6 +49,28 @@ public class JsonAdaptedPersonTest {
     public void toModelType_validPersonDetails_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(BENSON);
         assertEquals(BENSON, person.toModelType());
+    }
+
+    @Test
+    public void toModelType_validPersonDetailsWithWhitespace_returnsTrimmedPerson() throws Exception {
+        List<JsonAdaptedLogEntry> logsWithWhitespace = List.of(
+                new JsonAdaptedLogEntry(" 2026-03-22T14:05:31 ",
+                        " Observed intermittent leakage below sink cabinet. "));
+        List<JsonAdaptedTag> tagsWithWhitespace = List.of(new JsonAdaptedTag(" Plumbing "));
+
+        JsonAdaptedPerson person = new JsonAdaptedPerson(" Benson Meier ", " 98765432 ", " johnd@example.com ",
+                " 311, Clementi Ave 2, #02-25 ", " ", logsWithWhitespace, tagsWithWhitespace);
+        Person modelPerson = person.toModelType();
+
+        assertEquals(new Name("Benson Meier"), modelPerson.getName());
+        assertEquals(new Phone("98765432"), modelPerson.getPhone());
+        assertEquals(new Email("johnd@example.com"), modelPerson.getEmail());
+        assertEquals(new Address("311, Clementi Ave 2, #02-25"), modelPerson.getAddress());
+        assertEquals(new Notes(""), modelPerson.getNotes());
+        assertEquals(List.of(new LogEntry(LocalDateTime.parse("2026-03-22T14:05:31"),
+                new LogMessage("Observed intermittent leakage below sink cabinet."))),
+                modelPerson.getLogHistory().asUnmodifiableList());
+        assertEquals(Set.of(new Tag("Plumbing")), modelPerson.getTags());
     }
 
     @Test
