@@ -219,4 +219,117 @@ public class EditCommandTest {
         assertEquals(expected, editCommand.toString());
     }
 
+    @Test
+    public void execute_duplicatePhoneDifferentPerson_throwsCommandException() {
+        // Get two different persons
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        // Try to edit second person to have the same phone as first person
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(secondPerson)
+                .withPhone(firstPerson.getPhone().value).build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_duplicateEmailDifferentPerson_throwsCommandException() {
+        // Get two different persons
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        // Try to edit second person to have the same email as first person
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(secondPerson)
+                .withEmail(firstPerson.getEmail().value).build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_duplicatePhoneSamePerson_success() throws Exception {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        // Edit the same person with the same phone (should succeed)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(personToEdit)
+                .withPhone(personToEdit.getPhone().value).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(personToEdit));
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_duplicateEmailSamePerson_success() throws Exception {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        // Edit the same person with the same email (should succeed)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(personToEdit)
+                .withEmail(personToEdit.getEmail().value).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(personToEdit));
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_duplicatePhoneWithDifferentFormat_throwsCommandException() {
+        // Get first person with formatted phone
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        // Format the phone differently (e.g., with spaces or hyphens)
+        String formattedPhone = firstPerson.getPhone().value.replaceAll("(\\d{4})(\\d{4})", "$1-$2");
+
+        // Try to edit second person to have the same phone digits but different format
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(secondPerson)
+                .withPhone(formattedPhone).build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_duplicateEmailWithDifferentCase_throwsCommandException() {
+        // Get first person
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        // Change email case
+        String differentCaseEmail = firstPerson.getEmail().value.toUpperCase();
+
+        // Try to edit second person to have the same email but different case
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(secondPerson)
+                .withEmail(differentCaseEmail).build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_editToSamePhoneAsSelfAfterChangingOtherField_success() throws Exception {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        // Keep same phone, change address (should succeed)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(personToEdit)
+                .withPhone(personToEdit.getPhone().value)
+                .withAddress("New Address").build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        Person expectedPerson = new PersonBuilder(personToEdit)
+                .withAddress("New Address").build();
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(expectedPerson));
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setPerson(personToEdit, expectedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
 }
