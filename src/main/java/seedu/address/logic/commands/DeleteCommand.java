@@ -24,14 +24,16 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
-            + "Parameters: INDEX\n"
+            + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete %1$s (%2$s, %3$s)?\n"
-                    + "Type '%4$s %5$d' again to confirm.\n"
+                    + "Type '%4$s %5$d' again to confirm. "
+                    + "(Leading/trailing spaces and spaces between the command word and index are ignored, "
+                    + "numbers with leading zeros (e.g., '0%5$d') also confirm the deletion)\n"
                     + "Any other command will cancel this pending deletion.";
 
     private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
