@@ -32,7 +32,9 @@ public class LogDeleteCommand extends Command {
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete log #%2$d from client %1$s?\n"
                     + "Log: %3$s\n"
-                    + "Type '%4$s %5$d %6$d' again to confirm.\n"
+                    + "Type '%4$s %5$d %6$d' again to confirm. "
+                    + "(Leading/trailing spaces and spaces between the command word and indexes are ignored, "
+                    + "numbers with leading zeros (e.g., '0%5$d') also confirm the deletion)\n"
                     + "Any other command will cancel this pending action.";
 
     public static final String MESSAGE_NO_LOGS = "This client has no logs.";

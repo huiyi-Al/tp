@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
@@ -32,6 +33,7 @@ public class FindCommand extends Command {
             """
                     {0}: Finds all persons whose details contain any of the given queries \
                     and displays them as a list with index numbers.
+                    Preamble given will result in an error.
                     Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail \
                     [OPTIONAL_SUBEMAILS] {4}subAddresses [OPTIONAL_SUBADDRESSES] {5}tags [OPTIONAL_TAGS]
                     Example: {0} {1}david {2}123 {3}d@gmail {4}Woodlands {5}Friend""",
@@ -58,10 +60,15 @@ public class FindCommand extends Command {
         requireNonNull(model);
         logger.fine(MessageFormat.format("Executing FindCommand with predicate: {0}", searchPredicate));
 
+        Person lastSelectedPerson = model.getSelectedPerson().getValue();
         model.updateFilteredPersonList(searchPredicate);
         int resultSize = model.getFilteredPersonList().size();
-
         logger.fine(MessageFormat.format("Filtered person list size: {0}", resultSize));
+
+        if (lastSelectedPerson != null && !model.getFilteredPersonList().contains(lastSelectedPerson)) {
+            logger.fine("Last selected person no longer available. Resetting view panel");
+            model.setSelectedPerson(null);
+        }
 
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultSize));

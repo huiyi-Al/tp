@@ -28,11 +28,12 @@ public class FindCommandParser implements Parser<FindCommand> {
             PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
 
     private void checkValidFormat(ArgumentMultimap argMultimap) throws ParseException {
+        boolean preamblePresent = !argMultimap.getPreamble().isEmpty();
         boolean nonePresent = EXPECTED_PREFIXES.stream()
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
         boolean anyPresentButEmpty = EXPECTED_PREFIXES.stream()
                 .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        if (nonePresent || anyPresentButEmpty) {
+        if (preamblePresent || nonePresent || anyPresentButEmpty) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }

@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
 /**
@@ -31,6 +32,10 @@ public class FilterCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
+        Person lastSelectedPerson = model.getSelectedPerson().getValue();
+        if (lastSelectedPerson != null && !model.getFilteredPersonList().contains(lastSelectedPerson)) {
+            model.setSelectedPerson(null);
+        }
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }

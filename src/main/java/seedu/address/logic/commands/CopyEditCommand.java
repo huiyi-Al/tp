@@ -1,6 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -13,33 +19,34 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
- * Copies the address of a person identified using its displayed index from the address book to the clipboard.
+ * Copies the edit command format for the specified client to clipboard.
  */
-public class CopyAddrCommand extends Command {
+public class CopyEditCommand extends Command {
 
-    public static final String COMMAND_WORD = "copyaddr";
+    public static final String COMMAND_WORD = "copyedit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Copies the address of the person identified by the "
-            + "index number used in the current displayed person list.\n"
+            + ": Copies the edit command format for the client identified by the "
+            + "index number in the current displayed person list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_COPY_ADDRESS_SUCCESS = "Address copied to clipboard for: %1$s (Index: %2$s)"
+    public static final String MESSAGE_COPY_SUCCESS = "Edit command format copied to clipboard for: %1$s (Index: %2$s)"
             + "\n(Press Ctrl+V or Cmd+V to paste)";
     public static final String MESSAGE_CLIPBOARD_UNAVAILABLE = "Could not access clipboard. Please copy manually.";
-    // Test flag - set to true to skip real clipboard
+
     private static boolean isTestMode = false;
-    // For testing only - allows tests to simulate clipboard failure
     private static boolean simulateClipboardFailure = false;
     private final Index targetIndex;
 
     /**
      * Constructor for production use.
      */
-    public CopyAddrCommand(Index targetIndex) {
+    public CopyEditCommand(Index targetIndex) {
+        requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
     }
 
@@ -75,29 +82,50 @@ public class CopyAddrCommand extends Command {
         }
 
         Person personToCopy = lastShownList.get(targetIndex.getZeroBased());
-        String address = personToCopy.getAddress().value;
-        String personName = personToCopy.getName().fullName;
         int personIndex = targetIndex.getOneBased();
+
+        String editCommand = generateEditCommand(personToCopy, personIndex);
 
         // In test mode, skip real clipboard
         if (isTestMode) {
             if (simulateClipboardFailure) {
                 throw new CommandException(MESSAGE_CLIPBOARD_UNAVAILABLE);
             }
-            return new CommandResult(String.format(MESSAGE_COPY_ADDRESS_SUCCESS, personName, personIndex));
+            return new CommandResult(String.format(MESSAGE_COPY_SUCCESS, personToCopy.getName().fullName, personIndex));
         }
 
         // Production code - real clipboard
         try {
-            // Copy to system clipboard
-            StringSelection stringSelection = new StringSelection(address);
+            StringSelection stringSelection = new StringSelection(editCommand);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
 
-            return new CommandResult(String.format(MESSAGE_COPY_ADDRESS_SUCCESS, personName, personIndex));
+            return new CommandResult(String.format(MESSAGE_COPY_SUCCESS, personToCopy.getName().fullName, personIndex));
         } catch (Exception e) {
             throw new CommandException(MESSAGE_CLIPBOARD_UNAVAILABLE);
         }
+    }
+
+    /**
+     * Generates the edit command format with current client details.
+     */
+    String generateEditCommand(Person person, int personIndex) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(EditCommand.COMMAND_WORD).append(" ").append(personIndex).append(" ");
+        sb.append(PREFIX_NAME).append(person.getName().fullName).append(" ");
+        sb.append(PREFIX_PHONE).append(person.getPhone().value).append(" ");
+        sb.append(PREFIX_EMAIL).append(person.getEmail().value).append(" ");
+        sb.append(PREFIX_ADDRESS).append(person.getAddress().value).append(" ");
+
+        if (!person.getNotes().value.isEmpty()) {
+            sb.append(PREFIX_NOTES).append(person.getNotes().value).append(" ");
+        }
+
+        for (Tag tag : person.getTags()) {
+            sb.append(PREFIX_TAG).append(tag.tagName).append(" ");
+        }
+
+        return sb.toString().trim();
     }
 
     @Override
@@ -106,12 +134,12 @@ public class CopyAddrCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof CopyAddrCommand)) {
+        if (!(other instanceof CopyEditCommand)) {
             return false;
         }
 
-        CopyAddrCommand otherCopyAddrCommand = (CopyAddrCommand) other;
-        return targetIndex.equals(otherCopyAddrCommand.targetIndex);
+        CopyEditCommand otherCopyEditCommand = (CopyEditCommand) other;
+        return targetIndex.equals(otherCopyEditCommand.targetIndex);
     }
 
     @Override

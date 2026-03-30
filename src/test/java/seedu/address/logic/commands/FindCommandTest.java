@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -10,6 +11,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -159,6 +161,33 @@ public class FindCommandTest {
     @Test
     public void equals_null_returnsFalse() {
         assertFalse(TEST_FIND_COMMAND_ALL_PRESENT.equals(null));
+    }
+
+    @Test
+    public void execute_selectedInitiallyNull_selectedNoChange() {
+        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.setSelectedPerson(null);
+        TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
+
+        assertNull(MODEL.getSelectedPerson().getValue());
+    }
+
+    @Test
+    public void execute_selectedInitiallyPersonNotRemoved_selectedNotChanged() {
+        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.setSelectedPerson(CARL);
+        TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
+
+        assertEquals(CARL, MODEL.getSelectedPerson().getValue());
+    }
+
+    @Test
+    public void execute_selectedInitiallyPersonThenRemoved_selectedChangeToNull() {
+        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.setSelectedPerson(DANIEL);
+        TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
+
+        assertNull(MODEL.getSelectedPerson().getValue());
     }
 
     @Test

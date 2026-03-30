@@ -47,10 +47,11 @@ class JsonAdaptedLogEntry {
         if (timestamp == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "timestamp"));
         }
+        final String trimmedTimestamp = timestamp.trim();
 
         final LocalDateTime modelTimestamp;
         try {
-            modelTimestamp = LocalDateTime.parse(timestamp);
+            modelTimestamp = LocalDateTime.parse(trimmedTimestamp);
         } catch (DateTimeParseException e) {
             throw new IllegalValueException(MESSAGE_INVALID_TIMESTAMP);
         }
@@ -58,10 +59,11 @@ class JsonAdaptedLogEntry {
         if (message == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "message"));
         }
-        if (!LogMessage.isValidLogMessage(message)) {
+        final String trimmedMessage = message.trim();
+        if (!LogMessage.isValidLogMessage(trimmedMessage)) {
             throw new IllegalValueException(LogMessage.MESSAGE_CONSTRAINTS);
         }
-        final LogMessage modelMessage = new LogMessage(message);
+        final LogMessage modelMessage = new LogMessage(trimmedMessage);
 
         return new LogEntry(modelTimestamp, modelMessage);
     }

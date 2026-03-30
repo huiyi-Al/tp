@@ -49,7 +49,8 @@ public class LogEntryListCell extends ListCell<LogEntry> {
             return;
         }
 
-        int displayIndex = getIndex() + 1;
+        int totalLogs = getListView() == null ? 0 : getListView().getItems().size();
+        int displayIndex = LogEntryDisplayIndex.calculateDisplayIndex(getIndex(), totalLogs);
         titleLabel.setText("Log " + displayIndex);
         timestampLabel.setText(logEntry.getTimestamp().format(LOG_TIMESTAMP_FORMATTER));
         messageLabel.setText(logEntry.getMessage().value);

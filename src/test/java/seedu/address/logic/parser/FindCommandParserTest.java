@@ -96,7 +96,7 @@ public class FindCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
-    /*
+
     @Test
     public void parse_preambleWithFields_throwParseException() {
         argMultimap.clear();
@@ -106,7 +106,26 @@ public class FindCommandParserTest {
         assertParseFailure(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME3, PREFIX_NAME, TEST_NAME2),
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
-    */
+
+    @Test
+    public void parse_preambleAndValidFieldCorrectOrder_throwsParseException() {
+        // No leading and trailing whitespaces
+        assertParseFailure(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME3, PREFIX_NAME, TEST_NAME2),
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        // Multiple whitespaces between keywords
+        assertParseFailure(parser, MessageFormat.format("\n {0} \n {1}\t{2}\t", TEST_NAME3, PREFIX_NAME,
+                TEST_NAME2), String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_preambleAndValidFieldWrongOrder_throwsParseException() {
+        // No leading and trailing whitespaces
+        assertParseFailure(parser, MessageFormat.format("{0} {1}{2}", TEST_NAME2, PREFIX_NAME, TEST_NAME3),
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        // Multiple whitespaces between keywords
+        assertParseFailure(parser, MessageFormat.format("\t{0}\t {1} \n{2}\n", TEST_NAME2, PREFIX_NAME,
+                TEST_NAME3), String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
 
     @Test
     public void parse_emptyField_throwsParseException() {

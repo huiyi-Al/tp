@@ -92,42 +92,47 @@ class JsonAdaptedPerson {
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
-        if (!Name.isValidName(name)) {
+        final String trimmedName = name.trim();
+        if (!Name.isValidName(trimmedName)) {
             throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
         }
-        final Name modelName = new Name(name);
+        final Name modelName = new Name(trimmedName);
 
         if (phone == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName()));
         }
-        if (!Phone.isValidPhone(phone)) {
+        final String trimmedPhone = phone.trim();
+        if (!Phone.isValidPhone(trimmedPhone)) {
             throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
         }
-        final Phone modelPhone = new Phone(phone);
+        final Phone modelPhone = new Phone(trimmedPhone);
 
         if (email == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
         }
-        if (!Email.isValidEmail(email)) {
+        final String trimmedEmail = email.trim();
+        if (!Email.isValidEmail(trimmedEmail)) {
             throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
         }
-        final Email modelEmail = new Email(email);
+        final Email modelEmail = new Email(trimmedEmail);
 
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
         }
-        if (!Address.isValidAddress(address)) {
+        final String trimmedAddress = address.trim();
+        if (!Address.isValidAddress(trimmedAddress)) {
             throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
         }
-        final Address modelAddress = new Address(address);
+        final Address modelAddress = new Address(trimmedAddress);
 
         if (notes == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Notes.class.getSimpleName()));
         }
-        if (!Notes.isValidNotes(notes)) {
+        final String trimmedNotes = notes.trim();
+        if (!Notes.isValidNotes(trimmedNotes)) {
             throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
         }
-        final Notes modelNotes = new Notes(notes);
+        final Notes modelNotes = new Notes(trimmedNotes);
 
         final LogHistory modelLogHistory = new LogHistory(personLogs);
 
