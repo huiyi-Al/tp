@@ -27,11 +27,12 @@ public class Notes {
     }
 
     /**
-     * Returns true if a given string is a valid notes.
+     * Returns true if a given string is valid notes.
+     * Length is measured in Unicode code points (not UTF-16 code units).
      */
     public static boolean isValidNotes(String test) {
         requireNonNull(test);
-        return test.length() <= MAX_LENGTH;
+        return test.codePointCount(0, test.length()) <= MAX_LENGTH;
     }
 
     @Override
