@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -27,6 +29,7 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private final SimpleObjectProperty<Person> selectedPerson =
             new SimpleObjectProperty<>();
+    private List<Predicate<Person>> activePredicates;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -38,7 +41,8 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.activePredicates = new ArrayList<>(List.of(PREDICATE_SHOW_ALL_PERSONS));
     }
 
     public ModelManager() {
@@ -112,7 +116,7 @@ public class ModelManager implements Model {
     @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        resetPredicatesFilteredPersonList();
 
         selectedPerson.set(person);
     }
@@ -142,7 +146,7 @@ public class ModelManager implements Model {
         addressBook.setTag(target, editedTag);
         refreshSelectedPersonIfTagAffected(target);
 
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        resetPredicatesFilteredPersonList();
     }
 
     @Override
@@ -152,7 +156,7 @@ public class ModelManager implements Model {
         addressBook.removeTag(target);
         refreshSelectedPersonIfTagAffected(target);
 
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        resetPredicatesFilteredPersonList();
     }
 
     /**
@@ -182,9 +186,27 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
+    public void resetPredicatesFilteredPersonList() {
+        activePredicates.clear();
+        addPredicateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        assert activePredicates.size() == 1;
+    }
+
+    @Override
+    public void singlePredicateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
-        filteredPersons.setPredicate(predicate);
+        activePredicates.clear();
+        resetPredicatesFilteredPersonList();
+        addPredicateFilteredPersonList(predicate);
+        assert activePredicates.size() == 2;
+    }
+
+    @Override
+    public void addPredicateFilteredPersonList(Predicate<Person> predicate) {
+        requireNonNull(predicate);
+        activePredicates.add(predicate);
+        Predicate<Person> uberPredicate = activePredicates.stream().reduce(p -> true, Predicate::and);
+        filteredPersons.setPredicate(uberPredicate);
     }
 
     @Override

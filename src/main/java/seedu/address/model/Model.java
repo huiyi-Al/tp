@@ -13,10 +13,14 @@ import seedu.address.model.tag.Tag;
  * The API of the Model component.
  */
 public interface Model {
-    /** {@code Predicate} that always evaluate to true */
+    /**
+     * {@code Predicate} that always evaluate to true
+     */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
 
-    /** {@code Predicate} that always evaluate to true for tags */
+    /**
+     * {@code Predicate} that always evaluate to true for tags
+     */
     Predicate<Tag> PREDICATE_SHOW_ALL_TAGS = unused -> true;
 
     /**
@@ -54,7 +58,9 @@ public interface Model {
      */
     void setAddressBook(ReadOnlyAddressBook addressBook);
 
-    /** Returns the AddressBook */
+    /**
+     * Returns the AddressBook
+     */
     ReadOnlyAddressBook getAddressBook();
 
     /**
@@ -99,14 +105,27 @@ public interface Model {
      */
     void deleteTag(Tag target);
 
-    /** Returns an unmodifiable view of the filtered person list */
+    /**
+     * Returns an unmodifiable view of the filtered person list
+     */
     ObservableList<Person> getFilteredPersonList();
 
     /**
-     * Updates the filter of the filtered person list to filter by the given {@code predicate}.
+     * Reset the filter on the filtered person list to one that shows all persons.
+     */
+    void resetPredicatesFilteredPersonList();
+
+    /**
+     * Clear all filters, then apply given {@code predicate}, onto the filtered person list.
+     */
+    void singlePredicateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Updates filtered person list to filter further by the given {@code predicate}.
+     *
      * @throws NullPointerException if {@code predicate} is null.
      */
-    void updateFilteredPersonList(Predicate<Person> predicate);
+    void addPredicateFilteredPersonList(Predicate<Person> predicate);
 
     ObservableValue<Person> getSelectedPerson();
 
