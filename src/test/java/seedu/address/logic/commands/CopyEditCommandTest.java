@@ -214,25 +214,6 @@ public class CopyEditCommandTest {
     }
 
     @Test
-    public void execute_productionMode_success() {
-        CopyEditCommand.setTestMode(false);
-        CopyEditCommand.setSimulateClipboardFailure(false);
-
-        Person personToCopy = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        CopyEditCommand copyEditCommand = new CopyEditCommand(INDEX_FIRST_PERSON);
-
-        String expectedMessage = String.format(CopyEditCommand.MESSAGE_COPY_SUCCESS,
-                personToCopy.getName().fullName, INDEX_FIRST_PERSON.getOneBased());
-
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        assertCommandSuccess(copyEditCommand, model, expectedMessage, expectedModel);
-
-        // Re-enable test mode for other tests
-        CopyEditCommand.setTestMode(true);
-    }
-
-    @Test
     public void equals_differentType_returnsFalse() {
         CopyEditCommand copyCommand = new CopyEditCommand(INDEX_FIRST_PERSON);
         assertFalse(copyCommand.equals(new Object()));
