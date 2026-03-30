@@ -11,7 +11,8 @@ public class Notes {
 
     public static final String DEFAULT_NOTE = "";
     public static final int MAX_LENGTH = 200;
-    public static final String MESSAGE_CONSTRAINTS = "Notes should be between 0 and 200 characters.";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Notes should be between 0 and 200 characters (measured in Unicode code points).";
 
     public final String value;
 
