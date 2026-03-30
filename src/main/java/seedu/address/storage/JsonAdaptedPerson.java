@@ -136,8 +136,9 @@ class JsonAdaptedPerson {
             final String trimmedNotes = notes.trim();
             if (!notes.equals(trimmedNotes)) {
                 logger.fine(() -> String.format("Normalized notes from storage record by trimming boundary "
-                                + "whitespace: rawLength=%d, trimmedLength=%d",
-                        notes.length(), trimmedNotes.length()));
+                                + "whitespace: rawCodePointLength=%d, trimmedCodePointLength=%d",
+                        notes.codePointCount(0, notes.length()),
+                        trimmedNotes.codePointCount(0, trimmedNotes.length())));
             }
             if (!Notes.isValidNotes(trimmedNotes)) {
                 throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
