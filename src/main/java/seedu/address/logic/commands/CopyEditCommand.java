@@ -109,7 +109,7 @@ public class CopyEditCommand extends Command {
     /**
      * Generates the edit command format with current client details.
      */
-    private String generateEditCommand(Person person, int personIndex) {
+    String generateEditCommand(Person person, int personIndex) {
         StringBuilder sb = new StringBuilder();
         sb.append(EditCommand.COMMAND_WORD).append(" ").append(personIndex).append(" ");
         sb.append(PREFIX_NAME).append(person.getName().fullName).append(" ");
