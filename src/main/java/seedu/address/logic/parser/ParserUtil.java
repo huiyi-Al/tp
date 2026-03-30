@@ -5,8 +5,10 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
@@ -22,6 +24,7 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    private static final Logger logger = LogsCenter.getLogger(ParserUtil.class);
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -105,6 +108,11 @@ public class ParserUtil {
     public static Notes parseNotes(String notes) throws ParseException {
         requireNonNull(notes);
         String trimmedNotes = notes.trim();
+        if (!notes.equals(trimmedNotes)) {
+            logger.fine(() -> String.format("Normalized notes from parser input by trimming boundary whitespace: "
+                            + "rawLength=%d, trimmedLength=%d",
+                    notes.length(), trimmedNotes.length()));
+        }
         if (!Notes.isValidNotes(trimmedNotes)) {
             throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
         }

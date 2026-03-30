@@ -8,10 +8,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 
 /**
@@ -41,6 +45,7 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same phone number (ignoring formatting)"
             + " or email already exists";
+    private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 
     private final Person toAdd;
 
@@ -60,8 +65,15 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
+        logger.fine(() -> "Executing add with notes state: " + describeNotesState(toAdd.getNotes()));
         model.addPerson(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+    }
+
+    private static String describeNotesState(Notes notes) {
+        int codePointLength = notes.value.codePointCount(0, notes.value.length());
+        String emptiness = notes.value.isBlank() ? "blank" : "non-blank";
+        return String.format("%s, codePointLength=%d", emptiness, codePointLength);
     }
 
     @Override

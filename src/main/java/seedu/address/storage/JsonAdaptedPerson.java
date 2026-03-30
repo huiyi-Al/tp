@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -26,6 +28,7 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    private static final Logger logger = LogsCenter.getLogger(JsonAdaptedPerson.class);
 
     private final String name;
     private final String phone;
@@ -127,9 +130,15 @@ class JsonAdaptedPerson {
 
         final Notes modelNotes;
         if (notes == null) {
+            logger.fine("Missing notes field in storage record; defaulting to empty notes.");
             modelNotes = new Notes(Notes.DEFAULT_NOTE);
         } else {
             final String trimmedNotes = notes.trim();
+            if (!notes.equals(trimmedNotes)) {
+                logger.fine(() -> String.format("Normalized notes from storage record by trimming boundary "
+                                + "whitespace: rawLength=%d, trimmedLength=%d",
+                        notes.length(), trimmedNotes.length()));
+            }
             if (!Notes.isValidNotes(trimmedNotes)) {
                 throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
             }
