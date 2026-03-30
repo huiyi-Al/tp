@@ -115,9 +115,15 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_multiQuery_throwsParseException() {
-        assertParseFailure(parser, TEST_MULTIQUERY,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    public void parse_multiQuery_returnDifferentFindCommand() {
+        argMultimap = ArgumentTokenizer.tokenize(TEST_MULTIQUERY, PREFIX_NAME);
+        expected = generateFindCommand();
+
+        ArgumentMultimap argMultimapIndivName = ArgumentTokenizer.tokenize(TEST_MULTINAME1, PREFIX_NAME);
+        FindCommand expectedIndivName = new FindCommand(new SearchPredicate(argMultimapIndivName));
+
+        assertParseSuccess(parser, TEST_MULTIQUERY, expected);
+        assertParseDifferent(parser, TEST_MULTIQUERY, expectedIndivName);
     }
 
     @Test

@@ -146,8 +146,7 @@ Format:
 
 * At least one of the optional fields must be provided.
 * If a field is specified, it must not be empty.
-* A field can be specified as many times as keywords are required, but it can never take more than one keyword at a
-  time.
+* A field can be specified as many times as keywords are required.
 * The order in which the fields are specified does not matter.
 * Only the fields specified are searched against.
 * In all fields, the search is case-insensitive. e.g. In name field, `hans` will match `Hans`.
@@ -163,8 +162,8 @@ Examples:
 
 * `find` is not a valid command as no fields are provided.
 * `find --name=Alice --phone= --email=gmail.com` is not a valid command as phone field is specified but empty.
-* `find --name=Alice Bob` is not a valid command as name field has more than one keyword provided at once.
-  `find --name=Alice --name=Bob` is the correct way to write the command.
+* `find --name=Alice Bob` will have 1 keyword `Alice Bob`.
+* `find --name=Alice --name=Bob` will have 2 name keywords `Alice` and `Bob`.
 * `find --name=jon --name=Jack` can return persons with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
 * `find --phone=1234` can return persons with numbers `91234567` and `94561234`.
 * `find --email=.edu` can return persons with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.

@@ -32,10 +32,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
         boolean anyPresentButEmpty = EXPECTED_PREFIXES.stream()
                 .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        boolean anyPrefixMultipleQuery = EXPECTED_PREFIXES.stream()
-                .anyMatch(p -> argMultimap.getAllValues(p).stream().anyMatch(v -> v
-                        .matches(".*\\s.*")));
-        if (nonePresent || anyPresentButEmpty || anyPrefixMultipleQuery) {
+        if (nonePresent || anyPresentButEmpty) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
