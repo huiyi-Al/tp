@@ -141,6 +141,12 @@ Examples:
 Finds persons whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
 specified per field. A by-name sorted list of such persons is returned.
 
+Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filter` operations can be
+chained together to shorten the list.
+
+For example, if there are 10 clients initially on the list, and a `find` / `filter` operations shortens it to 5 clients,
+any subsequent `find` / `filter` operations would only search within those 5 clients.
+
 Format:
 `find [--name=SUBNAME [MORE_SUBNAMES]] [--phone=SUBNUMBER [MORE_SUBNUMBERS]] [--email=SUBEMAIL [MORE_SUBEMAILS]] [--address=SUBADDRESS [MORE_SUBADDRESS]] [--tag=TAG [MORE_TAGS]]`
 
@@ -213,9 +219,9 @@ Copies the edit command format for the specified client, allowing you to easily 
 
 Format: `copyedit INDEX`
 
-* Copies the edit command with all current details of the client at the specified `INDEX`. 
-* The index refers to the index number shown in the displayed client list. 
-* The index must be a positive integer 1, 2, 3, …​ 
+* Copies the edit command with all current details of the client at the specified `INDEX`.
+* The index refers to the index number shown in the displayed client list.
+* The index must be a positive integer 1, 2, 3, …​
 * The copied format includes the client's name, phone, email, address, notes, and all tags.
 
 ### Viewing client details: `view`

@@ -330,7 +330,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. `user` specifies one or multiple fields (name, phone number, email address, physical address, tags) with one or
    multiple keywords per field as a search query.
 2. `Linkline` uses the query provided to search and list (lexicographically by name) the clients who have at least one
-   field match successfully against the specified fields.
+   field match successfully against the specified fields (This search is done only against the currently filtered
+   clients).
 3. Use case ends.
 
 **Extensions**
