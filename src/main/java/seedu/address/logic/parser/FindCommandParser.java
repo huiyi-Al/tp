@@ -41,44 +41,27 @@ public class FindCommandParser implements Parser<FindCommand> {
         logger.fine(MessageFormat.format("Parsing args: {0}", args));
 
         String trimmedArgs = args.trim();
-        logger.fine(MessageFormat.format("Trimmed args: {0}", trimmedArgs));
-
         if (trimmedArgs.isEmpty()) {
             logger.warning("Arguments are empty after trimming");
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
+        trimmedArgs = MessageFormat.format(" {0}", trimmedArgs);
 
         List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(
                 PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
-        logger.fine(MessageFormat.format("Expected prefixes: {0}", expectedPrefixes));
-
-        trimmedArgs = MessageFormat.format(" {0}", trimmedArgs);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
         logger.fine(MessageFormat.format("ArgumentMultimap created: {0}", argMultimap));
 
         boolean nonePresent = expectedPrefixes.stream()
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
-        if (nonePresent) {
-            logger.warning("Validation failed: no prefixes present");
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
         boolean anyPresentButEmpty = expectedPrefixes.stream()
                 .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        if (anyPresentButEmpty) {
-            logger.warning("Validation failed: some prefixes have empty values");
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
         boolean anyPrefixMultipleQuery = expectedPrefixes.stream()
                 .anyMatch(p -> argMultimap.getAllValues(p).stream().anyMatch(v -> v
                         .matches(".*\\s.*")));
-        if (anyPrefixMultipleQuery) {
-            logger.warning("Validation failed: some prefixes have multiple queries");
+        if (nonePresent || anyPresentButEmpty || anyPrefixMultipleQuery) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
