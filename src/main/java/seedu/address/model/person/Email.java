@@ -24,12 +24,12 @@ public class Email {
             + "7. The domain name must:\n"
             + "    - end with a domain label at least 2 characters long\n"
             + "    - have each domain label start and end with alphanumeric characters\n"
-            + "    - have each domain label consist of alphanumeric characters, separated only by hyphens, if any.\n"
-            + "8. Each domain label must not exceed 63 characters.";
+            + "    - have each domain label not exceed 63 characters, and consist of alphanumeric characters, "
+            + "separated only by hyphens, if any.";
 
 
     private static final String ALPHANUMERIC = "a-zA-Z0-9";
-    // Total length limit of 254
+    // Total length limit of 320
     private static final String LENGTH_CHECK = "(?=.{1,320}$)";
     // Local part length 1-64
     private static final String LOCAL_PART_LENGTH_CHECK = "(?=[^@]{1,64}@)";
