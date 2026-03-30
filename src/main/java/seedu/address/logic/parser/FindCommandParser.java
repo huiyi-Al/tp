@@ -24,6 +24,22 @@ import seedu.address.model.person.predicates.SearchPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     private static final Logger logger = Logger.getLogger(FindCommandParser.class.getName());
+    private static final List<Prefix> EXPECTED_PREFIXES = new ArrayList<>(Arrays.asList(
+            PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
+
+    private void checkValidFormat(ArgumentMultimap argMultimap) throws ParseException {
+        boolean nonePresent = EXPECTED_PREFIXES.stream()
+                .allMatch(p -> argMultimap.getValue(p).isEmpty());
+        boolean anyPresentButEmpty = EXPECTED_PREFIXES.stream()
+                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
+        boolean anyPrefixMultipleQuery = EXPECTED_PREFIXES.stream()
+                .anyMatch(p -> argMultimap.getAllValues(p).stream().anyMatch(v -> v
+                        .matches(".*\\s.*")));
+        if (nonePresent || anyPresentButEmpty || anyPrefixMultipleQuery) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
 
     /**
      * Parses the given {@code args} to return a {@code FindCommand} object for execution.
@@ -48,23 +64,11 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         trimmedArgs = MessageFormat.format(" {0}", trimmedArgs);
 
-        List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
+                trimmedArgs, EXPECTED_PREFIXES.toArray(new Prefix[0]));
         logger.fine(MessageFormat.format("ArgumentMultimap created: {0}", argMultimap));
 
-        boolean nonePresent = expectedPrefixes.stream()
-                .allMatch(p -> argMultimap.getValue(p).isEmpty());
-        boolean anyPresentButEmpty = expectedPrefixes.stream()
-                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        boolean anyPrefixMultipleQuery = expectedPrefixes.stream()
-                .anyMatch(p -> argMultimap.getAllValues(p).stream().anyMatch(v -> v
-                        .matches(".*\\s.*")));
-        if (nonePresent || anyPresentButEmpty || anyPrefixMultipleQuery) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
+        checkValidFormat(argMultimap);
 
         SearchPredicate predicate = new SearchPredicate(argMultimap);
         logger.fine(MessageFormat.format("SearchPredicate created: {0}", predicate));
