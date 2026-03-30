@@ -30,6 +30,9 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_NOTES = "a".repeat(201);
+    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
+    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(200);
+    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(201);
     private static final String INVALID_TAG = " ";
     private static final String INVALID_LOG_TIMESTAMP = "22-03-2026 14:05:31";
 
@@ -149,6 +152,42 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                         INVALID_NOTES, VALID_LOGS, VALID_TAGS);
+        String expectedMessage = Notes.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_notesAtBoundaryLength_returnsPerson() throws Exception {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        MAX_LENGTH_NOTES, VALID_LOGS, VALID_TAGS);
+        Person modelPerson = person.toModelType();
+        assertEquals(new Notes(MAX_LENGTH_NOTES), modelPerson.getNotes());
+    }
+
+    @Test
+    public void toModelType_notesAtBoundaryLengthWithWhitespace_returnsTrimmedPerson() throws Exception {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        " " + MAX_LENGTH_NOTES + " ", VALID_LOGS, VALID_TAGS);
+        Person modelPerson = person.toModelType();
+        assertEquals(new Notes(MAX_LENGTH_NOTES), modelPerson.getNotes());
+    }
+
+    @Test
+    public void toModelType_notesAtUnicodeBoundaryLength_returnsPerson() throws Exception {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        MAX_LENGTH_EMOJI_NOTES, VALID_LOGS, VALID_TAGS);
+        Person modelPerson = person.toModelType();
+        assertEquals(new Notes(MAX_LENGTH_EMOJI_NOTES), modelPerson.getNotes());
+    }
+
+    @Test
+    public void toModelType_notesExceedUnicodeBoundary_throwsIllegalValueException() {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        TOO_LONG_EMOJI_NOTES, VALID_LOGS, VALID_TAGS);
         String expectedMessage = Notes.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
