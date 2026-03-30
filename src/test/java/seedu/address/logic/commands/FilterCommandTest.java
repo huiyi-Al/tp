@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -58,7 +57,7 @@ public class FilterCommandTest {
         TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays
                 .asList("AC-Service", "Plumbing"));
         FilterCommand command = new FilterCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.singlePredicateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(BENSON), model.getFilteredPersonList());
     }
@@ -71,14 +70,14 @@ public class FilterCommandTest {
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("NonExistentTag"));
         FilterCommand command = new FilterCommand(predicate);
 
-        expectedModel.updateFilteredPersonList(predicate);
+        expectedModel.singlePredicateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getFilteredPersonList());
     }
 
     @Test
     public void execute_selectedInitiallyNull_selectedNoChange() {
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.resetPredicatesFilteredPersonList();
         model.setSelectedPerson(null);
 
         TagsMatchAllKeywordsPredicate predicate =
@@ -92,7 +91,7 @@ public class FilterCommandTest {
 
     @Test
     public void execute_selectedInitiallyPersonNotRemoved_selectedNotChanged() {
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.resetPredicatesFilteredPersonList();
         model.setSelectedPerson(BENSON);
 
         TagsMatchAllKeywordsPredicate predicate =
@@ -106,7 +105,7 @@ public class FilterCommandTest {
 
     @Test
     public void execute_selectedInitiallyPersonThenRemoved_selectedChangeToNull() {
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.resetPredicatesFilteredPersonList();
         model.setSelectedPerson(BENSON);
 
         TagsMatchAllKeywordsPredicate predicate =

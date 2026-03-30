@@ -95,6 +95,7 @@ public class EditCommandTest {
     public void execute_filteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
+        @SuppressWarnings("unchecked")
         Predicate<Person> currentPredicate =
                 (Predicate<Person>) ((FilteredList<Person>) model.getFilteredPersonList()).getPredicate();
 
@@ -108,7 +109,7 @@ public class EditCommandTest {
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
-        expectedModel.updateFilteredPersonList(currentPredicate);
+        expectedModel.singlePredicateFilteredPersonList(currentPredicate);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
