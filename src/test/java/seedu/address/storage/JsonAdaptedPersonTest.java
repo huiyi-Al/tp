@@ -154,12 +154,13 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_nullNotes_throwsIllegalValueException() {
+    public void toModelType_nullNotes_returnsPersonWithDefaultNotes() throws Exception {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                         null, VALID_LOGS, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Notes.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(new Notes(Notes.DEFAULT_NOTE), modelPerson.getNotes());
     }
 
     @Test

@@ -125,14 +125,16 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(trimmedAddress);
 
+        final Notes modelNotes;
         if (notes == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Notes.class.getSimpleName()));
+            modelNotes = new Notes(Notes.DEFAULT_NOTE);
+        } else {
+            final String trimmedNotes = notes.trim();
+            if (!Notes.isValidNotes(trimmedNotes)) {
+                throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
+            }
+            modelNotes = new Notes(trimmedNotes);
         }
-        final String trimmedNotes = notes.trim();
-        if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
-        }
-        final Notes modelNotes = new Notes(trimmedNotes);
 
         final LogHistory modelLogHistory = new LogHistory(personLogs);
 
