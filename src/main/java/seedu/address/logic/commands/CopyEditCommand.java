@@ -1,6 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -105,15 +111,18 @@ public class CopyEditCommand extends Command {
      */
     private String generateEditCommand(Person person, int personIndex) {
         StringBuilder sb = new StringBuilder();
-        sb.append("edit ").append(personIndex).append(" ");
-        sb.append("--name=").append(person.getName().fullName).append(" ");
-        sb.append("--phone=").append(person.getPhone().value).append(" ");
-        sb.append("--email=").append(person.getEmail().value).append(" ");
-        sb.append("--address=").append(person.getAddress().value).append(" ");
-        sb.append("--notes=").append(person.getNotes().value).append(" ");
+        sb.append(EditCommand.COMMAND_WORD).append(" ").append(personIndex).append(" ");
+        sb.append(PREFIX_NAME).append(person.getName().fullName).append(" ");
+        sb.append(PREFIX_PHONE).append(person.getPhone().value).append(" ");
+        sb.append(PREFIX_EMAIL).append(person.getEmail().value).append(" ");
+        sb.append(PREFIX_ADDRESS).append(person.getAddress().value).append(" ");
+
+        if (!person.getNotes().value.isEmpty()) {
+            sb.append(PREFIX_NOTES).append(person.getNotes().value).append(" ");
+        }
 
         for (Tag tag : person.getTags()) {
-            sb.append("--tag=").append(tag.tagName).append(" ");
+            sb.append(PREFIX_TAG).append(tag.tagName).append(" ");
         }
 
         return sb.toString().trim();
