@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
@@ -99,6 +100,10 @@ public class EditCommand extends Command {
     }
 
     private static void logNotesTransition(Notes before, Notes after) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+
         int beforeLength = before.value.codePointCount(0, before.value.length());
         int afterLength = after.value.codePointCount(0, after.value.length());
         boolean wasBlank = before.value.isBlank();
