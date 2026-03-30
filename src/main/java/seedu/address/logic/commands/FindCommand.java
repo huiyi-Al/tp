@@ -10,9 +10,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
@@ -58,10 +60,15 @@ public class FindCommand extends Command {
         requireNonNull(model);
         logger.fine(MessageFormat.format("Executing FindCommand with predicate: {0}", searchPredicate));
 
+        Person lastSelectedPerson = model.getSelectedPerson().getValue();
         model.updateFilteredPersonList(searchPredicate);
         int resultSize = model.getFilteredPersonList().size();
-
         logger.fine(MessageFormat.format("Filtered person list size: {0}", resultSize));
+
+        if (lastSelectedPerson != null && !model.getFilteredPersonList().contains(lastSelectedPerson)) {
+            logger.fine("Last selected person no longer available. Resetting view panel");
+            model.setSelectedPerson(null);
+        }
 
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultSize));
