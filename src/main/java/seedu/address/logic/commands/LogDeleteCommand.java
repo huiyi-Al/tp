@@ -19,7 +19,7 @@ import seedu.address.model.person.log.LogHistory;
  */
 public class LogDeleteCommand extends Command {
 
-    public static final String COMMAND_WORD = "log-delete";
+    public static final String COMMAND_WORD = "logdelete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a log entry from the client identified by the index number used "

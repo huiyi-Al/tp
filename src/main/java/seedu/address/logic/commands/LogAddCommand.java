@@ -21,7 +21,7 @@ import seedu.address.model.person.log.LogMessage;
  */
 public class LogAddCommand extends Command {
 
-    public static final String COMMAND_WORD = "log-add";
+    public static final String COMMAND_WORD = "logadd";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a log entry to the client identified by the index number used in the displayed person list.\n"

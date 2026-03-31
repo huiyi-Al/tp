@@ -11,7 +11,7 @@ import seedu.address.model.person.log.LogEntry;
 import seedu.address.model.person.log.LogHistory;
 
 /**
- * Pending action for log-delete confirmation.
+ * Pending action for logdelete confirmation.
  */
 public class LogDeletePendingAction implements PendingAction {
 
