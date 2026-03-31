@@ -65,6 +65,11 @@ public class LogHistoryTest {
     }
 
     @Test
+    public void add_nullEntry_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new LogHistory().add(null));
+    }
+
+    @Test
     public void add_multipleEntries_keepsNewestFirst() {
         LogHistory updatedHistory = new LogHistory()
                 .add(LOG_ENTRY_1)
@@ -82,6 +87,19 @@ public class LogHistoryTest {
 
         assertEquals(List.of(LOG_ENTRY_3, LOG_ENTRY_2, LOG_ENTRY_1), updatedHistory.asUnmodifiableList());
         assertEquals(Optional.of(LOG_ENTRY_3), updatedHistory.getLatest());
+    }
+
+    @Test
+    public void add_sameTimestampEntries_preservesInsertionOrder() {
+        LocalDateTime sameTimestamp = LocalDateTime.of(2026, 3, 22, 11, 0);
+        LogEntry firstEntryAtTimestamp = new LogEntry(sameTimestamp, new LogMessage("First at same timestamp"));
+        LogEntry secondEntryAtTimestamp = new LogEntry(sameTimestamp, new LogMessage("Second at same timestamp"));
+
+        LogHistory updatedHistory = new LogHistory()
+                .add(firstEntryAtTimestamp)
+                .add(secondEntryAtTimestamp);
+
+        assertEquals(List.of(firstEntryAtTimestamp, secondEntryAtTimestamp), updatedHistory.asUnmodifiableList());
     }
 
     @Test
@@ -112,6 +130,18 @@ public class LogHistoryTest {
 
         assertEquals(List.of(LOG_ENTRY_3, LOG_ENTRY_2), updatedHistory.asUnmodifiableList());
         assertEquals(Optional.of(LOG_ENTRY_3), updatedHistory.getLatest());
+    }
+
+    @Test
+    public void delete_onlyEntry_resultsInEmptyHistory() {
+        LogHistory originalHistory = new LogHistory().add(LOG_ENTRY_1);
+
+        LogHistory updatedHistory = originalHistory.delete(Index.fromOneBased(1));
+
+        assertTrue(updatedHistory.isEmpty());
+        assertEquals(0, updatedHistory.size());
+        assertEquals(Optional.empty(), updatedHistory.getLatest());
+        assertTrue(updatedHistory.asUnmodifiableList().isEmpty());
     }
 
     @Test

@@ -21,6 +21,16 @@ public class LogDeleteCommandParserTest {
     }
 
     @Test
+    public void parse_validArgsWithExtraWhitespace_returnsLogDeleteCommand() {
+        assertParseSuccess(parser, "   1   2   ", new LogDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
+    }
+
+    @Test
+    public void parse_validArgsWithLeadingZeros_returnsLogDeleteCommand() {
+        assertParseSuccess(parser, "01 002", new LogDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
+    }
+
+    @Test
     public void parse_tooFewTokens_throwsParseException() {
         assertParseFailure(parser, "1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
@@ -33,14 +43,38 @@ public class LogDeleteCommandParserTest {
     }
 
     @Test
-    public void parse_invalidPersonIndex_throwsParseException() {
+    public void parse_nonNumericPersonIndex_throwsParseException() {
         assertParseFailure(parser, "a 1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_invalidLogIndex_throwsParseException() {
+    public void parse_zeroPersonIndex_throwsParseException() {
+        assertParseFailure(parser, "0 1",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_negativePersonIndex_throwsParseException() {
+        assertParseFailure(parser, "-1 1",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_nonNumericLogIndex_throwsParseException() {
         assertParseFailure(parser, "1 a",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_zeroLogIndex_throwsParseException() {
+        assertParseFailure(parser, "1 0",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_negativeLogIndex_throwsParseException() {
+        assertParseFailure(parser, "1 -1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogDeleteCommand.MESSAGE_USAGE));
     }
 
