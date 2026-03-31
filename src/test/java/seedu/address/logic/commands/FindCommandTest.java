@@ -11,7 +11,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -25,8 +24,10 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.ArgumentMultimap;
@@ -137,6 +138,12 @@ public class FindCommandTest {
     public FindCommandTest() {
     }
 
+    @BeforeEach
+    void resetsPredicates() {
+        MODEL.resetPredicatesFilteredPersonList();
+        EXPECTED_MODEL.resetPredicatesFilteredPersonList();
+    }
+
     @Test
     public void equals_sameObject_returnsTrue() {
         assertTrue(TEST_FIND_COMMAND_ALL_PRESENT.equals(TEST_FIND_COMMAND_ALL_PRESENT));
@@ -165,7 +172,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_selectedInitiallyNull_selectedNoChange() {
-        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.resetPredicatesFilteredPersonList();
         MODEL.setSelectedPerson(null);
         TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
 
@@ -174,7 +181,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_selectedInitiallyPersonNotRemoved_selectedNotChanged() {
-        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.resetPredicatesFilteredPersonList();
         MODEL.setSelectedPerson(CARL);
         TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
 
@@ -183,7 +190,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_selectedInitiallyPersonThenRemoved_selectedChangeToNull() {
-        MODEL.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        MODEL.resetPredicatesFilteredPersonList();
         MODEL.setSelectedPerson(DANIEL);
         TEST_FIND_COMMAND_NAME_ONLY.execute(MODEL);
 
@@ -192,7 +199,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_emptyPredicate_noPersonFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_EMPTY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_EMPTY);
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         assertCommandSuccess(TEST_FIND_COMMAND_EMPTY, MODEL, expectedMessage, EXPECTED_MODEL);
@@ -201,7 +208,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleSubNames_multiplePersonsFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_NAME_ONLY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_NAME_ONLY);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(CARL, ELLE, FIONA));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
@@ -211,7 +218,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleSubPhones_multiplePersonsFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_PHONE_ONLY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_PHONE_ONLY);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(CARL, GEORGE));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
@@ -221,7 +228,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleSubEmailAddresses_multiplePersonsFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_EMAIL_ONLY);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(DANIEL, ELLE, FIONA, GEORGE));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
@@ -231,7 +238,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleSubPhysicalAddresses_multiplePersonsFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_ADDRESS_ONLY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_ADDRESS_ONLY);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
@@ -241,7 +248,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleTag_multiplePersonsFound() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_TAG_ONLY);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_TAG_ONLY);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON, DANIEL, ELLE));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
@@ -251,12 +258,19 @@ public class FindCommandTest {
 
     @Test
     public void execute_allPresent_multiplePersonsUnion() {
-        EXPECTED_MODEL.updateFilteredPersonList(TEST_SEARCH_PREDICATE_ALL_PRESENT);
+        EXPECTED_MODEL.singlePredicateFilteredPersonList(TEST_SEARCH_PREDICATE_ALL_PRESENT);
         Set<Person> expectedFound = new HashSet<>(Arrays.asList(ALICE, BENSON, CARL, GEORGE, ELLE, FIONA, DANIEL));
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedFound.size());
         assertCommandSuccess(TEST_FIND_COMMAND_ALL_PRESENT, MODEL, expectedMessage, EXPECTED_MODEL);
         assertEquals(expectedFound, new HashSet<>(MODEL.getFilteredPersonList()));
+    }
+
+    @Test
+    public void execute_multiPredicates_subsetPersonsFound() {
+        TEST_FIND_COMMAND_EMAIL_ONLY.execute(MODEL);
+        TEST_FIND_COMMAND_PHONE_ONLY.execute(MODEL);
+        assertEquals(MODEL.getFilteredPersonList(), List.of(GEORGE));
     }
 
     @Test

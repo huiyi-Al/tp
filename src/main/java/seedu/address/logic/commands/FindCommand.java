@@ -61,7 +61,7 @@ public class FindCommand extends Command {
         logger.fine(MessageFormat.format("Executing FindCommand with predicate: {0}", searchPredicate));
 
         Person lastSelectedPerson = model.getSelectedPerson().getValue();
-        model.updateFilteredPersonList(searchPredicate);
+        model.addPredicateFilteredPersonList(searchPredicate);
         int resultSize = model.getFilteredPersonList().size();
         logger.fine(MessageFormat.format("Filtered person list size: {0}", resultSize));
 

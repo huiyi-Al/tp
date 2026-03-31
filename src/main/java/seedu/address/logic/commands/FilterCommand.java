@@ -31,7 +31,7 @@ public class FilterCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.updateFilteredPersonList(predicate);
+        model.addPredicateFilteredPersonList(predicate);
         Person lastSelectedPerson = model.getSelectedPerson().getValue();
         if (lastSelectedPerson != null && !model.getFilteredPersonList().contains(lastSelectedPerson)) {
             model.setSelectedPerson(null);

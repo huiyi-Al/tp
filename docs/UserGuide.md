@@ -141,6 +141,12 @@ Examples:
 Finds persons whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
 specified per field. A by-name sorted list of such persons is returned.
 
+Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filter` operations can be
+chained together to shorten the list.
+
+For example, if there are 10 clients initially on the list, and a `find` / `filter` operations shortens it to 5 clients,
+any subsequent `find` / `filter` operations would only search within those 5 clients.
+
 Format:
 `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`
 
