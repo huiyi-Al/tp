@@ -61,6 +61,19 @@ public class LogAddCommandParserTest {
     }
 
     @Test
+    public void parse_maxLengthEmojiMessage_returnsLogAddCommand() {
+        String maxLengthEmojiMessage = "😀".repeat(LogMessage.MAX_LENGTH);
+        assertParseSuccess(parser, "1 " + maxLengthEmojiMessage,
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(maxLengthEmojiMessage)));
+    }
+
+    @Test
+    public void parse_tooLongEmojiMessage_throwsParseException() {
+        String tooLongEmojiMessage = "😀".repeat(LogMessage.MAX_LENGTH + 1);
+        assertParseFailure(parser, "1 " + tooLongEmojiMessage, LogMessage.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_nullArgs_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> parser.parse(null));
     }
