@@ -74,7 +74,6 @@ public class LogHistory {
         requireNonNull(entry);
         List<LogEntry> updatedEntries = new ArrayList<>(entries);
         updatedEntries.add(entry);
-        updatedEntries.sort(NEWEST_FIRST_COMPARATOR);
         return new LogHistory(updatedEntries);
     }
 
