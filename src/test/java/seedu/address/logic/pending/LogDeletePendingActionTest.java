@@ -36,7 +36,8 @@ public class LogDeletePendingActionTest {
         logHistory = new LogHistory().add(log1).add(log2);
 
         person = ALICE;
-        pendingAction = new LogDeletePendingAction(person, INDEX_FIRST_PERSON, INDEX_FIRST_LOG, logHistory);
+        pendingAction = new LogDeletePendingAction(person, INDEX_FIRST_PERSON,
+                INDEX_FIRST_LOG, INDEX_SECOND_LOG, logHistory);
     }
 
     @Test

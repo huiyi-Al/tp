@@ -26,6 +26,7 @@ public class LogDeleteCommand extends Command {
             + "in the displayed person list.\n"
             + "Parameters: PERSON_INDEX LOG_INDEX\n"
             + "Example: " + COMMAND_WORD + " 2 1\n"
+            + "The LOG_INDEX refers to the log number shown in the UI.\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_SUCCESS = "Deleted log %1$d from client: %2$s";
@@ -77,11 +78,13 @@ public class LogDeleteCommand extends Command {
         if (logHistory.isEmpty()) {
             throw new CommandException(MESSAGE_NO_LOGS);
         }
-        if (logIndex.getZeroBased() >= logHistory.size()) {
+        if (logIndex.getOneBased() > logHistory.size()) {
             throw new CommandException(MESSAGE_INVALID_LOG_DISPLAYED_INDEX);
         }
 
-        PendingAction pendingAction = new LogDeletePendingAction(targetPerson, personIndex, logIndex, logHistory);
+        Index storageLogIndex = Index.fromZeroBased(logHistory.size() - logIndex.getOneBased());
+        PendingAction pendingAction =
+                new LogDeletePendingAction(targetPerson, personIndex, logIndex, storageLogIndex, logHistory);
         return new CommandResult(pendingAction.getConfirmationMessage(), pendingAction);
     }
 
