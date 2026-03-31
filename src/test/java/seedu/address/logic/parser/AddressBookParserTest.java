@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CopyAddrCommand;
+import seedu.address.logic.commands.CopyEditCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -166,6 +167,13 @@ public class AddressBookParserTest {
         CopyAddrCommand command = (CopyAddrCommand) parser.parseCommand(
                 CopyAddrCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new CopyAddrCommand(INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_copyedit() throws Exception {
+        CopyEditCommand command = (CopyEditCommand) parser.parseCommand(
+                CopyEditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new CopyEditCommand(INDEX_FIRST_PERSON), command);
     }
 
     @Test
