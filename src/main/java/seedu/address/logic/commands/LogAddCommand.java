@@ -26,7 +26,7 @@ public class LogAddCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a log entry to the client identified by the index number used in the displayed person list.\n"
             + "Parameters: "
-            + "PERSON_INDEX MESSAGE\n"
+            + "INDEX LOG_MESSAGE\n"
             + "Example: " + COMMAND_WORD + " "
             + "1 Observed leakage beneath sink during site visit.";
 
