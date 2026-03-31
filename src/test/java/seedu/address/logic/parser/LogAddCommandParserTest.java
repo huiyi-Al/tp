@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -29,6 +30,20 @@ public class LogAddCommandParserTest {
     }
 
     @Test
+    public void parse_validArgsWithExtraWhitespace_returnsLogAddCommand() {
+        String message = "Observed leakage beneath sink during site visit.";
+        assertParseSuccess(parser, "   1   " + message + "   ",
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(message)));
+    }
+
+    @Test
+    public void parse_validArgsWithTabDelimiter_returnsLogAddCommand() {
+        String message = "Observed leakage beneath sink during site visit.";
+        assertParseSuccess(parser, "1\t" + message,
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(message)));
+    }
+
+    @Test
     public void parse_messageTailPreserved_success() {
         String message = "Client requested follow-up   call next Wednesday.";
         assertParseSuccess(parser, "1 " + message,
@@ -42,8 +57,20 @@ public class LogAddCommandParserTest {
     }
 
     @Test
-    public void parse_invalidIndex_throwsParseException() {
+    public void parse_nonNumericIndex_throwsParseException() {
         assertParseFailure(parser, "a Valid message",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogAddCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_zeroIndex_throwsParseException() {
+        assertParseFailure(parser, "0 Valid message",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogAddCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_negativeIndex_throwsParseException() {
+        assertParseFailure(parser, "-1 Valid message",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogAddCommand.MESSAGE_USAGE));
     }
 
@@ -54,8 +81,40 @@ public class LogAddCommandParserTest {
     }
 
     @Test
+    public void parse_minLengthMessage_returnsLogAddCommand() {
+        String minLengthMessage = "a";
+        assertParseSuccess(parser, "1 " + minLengthMessage,
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(minLengthMessage)));
+    }
+
+    @Test
+    public void parse_maxLengthMessage_returnsLogAddCommand() {
+        String maxLengthMessage = "a".repeat(LogMessage.MAX_LENGTH);
+        assertParseSuccess(parser, "1 " + maxLengthMessage,
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(maxLengthMessage)));
+    }
+
+    @Test
     public void parse_tooLongMessage_throwsParseException() {
         String tooLongMessage = "a".repeat(LogMessage.MAX_LENGTH + 1);
         assertParseFailure(parser, "1 " + tooLongMessage, LogMessage.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_maxLengthEmojiMessage_returnsLogAddCommand() {
+        String maxLengthEmojiMessage = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH);
+        assertParseSuccess(parser, "1 " + maxLengthEmojiMessage,
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage(maxLengthEmojiMessage)));
+    }
+
+    @Test
+    public void parse_tooLongEmojiMessage_throwsParseException() {
+        String tooLongEmojiMessage = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH + 1);
+        assertParseFailure(parser, "1 " + tooLongEmojiMessage, LogMessage.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_nullArgs_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> parser.parse(null));
     }
 }

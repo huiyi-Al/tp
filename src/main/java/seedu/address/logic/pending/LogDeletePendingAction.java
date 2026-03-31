@@ -1,5 +1,9 @@
 package seedu.address.logic.pending;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
@@ -11,13 +15,15 @@ import seedu.address.model.person.log.LogEntry;
 import seedu.address.model.person.log.LogHistory;
 
 /**
- * Pending action for log-delete confirmation.
+ * Pending action for logdelete confirmation.
  */
 public class LogDeletePendingAction implements PendingAction {
+    private static final Logger logger = LogsCenter.getLogger(LogDeletePendingAction.class);
 
     private final Person person;
     private final Index personIndex;
-    private final Index logIndex;
+    private final Index displayLogIndex;
+    private final Index storageLogIndex;
     private final LogEntry logEntry;
     private final LogHistory originalLogHistory;
     private final String confirmationMessage;
@@ -34,25 +40,28 @@ public class LogDeletePendingAction implements PendingAction {
      *
      * @param person The person whose log entry is to be deleted.
      * @param personIndex The 1-based index of the person in the displayed list.
-     * @param logIndex The 1-based index of the log entry in the person's log history.
+     * @param displayLogIndex The 1-based log number shown in the UI.
+     * @param storageLogIndex The 1-based index of the log entry in the newest-first log history.
      * @param logHistory The current log history of the person (used to retrieve the log entry).
      */
-    public LogDeletePendingAction(Person person, Index personIndex, Index logIndex, LogHistory logHistory) {
+    public LogDeletePendingAction(Person person, Index personIndex, Index displayLogIndex,
+                                  Index storageLogIndex, LogHistory logHistory) {
         this.person = person;
         this.personIndex = personIndex;
-        this.logIndex = logIndex;
+        this.displayLogIndex = displayLogIndex;
+        this.storageLogIndex = storageLogIndex;
         this.originalLogHistory = logHistory;
 
-        int zeroBasedIndex = logIndex.getZeroBased();
+        int zeroBasedIndex = storageLogIndex.getZeroBased();
         this.logEntry = logHistory.asUnmodifiableList().get(zeroBasedIndex);
 
         this.confirmationMessage = String.format(LogDeleteCommand.MESSAGE_DELETE_CONFIRM,
                 person.getName().fullName,
-                logIndex.getOneBased(),
+                displayLogIndex.getOneBased(),
                 logEntry.getDescription(),
                 LogDeleteCommand.COMMAND_WORD,
                 personIndex.getOneBased(),
-                logIndex.getOneBased());
+                displayLogIndex.getOneBased());
     }
 
     @Override
@@ -62,16 +71,18 @@ public class LogDeletePendingAction implements PendingAction {
         }
         LogDeleteCommand logDeleteCommand = (LogDeleteCommand) nextCommand;
         return logDeleteCommand.getPersonIndex().equals(personIndex)
-                && logDeleteCommand.getLogIndex().equals(logIndex);
+                && logDeleteCommand.getLogIndex().equals(displayLogIndex);
     }
 
     @Override
     public CommandResult complete(Model model) throws CommandException {
-        LogHistory updatedLogHistory = originalLogHistory.delete(logIndex);
+        int previousLogCount = originalLogHistory.size();
+        LogHistory updatedLogHistory = originalLogHistory.delete(storageLogIndex);
         Person editedPerson = createPersonWithUpdatedLogHistory(person, updatedLogHistory);
         model.setPerson(person, editedPerson);
+        logConfirmedDeletion(previousLogCount, updatedLogHistory.size());
         return new CommandResult(String.format(LogDeleteCommand.MESSAGE_SUCCESS,
-                logIndex.getOneBased(), person.getName().fullName));
+                displayLogIndex.getOneBased(), person.getName().fullName));
     }
 
     @Override
@@ -88,5 +99,18 @@ public class LogDeletePendingAction implements PendingAction {
                 original.getNotes(),
                 updatedLogHistory,
                 original.getTags());
+    }
+
+    private void logConfirmedDeletion(int previousLogCount, int updatedLogCount) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+        logger.fine(() -> String.format("logdelete confirmed for person index %d. display index %d "
+                        + "(storage index %d). Log count: %d -> %d",
+                personIndex.getOneBased(),
+                displayLogIndex.getOneBased(),
+                storageLogIndex.getOneBased(),
+                previousLogCount,
+                updatedLogCount));
     }
 }

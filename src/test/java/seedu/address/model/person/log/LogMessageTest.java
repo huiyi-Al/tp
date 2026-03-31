@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 public class LogMessageTest {
 
     private static final String VALID_MESSAGE = "Observed leakage below sink cabinet.";
+    private static final String MIN_LENGTH_MESSAGE = "a";
+    private static final String MAX_LENGTH_MESSAGE = "a".repeat(LogMessage.MAX_LENGTH);
     private static final String TOO_LONG_MESSAGE = "a".repeat(LogMessage.MAX_LENGTH + 1);
+    private static final String MAX_LENGTH_EMOJI_MESSAGE = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH);
+    private static final String TOO_LONG_EMOJI_MESSAGE = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH + 1);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -19,16 +23,22 @@ public class LogMessageTest {
 
     @Test
     public void constructor_invalidLogMessage_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new LogMessage("   "));
-        assertThrows(IllegalArgumentException.class, () -> new LogMessage("  " + VALID_MESSAGE));
+        assertThrows(IllegalArgumentException.class, () -> new LogMessage(""));
         assertThrows(IllegalArgumentException.class, () -> new LogMessage(TOO_LONG_MESSAGE));
+        assertThrows(IllegalArgumentException.class, () -> new LogMessage(TOO_LONG_EMOJI_MESSAGE));
+    }
+
+    @Test
+    public void constructor_boundaryLengthMessages_success() {
+        assertEquals(MIN_LENGTH_MESSAGE, new LogMessage(MIN_LENGTH_MESSAGE).value);
+        assertEquals(MAX_LENGTH_MESSAGE, new LogMessage(MAX_LENGTH_MESSAGE).value);
     }
 
     @Test
     public void constructor_validLogMessage_preservesInput() {
-        String messageWithTrailingWhitespace = VALID_MESSAGE + "  ";
-        LogMessage logMessage = new LogMessage(messageWithTrailingWhitespace);
-        assertEquals(messageWithTrailingWhitespace, logMessage.value);
+        String messageWithOuterWhitespace = "  " + VALID_MESSAGE + "  ";
+        LogMessage logMessage = new LogMessage(messageWithOuterWhitespace);
+        assertEquals(messageWithOuterWhitespace, logMessage.value);
     }
 
     @Test
@@ -38,15 +48,18 @@ public class LogMessageTest {
 
         // invalid messages
         assertFalse(LogMessage.isValidLogMessage(""));
-        assertFalse(LogMessage.isValidLogMessage("   "));
-        assertFalse(LogMessage.isValidLogMessage(" leading whitespace"));
         assertFalse(LogMessage.isValidLogMessage(TOO_LONG_MESSAGE));
+        assertFalse(LogMessage.isValidLogMessage(TOO_LONG_EMOJI_MESSAGE));
 
         // valid messages
+        assertTrue(LogMessage.isValidLogMessage(MIN_LENGTH_MESSAGE));
+        assertTrue(LogMessage.isValidLogMessage(MAX_LENGTH_MESSAGE));
+        assertTrue(LogMessage.isValidLogMessage("   "));
+        assertTrue(LogMessage.isValidLogMessage(" leading whitespace"));
         assertTrue(LogMessage.isValidLogMessage("Call client at 2pm."));
         assertTrue(LogMessage.isValidLogMessage("Client asked for follow-up next Wednesday!"));
         assertTrue(LogMessage.isValidLogMessage("message with trailing spaces  "));
-        assertTrue(LogMessage.isValidLogMessage("a".repeat(LogMessage.MAX_LENGTH)));
+        assertTrue(LogMessage.isValidLogMessage(MAX_LENGTH_EMOJI_MESSAGE));
     }
 
     @Test

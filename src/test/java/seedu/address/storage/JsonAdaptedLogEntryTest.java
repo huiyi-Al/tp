@@ -16,7 +16,13 @@ public class JsonAdaptedLogEntryTest {
     private static final String VALID_TIMESTAMP = "2026-03-22T14:05:31";
     private static final String INVALID_TIMESTAMP = "22-03-2026 14:05:31";
     private static final String VALID_MESSAGE = "Observed leakage below sink cabinet.";
-    private static final String INVALID_MESSAGE = "   ";
+    private static final String MIN_LENGTH_MESSAGE = "a";
+    private static final String MAX_LENGTH_MESSAGE = "a".repeat(LogMessage.MAX_LENGTH);
+    private static final String TOO_LONG_MESSAGE = "a".repeat(LogMessage.MAX_LENGTH + 1);
+    private static final String MAX_LENGTH_EMOJI_MESSAGE = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH);
+    private static final String TOO_LONG_EMOJI_MESSAGE = "\uD83D\uDE00".repeat(LogMessage.MAX_LENGTH + 1);
+    private static final String WHITESPACE_ONLY_MESSAGE = "   ";
+    private static final String EMPTY_MESSAGE = "";
 
     @Test
     public void toModelType_validLogEntryDetails_returnsLogEntry() throws Exception {
@@ -29,6 +35,30 @@ public class JsonAdaptedLogEntryTest {
     public void toModelType_validLogEntryDetailsWithWhitespace_returnsTrimmedLogEntry() throws Exception {
         JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(" " + VALID_TIMESTAMP + " ", " " + VALID_MESSAGE + " ");
         LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP), new LogMessage(VALID_MESSAGE));
+        assertEquals(expectedLogEntry, logEntry.toModelType());
+    }
+
+    @Test
+    public void toModelType_minLengthMessageAfterTrim_returnsLogEntry() throws Exception {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, " " + MIN_LENGTH_MESSAGE + " ");
+        LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP),
+                new LogMessage(MIN_LENGTH_MESSAGE));
+        assertEquals(expectedLogEntry, logEntry.toModelType());
+    }
+
+    @Test
+    public void toModelType_maxLengthMessageAfterTrim_returnsLogEntry() throws Exception {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, " " + MAX_LENGTH_MESSAGE + " ");
+        LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP),
+                new LogMessage(MAX_LENGTH_MESSAGE));
+        assertEquals(expectedLogEntry, logEntry.toModelType());
+    }
+
+    @Test
+    public void toModelType_validLogEntryDetailsWithMaxEmojiMessage_returnsLogEntry() throws Exception {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, MAX_LENGTH_EMOJI_MESSAGE);
+        LogEntry expectedLogEntry = new LogEntry(LocalDateTime.parse(VALID_TIMESTAMP),
+                new LogMessage(MAX_LENGTH_EMOJI_MESSAGE));
         assertEquals(expectedLogEntry, logEntry.toModelType());
     }
 
@@ -46,8 +76,26 @@ public class JsonAdaptedLogEntryTest {
     }
 
     @Test
-    public void toModelType_invalidMessage_throwsIllegalValueException() {
-        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, INVALID_MESSAGE);
+    public void toModelType_whitespaceOnlyMessage_throwsIllegalValueException() {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, WHITESPACE_ONLY_MESSAGE);
+        assertThrows(IllegalValueException.class, LogMessage.MESSAGE_CONSTRAINTS, logEntry::toModelType);
+    }
+
+    @Test
+    public void toModelType_emptyMessage_throwsIllegalValueException() {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, EMPTY_MESSAGE);
+        assertThrows(IllegalValueException.class, LogMessage.MESSAGE_CONSTRAINTS, logEntry::toModelType);
+    }
+
+    @Test
+    public void toModelType_tooLongMessage_throwsIllegalValueException() {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, TOO_LONG_MESSAGE);
+        assertThrows(IllegalValueException.class, LogMessage.MESSAGE_CONSTRAINTS, logEntry::toModelType);
+    }
+
+    @Test
+    public void toModelType_tooLongEmojiMessage_throwsIllegalValueException() {
+        JsonAdaptedLogEntry logEntry = new JsonAdaptedLogEntry(VALID_TIMESTAMP, TOO_LONG_EMOJI_MESSAGE);
         assertThrows(IllegalValueException.class, LogMessage.MESSAGE_CONSTRAINTS, logEntry::toModelType);
     }
 

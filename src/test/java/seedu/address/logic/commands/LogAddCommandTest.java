@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -92,6 +93,14 @@ public class LogAddCommandTest {
 
         LogAddCommand logAddCommand = new LogAddCommand(INDEX_SECOND_PERSON, new LogMessage("Valid log message"));
         assertCommandFailure(logAddCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_nullTimestampSupplierValue_throwsNullPointerException() {
+        LogAddCommand logAddCommand =
+                new LogAddCommand(INDEX_FIRST_PERSON, new LogMessage("Valid log message"), () -> null);
+
+        assertThrows(NullPointerException.class, () -> logAddCommand.execute(model));
     }
 
     @Test

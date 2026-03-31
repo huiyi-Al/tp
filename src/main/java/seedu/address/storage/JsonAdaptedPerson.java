@@ -28,6 +28,7 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    public static final String NULL_LOG_ENTRY_MESSAGE = "Person's logs contain a null entry.";
     private static final Logger logger = LogsCenter.getLogger(JsonAdaptedPerson.class);
 
     private final String name;
@@ -89,6 +90,9 @@ class JsonAdaptedPerson {
 
         final List<LogEntry> personLogs = new ArrayList<>();
         for (JsonAdaptedLogEntry log : logs) {
+            if (log == null) {
+                throw new IllegalValueException(NULL_LOG_ENTRY_MESSAGE);
+            }
             personLogs.add(log.toModelType());
         }
 

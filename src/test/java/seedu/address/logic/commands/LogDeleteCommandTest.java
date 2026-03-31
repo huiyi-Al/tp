@@ -67,20 +67,52 @@ public class LogDeleteCommandTest {
     }
 
     @Test
+    public void execute_deleteFirstDisplayedLog_showsConfirmation() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LogEntry oldestLog = new LogEntry(LocalDateTime.of(2026, 3, 20, 9, 0), new LogMessage("Oldest"));
+        LogEntry middleLog = new LogEntry(LocalDateTime.of(2026, 3, 21, 9, 0), new LogMessage("Middle"));
+        LogEntry newestLog = new LogEntry(LocalDateTime.of(2026, 3, 22, 9, 0), new LogMessage("Newest"));
+        Person personWithLogs = new PersonBuilder(firstPerson)
+                .withLogHistory(new LogHistory().add(oldestLog).add(middleLog).add(newestLog))
+                .build();
+        model.setPerson(firstPerson, personWithLogs);
+
+        Index logIndex = Index.fromOneBased(1);
+        LogDeleteCommand logDeleteCommand = new LogDeleteCommand(INDEX_FIRST_PERSON, logIndex);
+
+        String expectedMessage = String.format(LogDeleteCommand.MESSAGE_DELETE_CONFIRM,
+                personWithLogs.getName().fullName,
+                logIndex.getOneBased(),
+                oldestLog.getDescription(),
+                LogDeleteCommand.COMMAND_WORD,
+                INDEX_FIRST_PERSON.getOneBased(),
+                logIndex.getOneBased());
+
+        try {
+            CommandResult result = logDeleteCommand.execute(model);
+            assertTrue(result.hasPendingAction());
+            assertEquals(expectedMessage, result.getFeedbackToUser());
+            assertTrue(result.getPendingAction().isPresent());
+        } catch (CommandException e) {
+            fail("Should not throw CommandException, should return CommandResult with PendingAction");
+        }
+    }
+
+    @Test
     public void execute_deleteLatestLog_showsConfirmation() {
         Person targetPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        Index latestLogIndex = Index.fromOneBased(1);
-        LogDeleteCommand logDeleteCommand = new LogDeleteCommand(INDEX_SECOND_PERSON, latestLogIndex);
+        Index latestLogDisplayIndex = Index.fromOneBased(targetPerson.getLogHistory().size());
+        LogDeleteCommand logDeleteCommand = new LogDeleteCommand(INDEX_SECOND_PERSON, latestLogDisplayIndex);
 
         LogEntry logToDelete = targetPerson.getLogHistory().asUnmodifiableList().get(0);
 
         String expectedMessage = String.format(LogDeleteCommand.MESSAGE_DELETE_CONFIRM,
                 targetPerson.getName().fullName,
-                latestLogIndex.getOneBased(),
+                latestLogDisplayIndex.getOneBased(),
                 logToDelete.getDescription(),
                 LogDeleteCommand.COMMAND_WORD,
                 INDEX_SECOND_PERSON.getOneBased(),
-                latestLogIndex.getOneBased());
+                latestLogDisplayIndex.getOneBased());
 
         try {
             CommandResult result = logDeleteCommand.execute(model);
@@ -126,8 +158,8 @@ public class LogDeleteCommandTest {
     @Test
     public void execute_confirmed_deletesLatestLogSuccess() throws Exception {
         Person targetPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        Index latestLogIndex = Index.fromOneBased(1);
-        LogDeleteCommand logDeleteCommand = new LogDeleteCommand(INDEX_SECOND_PERSON, latestLogIndex);
+        Index latestLogDisplayIndex = Index.fromOneBased(targetPerson.getLogHistory().size());
+        LogDeleteCommand logDeleteCommand = new LogDeleteCommand(INDEX_SECOND_PERSON, latestLogDisplayIndex);
 
         CommandResult firstResult = logDeleteCommand.execute(model);
         assertTrue(firstResult.hasPendingAction());
@@ -135,11 +167,13 @@ public class LogDeleteCommandTest {
 
         CommandResult result = pendingAction.complete(model);
 
+        Index latestStorageIndex = Index.fromZeroBased(
+                targetPerson.getLogHistory().size() - latestLogDisplayIndex.getOneBased());
         Person editedPerson = new PersonBuilder(targetPerson)
-                .withLogHistory(targetPerson.getLogHistory().delete(latestLogIndex))
+                .withLogHistory(targetPerson.getLogHistory().delete(latestStorageIndex))
                 .build();
         String expectedMessage = String.format(LogDeleteCommand.MESSAGE_SUCCESS,
-                latestLogIndex.getOneBased(), editedPerson.getName());
+                latestLogDisplayIndex.getOneBased(), editedPerson.getName());
         assertEquals(expectedMessage, result.getFeedbackToUser());
     }
 

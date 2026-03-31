@@ -9,10 +9,10 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class LogMessage {
 
+    public static final int MIN_LENGTH = 1;
     public static final int MAX_LENGTH = 1000;
-    public static final String VALIDATION_REGEX = "^\\S.{0,999}$";
     public static final String MESSAGE_CONSTRAINTS =
-            "Log messages should start with a non-whitespace character and be between 1 and 1000 characters.";
+            "Log messages should be between 1 and 1000 characters (measured in Unicode code points).";
 
     public final String value;
 
@@ -29,10 +29,12 @@ public class LogMessage {
 
     /**
      * Returns true if a given string is a valid log message.
+     * Length is measured in Unicode code points (not UTF-16 code units).
      */
     public static boolean isValidLogMessage(String test) {
         requireNonNull(test);
-        return test.matches(VALIDATION_REGEX);
+        int codePointLength = test.codePointCount(0, test.length());
+        return codePointLength >= MIN_LENGTH && codePointLength <= MAX_LENGTH;
     }
 
     @Override
