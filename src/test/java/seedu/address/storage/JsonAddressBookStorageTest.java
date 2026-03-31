@@ -23,6 +23,7 @@ import seedu.address.model.tag.Tag;
 
 public class JsonAddressBookStorageTest {
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonAddressBookStorageTest");
+    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
 
     @TempDir
     public Path testFolder;
@@ -77,6 +78,19 @@ public class JsonAddressBookStorageTest {
                 person.getLogHistory().asUnmodifiableList().get(0).getMessage().value);
         assertEquals(1, person.getTags().size());
         assertEquals(new Tag("AC-Service"), person.getTags().iterator().next());
+    }
+
+    @Test
+    public void readAddressBook_notesAtBoundaryLength_readsSuccessfully() throws Exception {
+        ReadOnlyAddressBook readBack = readAddressBook("notesBoundaryAddressBook.json").get();
+        Person person = readBack.getPersonList().get(0);
+
+        assertEquals(MAX_LENGTH_NOTES, person.getNotes().value);
+    }
+
+    @Test
+    public void readAddressBook_notesExceedBoundaryLength_throwsDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> readAddressBook("notesTooLongAddressBook.json"));
     }
 
     @Test

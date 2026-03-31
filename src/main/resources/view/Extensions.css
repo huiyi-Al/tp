@@ -61,3 +61,20 @@
     -fx-font-style: italic;
     -fx-text-fill: #ababab;
 }
+
+.notes-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-padding: 4 8 4 8;
+    -fx-border-color: rgba(255, 255, 255, 0.14);
+    -fx-border-radius: 6;
+}
+
+.notes-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.notes-content-label {
+    -fx-padding: 1 0 2 0;
+}

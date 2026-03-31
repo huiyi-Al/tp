@@ -8,9 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.log.LogEntry;
 
@@ -20,6 +22,9 @@ import seedu.address.model.person.log.LogEntry;
 public class PersonDetailCard extends UiPart<Region> {
 
     private static final String FXML = "PersonDetailCard.fxml";
+    private static final int NOTES_VISIBLE_ROWS = 3;
+    private static final double NOTES_VIEWPORT_VERTICAL_CHROME = 14;
+    private static final double NOTES_DESCENDER_SAFETY_PADDING = 3;
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -44,7 +49,11 @@ public class PersonDetailCard extends UiPart<Region> {
     @FXML
     private Label notesPrefix;
     @FXML
+    private Label notesInlineValue;
+    @FXML
     private Label notesValue;
+    @FXML
+    private ScrollPane notesScrollPane;
     @FXML
     private Label logsHeader;
     @FXML
@@ -74,17 +83,39 @@ public class PersonDetailCard extends UiPart<Region> {
 
     private void initializeNotes(Person person) {
         notesPrefix.setText("Notes :");
-        String notesText = person.getNotes().value;
+        notesPrefix.setMinWidth(Region.USE_PREF_SIZE);
+        notesValue.setMinWidth(0);
+        notesValue.setMaxWidth(Double.MAX_VALUE);
+        notesScrollPane.setFitToWidth(true);
+        configureNotesViewportHeight();
+
+        String notesText = normalizeNotesForDisplay(person.getNotes().value);
         if (notesText.isBlank()) {
-            notesValue.setText("No notes");
-            if (!notesValue.getStyleClass().contains("note-empty-text")) {
-                notesValue.getStyleClass().add("note-empty-text");
-            }
+            notesInlineValue.setText("No notes");
+            setNodeShown(notesInlineValue, true);
+            setNodeShown(notesScrollPane, false);
             return;
         }
 
+        setNodeShown(notesInlineValue, false);
+        setNodeShown(notesScrollPane, true);
         notesValue.setText(notesText);
-        notesValue.getStyleClass().remove("note-empty-text");
+    }
+
+    private void configureNotesViewportHeight() {
+        Text measurementText = new Text("Ag");
+        measurementText.setFont(notesValue.getFont());
+        double lineHeight = measurementText.getLayoutBounds().getHeight();
+        double minHeight = lineHeight + NOTES_VIEWPORT_VERTICAL_CHROME + NOTES_DESCENDER_SAFETY_PADDING;
+        double preferredHeight = (lineHeight * NOTES_VISIBLE_ROWS)
+                + NOTES_VIEWPORT_VERTICAL_CHROME + NOTES_DESCENDER_SAFETY_PADDING;
+        notesScrollPane.setMinHeight(minHeight);
+        notesScrollPane.setPrefHeight(preferredHeight);
+    }
+
+    private static String normalizeNotesForDisplay(String rawNotes) {
+        return rawNotes.replace("\r\n", "\n")
+                .replace('\r', '\n');
     }
 
     private void initializeLogSummary(Person person) {

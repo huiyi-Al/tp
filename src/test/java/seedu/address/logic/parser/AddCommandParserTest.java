@@ -51,6 +51,8 @@ import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandParserTest {
+    private static final String EMPTY_NOTES_DESC = " " + PREFIX_NOTES;
+
     private AddCommandParser parser = new AddCommandParser();
 
     @Test
@@ -165,6 +167,14 @@ public class AddCommandParserTest {
         // zero tags and notes
         Person expectedPerson = new PersonBuilder(AMY).withNotes().withTags().build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
+                new AddCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_optionalNotesExplicitlyEmpty_success() {
+        Person expectedPerson = new PersonBuilder(AMY).withNotes().withTags().build();
+        assertParseSuccess(parser,
+                NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + EMPTY_NOTES_DESC,
                 new AddCommand(expectedPerson));
     }
 

@@ -12,7 +12,6 @@
     "phone" : "98765432",
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
-    "notes" : "",
     "logs" : [ {
       "timestamp" : "2026-03-22T14:05:31",
       "message" : "Observed intermittent leakage below sink cabinet."
@@ -33,7 +32,6 @@
     "phone" : "87652533",
     "email" : "cornelia@example.com",
     "address" : "10th street",
-    "notes" : "",
     "tags" : [ "AC-Service" ]
   }, {
     "name" : "Elle Meyer",
@@ -47,7 +45,6 @@
     "phone" : "9482427",
     "email" : "lydia@example.com",
     "address" : "little tokyo",
-    "notes" : "",
     "tags" : [ ]
   }, {
     "name" : "George Best",
