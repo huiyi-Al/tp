@@ -3,7 +3,10 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -18,7 +21,6 @@ import seedu.address.model.person.log.LogHistory;
  * Deletes a log entry from a person identified by the displayed person index.
  */
 public class LogDeleteCommand extends Command {
-
     public static final String COMMAND_WORD = "logdelete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -41,6 +43,7 @@ public class LogDeleteCommand extends Command {
     public static final String MESSAGE_NO_LOGS = "This client has no logs.";
     public static final String MESSAGE_INVALID_LOG_DISPLAYED_INDEX =
             "The log index provided is invalid for the selected client.";
+    private static final Logger logger = LogsCenter.getLogger(LogDeleteCommand.class);
 
     private final Index personIndex;
     private final Index logIndex;
@@ -83,9 +86,21 @@ public class LogDeleteCommand extends Command {
         }
 
         Index storageLogIndex = Index.fromZeroBased(logHistory.size() - logIndex.getOneBased());
+        logPendingDeleteTransition(personIndex.getOneBased(), logIndex.getOneBased(),
+                storageLogIndex.getOneBased(), logHistory.size());
         PendingAction pendingAction =
                 new LogDeletePendingAction(targetPerson, personIndex, logIndex, storageLogIndex, logHistory);
         return new CommandResult(pendingAction.getConfirmationMessage(), pendingAction);
+    }
+
+    private static void logPendingDeleteTransition(int personIndexOneBased, int displayIndex,
+                                                   int storageIndex, int currentLogCount) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+        logger.fine(() -> String.format("Executing logdelete transition for person index %d: "
+                        + "display index %d maps to storage index %d, current log count=%d, awaiting confirmation",
+                personIndexOneBased, displayIndex, storageIndex, currentLogCount));
     }
 
     @Override

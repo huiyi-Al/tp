@@ -5,7 +5,10 @@ import static java.util.Objects.requireNonNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -20,7 +23,6 @@ import seedu.address.model.person.log.LogMessage;
  * Adds a timestamped log entry to a person identified by the displayed index.
  */
 public class LogAddCommand extends Command {
-
     public static final String COMMAND_WORD = "logadd";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -31,6 +33,7 @@ public class LogAddCommand extends Command {
             + "1 Observed leakage beneath sink during site visit.";
 
     public static final String MESSAGE_SUCCESS = "Added log to client: %1$s";
+    private static final Logger logger = LogsCenter.getLogger(LogAddCommand.class);
 
     private final Index personIndex;
     private final LogMessage logMessage;
@@ -65,12 +68,16 @@ public class LogAddCommand extends Command {
         }
 
         Person targetPerson = lastShownList.get(personIndex.getZeroBased());
+        int previousLogCount = targetPerson.getLogHistory().size();
+        logger.fine(() -> String.format("Executing logadd transition for person index %d: log count %d -> %d",
+                personIndex.getOneBased(), previousLogCount, previousLogCount + 1));
         LocalDateTime timestamp = requireNonNull(timestampSupplier.get());
         LogEntry newLogEntry = new LogEntry(timestamp, logMessage);
         LogHistory updatedLogHistory = targetPerson.getLogHistory().add(newLogEntry);
         Person editedPerson = createPersonWithUpdatedLogHistory(targetPerson, updatedLogHistory);
 
         model.setPerson(targetPerson, editedPerson);
+        logLogCountTransition(personIndex.getOneBased(), previousLogCount, updatedLogHistory.size());
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, editedPerson.getName()));
     }
@@ -87,6 +94,14 @@ public class LogAddCommand extends Command {
                 original.getNotes(),
                 updatedLogHistory,
                 original.getTags());
+    }
+
+    private static void logLogCountTransition(int personIndexOneBased, int beforeCount, int afterCount) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+        logger.fine(() -> String.format("logadd applied for person index %d. Log count: %d -> %d",
+                personIndexOneBased, beforeCount, afterCount));
     }
 
     @Override

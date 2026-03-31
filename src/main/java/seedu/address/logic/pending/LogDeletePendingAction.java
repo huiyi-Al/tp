@@ -1,5 +1,9 @@
 package seedu.address.logic.pending;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
@@ -14,6 +18,7 @@ import seedu.address.model.person.log.LogHistory;
  * Pending action for logdelete confirmation.
  */
 public class LogDeletePendingAction implements PendingAction {
+    private static final Logger logger = LogsCenter.getLogger(LogDeletePendingAction.class);
 
     private final Person person;
     private final Index personIndex;
@@ -71,9 +76,11 @@ public class LogDeletePendingAction implements PendingAction {
 
     @Override
     public CommandResult complete(Model model) throws CommandException {
+        int previousLogCount = originalLogHistory.size();
         LogHistory updatedLogHistory = originalLogHistory.delete(storageLogIndex);
         Person editedPerson = createPersonWithUpdatedLogHistory(person, updatedLogHistory);
         model.setPerson(person, editedPerson);
+        logConfirmedDeletion(previousLogCount, updatedLogHistory.size());
         return new CommandResult(String.format(LogDeleteCommand.MESSAGE_SUCCESS,
                 displayLogIndex.getOneBased(), person.getName().fullName));
     }
@@ -92,5 +99,18 @@ public class LogDeletePendingAction implements PendingAction {
                 original.getNotes(),
                 updatedLogHistory,
                 original.getTags());
+    }
+
+    private void logConfirmedDeletion(int previousLogCount, int updatedLogCount) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+        logger.fine(() -> String.format("logdelete confirmed for person index %d. display index %d "
+                        + "(storage index %d). Log count: %d -> %d",
+                personIndex.getOneBased(),
+                displayLogIndex.getOneBased(),
+                storageLogIndex.getOneBased(),
+                previousLogCount,
+                updatedLogCount));
     }
 }
