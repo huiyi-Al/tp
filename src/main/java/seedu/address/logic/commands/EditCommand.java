@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
@@ -53,6 +56,7 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -80,6 +84,7 @@ public class EditCommand extends Command {
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+        logNotesTransition(personToEdit.getNotes(), editedPerson.getNotes());
 
         // Check if any other person (excluding the one being edited) has the same phone or email
         boolean isDuplicate = model.getAddressBook().getPersonList().stream()
@@ -92,6 +97,28 @@ public class EditCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
+    }
+
+    private static void logNotesTransition(Notes before, Notes after) {
+        if (!logger.isLoggable(Level.FINE)) {
+            return;
+        }
+
+        int beforeLength = before.value.codePointCount(0, before.value.length());
+        int afterLength = after.value.codePointCount(0, after.value.length());
+        boolean wasBlank = before.value.isBlank();
+        boolean isBlank = after.value.isBlank();
+
+        if (before.equals(after)) {
+            logger.fine(() -> String.format("Edit executed without notes change: state=%s, codePointLength=%d",
+                    isBlank ? "blank" : "non-blank", afterLength));
+            return;
+        }
+
+        logger.fine(() -> String.format("Edit notes transition: state %s->%s, codePointLength %d->%d",
+                wasBlank ? "blank" : "non-blank",
+                isBlank ? "blank" : "non-blank",
+                beforeLength, afterLength));
     }
 
     /**

@@ -82,14 +82,6 @@ public class EmailAddressPredicateTest {
     }
 
     @Test
-    public void test_multiWordSubstring_throwsIllegalArgumentException() {
-        EmailAddressPredicate predicate = new EmailAddressPredicate(Collections.singletonList("word1 word2"));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withEmail(EMAIL_ALICE).build()));
-        assertEquals("Substring parameter should be a single word", e.getMessage());
-    }
-
-    @Test
     public void test_singleMatchingSubstring_returnsTrue() {
         EmailAddressPredicate predicate = new EmailAddressPredicate(Collections.singletonList("alice"));
         assertTrue(predicate.test(new PersonBuilder().withEmail(EMAIL_ALICE).build()));

@@ -95,28 +95,25 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        String subNames = String.join(" ", "foo", "bar", "baz");
-        String subNumbers = String.join(" ", "123", "456", "789");
-        String subEmailAddresses = String.join(" ", "xy@z.com", "12@we.org");
-        String subPhysicalAddresses = String.join(" ", "Wood", "lands");
-        ArgumentMultimap argMultimap = new ArgumentMultimap();
-        argMultimap.put(PREFIX_NAME, subNames);
-        argMultimap.put(PREFIX_PHONE, subNumbers);
-        argMultimap.put(PREFIX_EMAIL, subEmailAddresses);
-        argMultimap.put(PREFIX_ADDRESS, subPhysicalAddresses);
+        String subNames = MessageFormat
+                .format(" {0}{1} {0}{2} {0}{3}", PREFIX_NAME, "KUrZ", "ElLe", "kuNz");
+        String subNumbers = MessageFormat
+                .format(" {0}{1} {0}{2}", PREFIX_PHONE, "535", "442");
+        String subEmailAddresses = MessageFormat
+                .format(" {0}{1} {0}{2}", PREFIX_EMAIL, "r@e", "a@e");
+        String subPhysicalAddresses = MessageFormat
+                .format(" {0}{1} {0}{2}", PREFIX_ADDRESS, "Jurong", "clEmenti");
+        String tags = MessageFormat
+                .format(" {0}{1} {0}{2}", PREFIX_TAG, "plumbing", "ac-Service");
+        String combined = MessageFormat
+                .format("{0} {1} {2} {3} {4}", subNames, subNumbers, subEmailAddresses, subPhysicalAddresses,
+                        tags);
+
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(combined, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_ADDRESS, PREFIX_TAG);
 
         FindCommand command = (FindCommand) parser.parseCommand(
-                MessageFormat.format("{0} {1} {2} {3} {4} {5} {6} {7} {8}",
-                        FindCommand.COMMAND_WORD,
-                        PREFIX_NAME.toString(),
-                        subNames,
-                        PREFIX_PHONE.toString(),
-                        subNumbers,
-                        PREFIX_EMAIL.toString(),
-                        subEmailAddresses,
-                        PREFIX_ADDRESS.toString(),
-                        subPhysicalAddresses
-                )
+                MessageFormat.format("{0} {1}", FindCommand.COMMAND_WORD, combined)
         );
 
         assertEquals(new FindCommand(new SearchPredicate(argMultimap)), command);

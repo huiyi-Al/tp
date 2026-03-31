@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -51,15 +52,30 @@
                   </image>
                </ImageView>
             </graphic></Label>
-            <HBox alignment="CENTER_LEFT" spacing="4.0">
-               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/note.png" />
-                  </image>
-               </ImageView>
-               <Label fx:id="notesPrefix" styleClass="card_small_label" text="Notes :" />
-               <Label fx:id="notesValue" styleClass="card_small_label" text="\$notes" />
-            </HBox>
+             <VBox alignment="TOP_LEFT" spacing="4.0">
+                <HBox alignment="CENTER_LEFT" spacing="4.0">
+                   <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                         <Image url="@../images/note.png" />
+                      </image>
+                   </ImageView>
+                   <Label fx:id="notesPrefix" styleClass="card_small_label" text="Notes :" />
+                   <Label fx:id="notesInlineValue" managed="false" styleClass="card_small_label, note-empty-text"
+                          text="No notes" visible="false" />
+                </HBox>
+                <ScrollPane fx:id="notesScrollPane" fitToWidth="true" focusTraversable="false"
+                            hbarPolicy="NEVER" minHeight="28.0" prefHeight="72.0"
+                            styleClass="notes-scroll-pane" vbarPolicy="AS_NEEDED"
+                            maxWidth="1.7976931348623157E308">
+                   <VBox.margin>
+                      <Insets left="18.0" />
+                   </VBox.margin>
+                   <content>
+                      <Label fx:id="notesValue" styleClass="card_small_label, notes-content-label"
+                             text="\$notes" wrapText="true" />
+                   </content>
+                </ScrollPane>
+             </VBox>
             <Separator styleClass="dotted-separator" />
             <Label fx:id="logsHeader" styleClass="card_small_label, emoji-label" text="Logs (0)">
                <graphic>

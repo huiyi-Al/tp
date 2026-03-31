@@ -18,10 +18,11 @@ import seedu.address.model.person.predicates.SearchPredicate;
 
 /**
  * Finds and lists all persons in address book based on following criteria:
- * 1. Full name contains any of the space-separated queries as substrings.
- * 2. Phone number contains any of the space-separated numbers given.
- * 3. Email address contains any of the space-separated queries as substrings.
- * 4. Physical address contains any of the space-separated queries as substrings.
+ * 1. Full name contains any of the queries as substrings.
+ * 2. Phone number contains any of the numbers given.
+ * 3. Email address contains any of the queries as substrings.
+ * 4. Physical address contains any of the queries as substrings.
+ * 5. Tag matches case-insensitively with any of the queries.
  * Keyword matching is case-insensitive.
  */
 public class FindCommand extends Command {
