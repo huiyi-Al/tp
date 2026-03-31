@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -57,5 +58,10 @@ public class LogAddCommandParserTest {
     public void parse_tooLongMessage_throwsParseException() {
         String tooLongMessage = "a".repeat(LogMessage.MAX_LENGTH + 1);
         assertParseFailure(parser, "1 " + tooLongMessage, LogMessage.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_nullArgs_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> parser.parse(null));
     }
 }

@@ -65,7 +65,8 @@ public class LogAddCommand extends Command {
         }
 
         Person targetPerson = lastShownList.get(personIndex.getZeroBased());
-        LogEntry newLogEntry = new LogEntry(timestampSupplier.get(), logMessage);
+        LocalDateTime timestamp = requireNonNull(timestampSupplier.get());
+        LogEntry newLogEntry = new LogEntry(timestamp, logMessage);
         LogHistory updatedLogHistory = targetPerson.getLogHistory().add(newLogEntry);
         Person editedPerson = createPersonWithUpdatedLogHistory(targetPerson, updatedLogHistory);
 
