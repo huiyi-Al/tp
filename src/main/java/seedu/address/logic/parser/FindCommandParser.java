@@ -24,12 +24,26 @@ import seedu.address.model.person.predicates.SearchPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     private static final Logger logger = Logger.getLogger(FindCommandParser.class.getName());
+    private static final List<Prefix> EXPECTED_PREFIXES = new ArrayList<>(Arrays.asList(
+            PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
+
+    private void checkValidFormat(ArgumentMultimap argMultimap) throws ParseException {
+        boolean preamblePresent = !argMultimap.getPreamble().isEmpty();
+        boolean nonePresent = EXPECTED_PREFIXES.stream()
+                .allMatch(p -> argMultimap.getValue(p).isEmpty());
+        boolean anyPresentButEmpty = EXPECTED_PREFIXES.stream()
+                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
+        if (preamblePresent || nonePresent || anyPresentButEmpty) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
 
     /**
      * Parses the given {@code args} to return a {@code FindCommand} object for execution.
      * <p>
-     * Validates that at least one valid prefix is present and that no provided
-     * prefix has an empty value. Constructs a {@code SearchPredicate} based on the
+     * Validates that at least one valid prefix is present, no provided prefix has an empty value,
+     * and each prefix contains only one query. Constructs a {@code SearchPredicate} based on the
      * parsed arguments and returns a new {@code FindCommand} with that predicate.
      *
      * @param args the raw input string containing search keywords and prefixes
@@ -41,44 +55,18 @@ public class FindCommandParser implements Parser<FindCommand> {
         logger.fine(MessageFormat.format("Parsing args: {0}", args));
 
         String trimmedArgs = args.trim();
-        logger.fine(MessageFormat.format("Trimmed args: {0}", trimmedArgs));
-
         if (trimmedArgs.isEmpty()) {
             logger.warning("Arguments are empty after trimming");
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
-
-        List<Prefix> expectedPrefixes = new ArrayList<>(Arrays.asList(
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG));
-        logger.fine(MessageFormat.format("Expected prefixes: {0}", expectedPrefixes));
-
         trimmedArgs = MessageFormat.format(" {0}", trimmedArgs);
+
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                trimmedArgs, expectedPrefixes.toArray(new Prefix[0]));
+                trimmedArgs, EXPECTED_PREFIXES.toArray(new Prefix[0]));
         logger.fine(MessageFormat.format("ArgumentMultimap created: {0}", argMultimap));
 
-        if (!argMultimap.getPreamble().isEmpty()) {
-            logger.warning("Validation failed: preamble given");
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        boolean nonePresent = expectedPrefixes.stream()
-                .allMatch(p -> argMultimap.getValue(p).isEmpty());
-        if (nonePresent) {
-            logger.warning("Validation failed: no prefixes present");
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        boolean anyPresentButEmpty = expectedPrefixes.stream()
-                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        if (anyPresentButEmpty) {
-            logger.warning("Validation failed: some prefixes have empty values");
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
+        checkValidFormat(argMultimap);
 
         SearchPredicate predicate = new SearchPredicate(argMultimap);
         logger.fine(MessageFormat.format("SearchPredicate created: {0}", predicate));

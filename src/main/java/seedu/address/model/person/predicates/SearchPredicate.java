@@ -44,27 +44,27 @@ public class SearchPredicate implements Predicate<Person> {
         logger.info("Initializing SearchPredicate");
 
         this.fullNamePredicate = argMultimap.getValue(PREFIX_NAME).isPresent()
-                ? new FullNamePredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_NAME))
+                ? new FullNamePredicate(argMultimap.getAllValues(PREFIX_NAME))
                 : new FullNamePredicate(new ArrayList<>());
         logger.fine(MessageFormat.format("FullNamePredicate initialized: {0}", fullNamePredicate));
 
         this.phoneNumberPredicate = argMultimap.getValue(PREFIX_PHONE).isPresent()
-                ? new PhoneNumberPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_PHONE))
+                ? new PhoneNumberPredicate(argMultimap.getAllValues(PREFIX_PHONE))
                 : new PhoneNumberPredicate(new ArrayList<>());
         logger.fine(MessageFormat.format("PhoneNumberPredicate initialized: {0}", phoneNumberPredicate));
 
         this.emailAddressPredicate = argMultimap.getValue(PREFIX_EMAIL).isPresent()
-                ? new EmailAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_EMAIL))
+                ? new EmailAddressPredicate(argMultimap.getAllValues(PREFIX_EMAIL))
                 : new EmailAddressPredicate(new ArrayList<>());
         logger.fine(MessageFormat.format("EmailAddressPredicate initialized: {0}", emailAddressPredicate));
 
         this.physicalAddressPredicate = argMultimap.getValue(PREFIX_ADDRESS).isPresent()
-                ? new PhysicalAddressPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_ADDRESS))
+                ? new PhysicalAddressPredicate(argMultimap.getAllValues(PREFIX_ADDRESS))
                 : new PhysicalAddressPredicate(new ArrayList<>());
         logger.fine(MessageFormat.format("PhysicalAddressPredicate initialized: {0}", physicalAddressPredicate));
 
         this.tagsPredicate = argMultimap.getValue(PREFIX_TAG).isPresent()
-                ? new TagsMatchOneKeywordPredicate(argMultimap.getValueWhitespaceSeparated(PREFIX_TAG))
+                ? new TagsMatchOneKeywordPredicate(argMultimap.getAllValues(PREFIX_TAG))
                 : new TagsMatchOneKeywordPredicate(new ArrayList<>());
         logger.fine(MessageFormat.format("TagsPredicate initialized: {0}", tagsPredicate));
     }
@@ -73,23 +73,23 @@ public class SearchPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         logger.fine(MessageFormat.format("Testing person: {0}", person));
 
-        boolean nameCondition = fullNamePredicate.test(person);
-        logger.fine(MessageFormat.format("Name condition: {0}", nameCondition));
+        boolean isNameMatch = fullNamePredicate.test(person);
+        logger.fine(MessageFormat.format("Name condition: {0}", isNameMatch));
 
-        boolean phoneCondition = phoneNumberPredicate.test(person);
-        logger.fine(MessageFormat.format("Phone condition: {0}", phoneCondition));
+        boolean isPhoneMatch = phoneNumberPredicate.test(person);
+        logger.fine(MessageFormat.format("Phone condition: {0}", isPhoneMatch));
 
-        boolean emailAddressCondition = emailAddressPredicate.test(person);
-        logger.fine(MessageFormat.format("Email condition: {0}", emailAddressCondition));
+        boolean isEmailAddressMatch = emailAddressPredicate.test(person);
+        logger.fine(MessageFormat.format("Email condition: {0}", isEmailAddressMatch));
 
-        boolean physicalAddressCondition = physicalAddressPredicate.test(person);
-        logger.fine(MessageFormat.format("Address condition: {0}", physicalAddressCondition));
+        boolean isPhysicalAddressMatch = physicalAddressPredicate.test(person);
+        logger.fine(MessageFormat.format("Address condition: {0}", isPhysicalAddressMatch));
 
-        boolean tagsCondition = tagsPredicate.test(person);
-        logger.fine(MessageFormat.format("Tags condition: {0}", tagsCondition));
+        boolean isTagMatch = tagsPredicate.test(person);
+        logger.fine(MessageFormat.format("Tags condition: {0}", isTagMatch));
 
-        boolean result = nameCondition || phoneCondition || emailAddressCondition
-                || physicalAddressCondition || tagsCondition;
+        boolean result = isNameMatch || isPhoneMatch || isEmailAddressMatch
+                || isPhysicalAddressMatch || isTagMatch;
 
         logger.fine(MessageFormat.format("Final result: {0}", result));
         return result;

@@ -27,6 +27,9 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_NOTES = "a".repeat(201);
+    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
+    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(200);
+    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(201);
     private static final String INVALID_TAG = "";
 
     private static final String VALID_NAME = "Rachel Walker";
@@ -162,6 +165,11 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseNotes_invalidValueAfterTrimming_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseNotes(WHITESPACE + INVALID_NOTES + WHITESPACE));
+    }
+
+    @Test
     public void parseNotes_validValueWithoutWhitespace_returnsNotes() throws Exception {
         Notes expectedNotes = new Notes(VALID_NOTES);
         assertEquals(expectedNotes, ParserUtil.parseNotes(VALID_NOTES));
@@ -172,6 +180,28 @@ public class ParserUtilTest {
         String notesWithWhitespace = WHITESPACE + VALID_NOTES + WHITESPACE;
         Notes expectedNotes = new Notes(VALID_NOTES);
         assertEquals(expectedNotes, ParserUtil.parseNotes(notesWithWhitespace));
+    }
+
+    @Test
+    public void parseNotes_emptyValue_returnsEmptyNotes() throws Exception {
+        assertEquals(new Notes(""), ParserUtil.parseNotes(""));
+    }
+
+    @Test
+    public void parseNotes_whitespaceOnlyValue_returnsTrimmedEmptyNotes() throws Exception {
+        assertEquals(new Notes(""), ParserUtil.parseNotes(WHITESPACE));
+    }
+
+    @Test
+    public void parseNotes_maxLengthValue_returnsNotes() throws Exception {
+        assertEquals(new Notes(MAX_LENGTH_NOTES), ParserUtil.parseNotes(MAX_LENGTH_NOTES));
+        assertEquals(new Notes(MAX_LENGTH_NOTES), ParserUtil.parseNotes(WHITESPACE + MAX_LENGTH_NOTES + WHITESPACE));
+    }
+
+    @Test
+    public void parseNotes_unicodeBoundaryValues() throws Exception {
+        assertEquals(new Notes(MAX_LENGTH_EMOJI_NOTES), ParserUtil.parseNotes(MAX_LENGTH_EMOJI_NOTES));
+        assertThrows(ParseException.class, () -> ParserUtil.parseNotes(TOO_LONG_EMOJI_NOTES));
     }
 
     @Test

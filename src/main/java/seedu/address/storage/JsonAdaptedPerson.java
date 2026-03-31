@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -26,6 +28,7 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    private static final Logger logger = LogsCenter.getLogger(JsonAdaptedPerson.class);
 
     private final String name;
     private final String phone;
@@ -125,14 +128,23 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(trimmedAddress);
 
+        final Notes modelNotes;
         if (notes == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Notes.class.getSimpleName()));
+            logger.fine("Missing notes field in storage record; defaulting to empty notes.");
+            modelNotes = new Notes(Notes.DEFAULT_NOTE);
+        } else {
+            final String trimmedNotes = notes.trim();
+            if (!notes.equals(trimmedNotes)) {
+                logger.fine(() -> String.format("Normalized notes from storage record by trimming boundary "
+                                + "whitespace: rawCodePointLength=%d, trimmedCodePointLength=%d",
+                        notes.codePointCount(0, notes.length()),
+                        trimmedNotes.codePointCount(0, trimmedNotes.length())));
+            }
+            if (!Notes.isValidNotes(trimmedNotes)) {
+                throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
+            }
+            modelNotes = new Notes(trimmedNotes);
         }
-        final String trimmedNotes = notes.trim();
-        if (!Notes.isValidNotes(trimmedNotes)) {
-            throw new IllegalValueException(Notes.MESSAGE_CONSTRAINTS);
-        }
-        final Notes modelNotes = new Notes(trimmedNotes);
 
         final LogHistory modelLogHistory = new LogHistory(personLogs);
 

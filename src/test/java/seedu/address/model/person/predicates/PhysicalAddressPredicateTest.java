@@ -82,14 +82,6 @@ public class PhysicalAddressPredicateTest {
     }
 
     @Test
-    public void test_multiWordSubstring_throwsIllegalArgumentException() {
-        PhysicalAddressPredicate predicate = new PhysicalAddressPredicate(Collections.singletonList("word1 word2"));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withAddress(ADDRESS_ALICE).build()));
-        assertEquals("Substring parameter should be a single word", e.getMessage());
-    }
-
-    @Test
     public void test_singleMatchingSubstring_returnsTrue() {
         PhysicalAddressPredicate predicate = new PhysicalAddressPredicate(Collections.singletonList("alice"));
         assertTrue(predicate.test(new PersonBuilder().withAddress(ADDRESS_ALICE).build()));
