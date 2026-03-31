@@ -95,8 +95,8 @@ public class EditCommandTest {
     public void execute_filteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
-        Predicate<Person> currentPredicate =
-                (Predicate<Person>) ((FilteredList<Person>) model.getFilteredPersonList()).getPredicate();
+        Predicate<? super Person> currentPredicate = (
+                (FilteredList<Person>) model.getFilteredPersonList()).getPredicate();
 
         Person personInFilteredList = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder(personInFilteredList).withName(VALID_NAME_BOB).build();
@@ -108,7 +108,7 @@ public class EditCommandTest {
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
-        expectedModel.updateFilteredPersonList(currentPredicate);
+        expectedModel.updateFilteredPersonList(currentPredicate::test);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
