@@ -85,14 +85,6 @@ public class FullNamePredicateTest {
     }
 
     @Test
-    public void test_multiWordSubstring_throwsIllegalArgumentException() {
-        FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList("word1 word2"));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withName(NAME_ALICE_BOB).build()));
-        assertEquals("Substring parameter should be a single word", e.getMessage());
-    }
-
-    @Test
     public void test_singleMatchingSubstring_returnsTrue() {
         FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList("Alice"));
         assertTrue(predicate.test(new PersonBuilder().withName(NAME_ALICE_BOB).build()));

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.ArgumentMultimap;
+import seedu.address.logic.parser.ArgumentTokenizer;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -32,17 +33,27 @@ import seedu.address.testutil.PersonBuilder;
  *   <li>Testing a person where any field matches at least one query token, returns true.</li>
  *   <li>Testing a person whose name matches (same case), returns true.</li>
  *   <li>Testing a person whose name matches (different case), returns true.</li>
+ *   <li>Testing a person whose name matches, all-fields predicate returns true.</li>
  *   <li>Testing a person whose name does not match, returns false.</li>
  *   <li>Testing a person whose email matches (same case), returns true.</li>
  *   <li>Testing a person whose email matches (different case), returns true.</li>
+ *   <li>Testing a person whose email matches, all-fields predicate returns true.</li>
  *   <li>Testing a person whose email does not match, returns false.</li>
  *   <li>Testing a person whose phone matches, returns true.</li>
+ *   <li>Testing a person whose phone matches, all-fields predicate returns true.</li>
  *   <li>Testing a person whose phone does not match, returns false.</li>
  *   <li>Testing a person whose physical address matches (same case), returns true.</li>
  *   <li>Testing a person whose physical address matches (different case), returns true.</li>
+ *   <li>Testing a person whose physical address matches, all-fields predicate returns true.</li>
+ *   <li>Testing a person whose physical address does not match, returns false.</li>
  *   <li>Testing a person where at least one tag matches, returns true.</li>
  *   <li>Testing a person where no tag matches, returns false.</li>
- *   <li>Testing a person where all fields match, returns true.</li>
+ *   <li>Testing a person where all fields match, name predicate returns true.</li>
+ *   <li>Testing a person where all fields match, phone predicate returns true.</li>
+ *   <li>Testing a person where all fields match, email predicate returns true.</li>
+ *   <li>Testing a person where all fields match, address predicate returns true.</li>
+ *   <li>Testing a person where all fields match, tags predicate returns true.</li>
+ *   <li>Testing a person where all fields match, all-fields predicate returns true.</li>
  *   <li>Testing a person where no fields match, returns false.</li>
  *   <li>String representation with an empty argument map, matches expected format.</li>
  *   <li>String representation with all fields present, matches expected format.</li>
@@ -72,12 +83,26 @@ public class SearchPredicateTest {
     private static final Person TEST_PERSON_NO_FIELDS_MATCH =
             new PersonBuilder().withName("David").withPhone("98765432").build();
 
-    private static final String TEST_NAME_QUERY = "al er";
-    private static final String TEST_PHONE_QUERY = "123 456";
-    private static final String TEST_EMAIL_QUERY = "3@nus.org edu";
-    private static final String TEST_ADDRESS_QUERY = "bis ood";
-    private static final String TEST_TAGS_QUERY = "NUS NT";
-    private static final String TEST_NAME_QUERY_ALTERNATIVE = "qw er";
+    private static final String TEST_NAME_QUERY = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_NAME,
+            "al", "er");
+    private static final String TEST_NAME_QUERY_UPPERCASE = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_NAME,
+            "al".toUpperCase(), "er".toUpperCase());
+    private static final String TEST_PHONE_QUERY = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_PHONE,
+            "123", "456");
+    private static final String TEST_EMAIL_QUERY = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_EMAIL,
+            "3@nus.org", "edu");
+    private static final String TEST_EMAIL_QUERY_UPPERCASE = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_EMAIL,
+            "3@nus.org".toUpperCase(), "edu".toUpperCase());
+    private static final String TEST_ADDRESS_QUERY = MessageFormat.format(" {0}{1} {0}{2}",
+            PREFIX_ADDRESS, "bis", "ood");
+    private static final String TEST_ADDRESS_QUERY_UPPERCASE = MessageFormat.format(" {0}{1} {0}{2}",
+            PREFIX_ADDRESS, "bis".toUpperCase(), "ood".toUpperCase());
+    private static final String TEST_TAGS_QUERY = MessageFormat.format(" {0}{1} {0}{2}", PREFIX_TAG,
+            "NUS", "NT");
+    private static final String TEST_ALL_QUERY = MessageFormat.format("{0} {1} {2} {3} {4}", TEST_NAME_QUERY,
+            TEST_PHONE_QUERY, TEST_EMAIL_QUERY, TEST_ADDRESS_QUERY, TEST_TAGS_QUERY);
+    private static final String TEST_NAME_QUERY_ALTERNATIVE = MessageFormat.format(" {0}{1} {2}", PREFIX_NAME,
+            "al", "er");
 
     private static final ArgumentMultimap TEST_ARGMAP_EMPTY;
     private static final SearchPredicate TEST_SEARCH_PREDICATE_EMPTY;
@@ -116,48 +141,36 @@ public class SearchPredicateTest {
         TEST_ARGMAP_EMPTY = new ArgumentMultimap();
         TEST_SEARCH_PREDICATE_EMPTY = new SearchPredicate(TEST_ARGMAP_EMPTY);
 
-        TEST_ARGMAP_NAME_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_NAME_ONLY.put(PREFIX_NAME, TEST_NAME_QUERY);
+        TEST_ARGMAP_NAME_ONLY = ArgumentTokenizer.tokenize(TEST_NAME_QUERY, PREFIX_NAME);
         TEST_SEARCH_PREDICATE_NAME_ONLY = new SearchPredicate(TEST_ARGMAP_NAME_ONLY);
 
-        TEST_ARGMAP_NAME_ONLY_UPPERCASE = new ArgumentMultimap();
-        TEST_ARGMAP_NAME_ONLY_UPPERCASE.put(PREFIX_NAME, TEST_NAME_QUERY.toUpperCase());
+        TEST_ARGMAP_NAME_ONLY_UPPERCASE = ArgumentTokenizer.tokenize(TEST_NAME_QUERY_UPPERCASE, PREFIX_NAME);
         TEST_SEARCH_PREDICATE_NAME_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_NAME_ONLY_UPPERCASE);
 
-        TEST_ARGMAP_NAME_ONLY_ALTERNATIVE = new ArgumentMultimap();
-        TEST_ARGMAP_NAME_ONLY_ALTERNATIVE.put(PREFIX_NAME, TEST_NAME_QUERY_ALTERNATIVE);
+        TEST_ARGMAP_NAME_ONLY_ALTERNATIVE = ArgumentTokenizer.tokenize(TEST_NAME_QUERY_ALTERNATIVE, PREFIX_NAME);
         TEST_SEARCH_PREDICATE_NAME_ONLY_ALTERNATIVE = new SearchPredicate(TEST_ARGMAP_NAME_ONLY_ALTERNATIVE);
 
-        TEST_ARGMAP_EMAIL_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_EMAIL_ONLY.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
+        TEST_ARGMAP_EMAIL_ONLY = ArgumentTokenizer.tokenize(TEST_EMAIL_QUERY, PREFIX_EMAIL);
         TEST_SEARCH_PREDICATE_EMAIL_ONLY = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY);
 
-        TEST_ARGMAP_EMAIL_ONLY_UPPERCASE = new ArgumentMultimap();
-        TEST_ARGMAP_EMAIL_ONLY_UPPERCASE.put(PREFIX_EMAIL, TEST_EMAIL_QUERY.toUpperCase());
+        TEST_ARGMAP_EMAIL_ONLY_UPPERCASE = ArgumentTokenizer.tokenize(TEST_EMAIL_QUERY_UPPERCASE, PREFIX_EMAIL);
         TEST_SEARCH_PREDICATE_EMAIL_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_EMAIL_ONLY_UPPERCASE);
 
-        TEST_ARGMAP_PHONE_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_PHONE_ONLY.put(PREFIX_PHONE, TEST_PHONE_QUERY);
+        TEST_ARGMAP_PHONE_ONLY = ArgumentTokenizer.tokenize(TEST_PHONE_QUERY, PREFIX_PHONE);
         TEST_SEARCH_PREDICATE_PHONE_ONLY = new SearchPredicate(TEST_ARGMAP_PHONE_ONLY);
 
-        TEST_ARGMAP_ADDRESS_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_ADDRESS_ONLY.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
+        TEST_ARGMAP_ADDRESS_ONLY = ArgumentTokenizer.tokenize(TEST_ADDRESS_QUERY, PREFIX_ADDRESS);
         TEST_SEARCH_PREDICATE_ADDRESS_ONLY = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY);
 
-        TEST_ARGMAP_TAGS_ONLY = new ArgumentMultimap();
-        TEST_ARGMAP_TAGS_ONLY.put(PREFIX_TAG, TEST_TAGS_QUERY);
-        TEST_SEARCH_PREDICATE_TAGS_ONLY = new SearchPredicate(TEST_ARGMAP_TAGS_ONLY);
-
-        TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE = new ArgumentMultimap();
-        TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY.toUpperCase());
+        TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE = ArgumentTokenizer.tokenize(TEST_ADDRESS_QUERY_UPPERCASE,
+                PREFIX_ADDRESS);
         TEST_SEARCH_PREDICATE_ADDRESS_ONLY_UPPERCASE = new SearchPredicate(TEST_ARGMAP_ADDRESS_ONLY_UPPERCASE);
 
-        TEST_ARGMAP_ALL_PRESENT = new ArgumentMultimap();
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_NAME, TEST_NAME_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_PHONE, TEST_PHONE_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
-        TEST_ARGMAP_ALL_PRESENT.put(PREFIX_TAG, TEST_TAGS_QUERY);
+        TEST_ARGMAP_TAGS_ONLY = ArgumentTokenizer.tokenize(TEST_TAGS_QUERY, PREFIX_TAG);
+        TEST_SEARCH_PREDICATE_TAGS_ONLY = new SearchPredicate(TEST_ARGMAP_TAGS_ONLY);
+
+        TEST_ARGMAP_ALL_PRESENT = ArgumentTokenizer.tokenize(TEST_ALL_QUERY, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_ADDRESS, PREFIX_TAG);
         TEST_SEARCH_PREDICATE_ALL_PRESENT = new SearchPredicate(TEST_ARGMAP_ALL_PRESENT);
     }
 
@@ -177,12 +190,8 @@ public class SearchPredicateTest {
 
     @Test
     public void equals_sameValues_returnsTrue() {
-        ArgumentMultimap argMapAllPresentCopy = new ArgumentMultimap();
-        argMapAllPresentCopy.put(PREFIX_NAME, TEST_NAME_QUERY);
-        argMapAllPresentCopy.put(PREFIX_PHONE, TEST_PHONE_QUERY);
-        argMapAllPresentCopy.put(PREFIX_EMAIL, TEST_EMAIL_QUERY);
-        argMapAllPresentCopy.put(PREFIX_ADDRESS, TEST_ADDRESS_QUERY);
-        argMapAllPresentCopy.put(PREFIX_TAG, TEST_TAGS_QUERY);
+        ArgumentMultimap argMapAllPresentCopy = ArgumentTokenizer.tokenize(TEST_ALL_QUERY, PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
         SearchPredicate searchPredicateAllPresentCopy = new SearchPredicate(argMapAllPresentCopy);
 
         assertTrue(TEST_SEARCH_PREDICATE_ALL_PRESENT.equals(searchPredicateAllPresentCopy));
@@ -367,15 +376,15 @@ public class SearchPredicateTest {
         String expected = MessageFormat.format(
                 EXPECTED_TO_STRING_FORMAT,
                 FullNamePredicate.class.getCanonicalName(),
-                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_NAME),
+                TEST_ARGMAP_ALL_PRESENT.getAllValues(PREFIX_NAME),
                 PhoneNumberPredicate.class.getCanonicalName(),
-                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_PHONE),
+                TEST_ARGMAP_ALL_PRESENT.getAllValues(PREFIX_PHONE),
                 EmailAddressPredicate.class.getCanonicalName(),
-                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_EMAIL),
+                TEST_ARGMAP_ALL_PRESENT.getAllValues(PREFIX_EMAIL),
                 PhysicalAddressPredicate.class.getCanonicalName(),
-                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_ADDRESS),
+                TEST_ARGMAP_ALL_PRESENT.getAllValues(PREFIX_ADDRESS),
                 TagsMatchOneKeywordPredicate.class.getCanonicalName(),
-                TEST_ARGMAP_ALL_PRESENT.getValueWhitespaceSeparated(PREFIX_TAG)
+                TEST_ARGMAP_ALL_PRESENT.getAllValues(PREFIX_TAG)
         );
         assertEquals(expected, TEST_SEARCH_PREDICATE_ALL_PRESENT.toString());
     }
