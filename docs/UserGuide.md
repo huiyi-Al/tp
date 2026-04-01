@@ -270,6 +270,8 @@ Format: `logdelete PERSON_INDEX LOG_INDEX`
 * Deletes the log at `LOG_INDEX` for the client at `PERSON_INDEX`.
 * `PERSON_INDEX` refers to the index number shown in the displayed person list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
+* **Log numbering note**: Logs are displayed newest-first, but numbered oldest-to-newest.
+  For example, if a client has 5 logs, the topmost (and the latest) log is `Log 5`.
 * Both indices **must be positive integers** 1, 2, 3, ...
 * **Two-step confirmation**:
     * First run of `logdelete PERSON_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
