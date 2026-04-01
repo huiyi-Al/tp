@@ -2,9 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -29,11 +27,6 @@
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
       <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
-      <ScrollPane fx:id="tagsScrollPane" fitToWidth="true" hbarPolicy="AS_NEEDED" maxHeight="100" styleClass="tags-scroll-pane" vbarPolicy="NEVER">
-        <content>
-          <FlowPane fx:id="tags" styleClass="label" />
-        </content>
-      </ScrollPane>
     </VBox>
   </GridPane>
 </HBox>
