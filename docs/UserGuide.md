@@ -39,7 +39,7 @@ can get your contact management tasks done faster than traditional GUI apps.
     * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01` : Adds a
       contact named `John Doe` to the Address Book.
 
-    * `delete 3` : Deletes the 3rd contact shown in the current list.
+    * `copyaddr 3` : Copies the address of the 3rd contact shown in the current list to user's clipboard.
 
     * `clear` : Deletes all contacts.
 
@@ -59,10 +59,10 @@ can get your contact management tasks done faster than traditional GUI apps.
   e.g. in `add --name=NAME`, `NAME` is a parameter which can be used as `add --name=John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `--name=NAME [--tag=TAG]` can be used as `--name=John Doe --tag=friend` or as `--name=John Doe`.
+  e.g `--name=NAME [--tag=TAG]` can be used as `--name=John Doe --tag=AC-Service` or as `--name=John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[--tag=TAG]…​` can be used as ` ` (i.e. 0 times), `--tag=friend`, `--tag=friend --tag=family` etc.
+  e.g. `[--tag=TAG]…​` can be used as ` ` (i.e. 0 times), `--tag=AC-Service`, `--tag=AC-Service --tag=Plumbing` etc.
 
 * Parameters can be in any order except for `renametag`.<br>
   e.g. if the command specifies `--name=NAME --phone=PHONE_NUMBER`, `--phone=PHONE_NUMBER --name=NAME` is also
@@ -95,63 +95,62 @@ Format: `help`
 * This command does not accept any arguments.
 * Entering `help` with additional parameters (e.g., `help 123`) will return an error message.
 
-### Adding a person: `add`
+### Adding a client: `add`
 
-Adds a person to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
+Adds a client to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
 
-* Person with the same email or phone number as an existing person in the address book cannot be added as they are
-  considered duplicated persons.
+* Client with the same email or phone number as an existing client in the address book cannot be added as they are
+  considered duplicated clients.
 
 Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0) and 1 or 0 notes.
+**Tip:** A client can have any number of tags (including 0) and 1 or 0 notes.
 </box>
 
 Examples:
 
 * `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01`
-*
+* `add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
 
-`add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
+### Listing all clients : `list`
 
-### Listing all persons : `list`
-
-Shows a sorted list of all persons in the address book.
+Shows a sorted list of all clients in the address book.
 
 Format: `list`
 
 * This command does not accept any arguments.
 * Entering `list` with additional parameters (e.g., `list 123`) will return an error message.
 
-### Editing a person : `edit`
+### Editing a client : `edit`
 
-Edits an existing person in the address book.
+Edits an existing client in the address book.
 
 Format:
 `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`
 
-* Edits the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* Edits the client at the specified `INDEX`.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any
+* When editing tags, the existing tags of the client will be removed i.e adding of tags is not cumulative.
+* You can remove all the client’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any
   tags after it.
+* If the edited client duplicates another existing client in the address book, the edit will fail.
 
 Examples:
 
-* `edit 1 --phone=91234567 --email=johndoe@example.com` Edits the phone number and email address of the 1st person to be
+* `edit 1 --phone=91234567 --email=johndoe@example.com` Edits the phone number and email address of the 1st client to be
   `91234567` and `johndoe@example.com` respectively.
-* `edit 2 --name=Betsy Crower --tag=` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing
+* `edit 2 --name=Betsy Crower --tag=` Edits the name of the 2nd client to be `Betsy Crower` and clears all existing
   tags.
 
-### Locating persons by personal details: `find`
+### Locating clients by personal details: `find`
 
-Finds persons whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
-specified per field. A by-name sorted list of such persons is returned.
+Finds clients whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
+specified per field. A sorted list of such clients is returned.
 
 Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filter` operations can be
 chained together to shorten the list.
@@ -170,12 +169,12 @@ Format:
 * Only the fields specified are searched against.
 * In all fields, the search is case-insensitive. e.g. In name field, `hans` will match `Hans`.
 * In all fields, the order of the keywords does not matter. e.g. In name field, `Hans Bo` will match `Bo Hans`.
-* In name, phone number, email address, physical address fields, persons whose field matches at least one keyword in
+* In name, phone number, email address, physical address fields, clients whose field matches at least one keyword in
   that specified field as a substring will be returned (i.e. `OR` search). e.g. In name field, `Gru Ya` will match
   `Hans Gruber`, `Bo Yang`.
-* In tag field, persons whose field match at least one keyword in that specified field exactly will be returned (i.e.
+* In tag field, clients whose field match at least one keyword in that specified field exactly will be returned (i.e.
   `OR` search) as a union with the other fields mentioned. e.g. In
-  tag field `Friend` will match only `Friend`.
+  tag field `AC-Service` will match only `AC-Service`.
 
 Examples:
 
@@ -183,32 +182,26 @@ Examples:
 * `find --name=Alice --phone= --email=gmail.com` is not a valid command as phone field is specified but empty.
 * `find --name=Alice Bob` will have 1 keyword `Alice Bob`.
 * `find --name=Alice --name=Bob` will have 2 name keywords `Alice` and `Bob`.
-* `find --name=jon --name=Jack` can return persons with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
-* `find --phone=1234` can return persons with numbers `91234567` and `94561234`.
-* `find --email=.edu` can return persons with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.
-* `find --address=Street` can return persons with physical addresses `Woodlands Street`, `Admiralty Street`
-* `find --tag=friend` can return persons with tag `Friend`, but not `ExFriend`,
-*
+* `find --name=jon --name=Jack` can return clients with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
+* `find --phone=1234` can return clients with numbers `91234567` and `94561234`.
+* `find --email=.edu` can return clients with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.
+* `find --address=Street` can return clients with physical addresses `Woodlands Street`, `Admiralty Street`
+* `find --tag=wiring` can return clients with tag `Wiring`, but not `ElectricalWiring`,
+* `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair`
+is a valid combination of all fields.
+* `find --phone=123 --phone=4567 --name=James --name=Jake --tag=Aircon-Repair --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
+will return the same results as the previous command.<br>
 
-`find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend`
-is a valid
-combination of all fields.
-
-*
-
-`find --phone=123 --phone=4567 --name=James --name=Jake --tag=Friend --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
-will
-return the same results as the previous command.<br>
 ![find command result](images/findCommandResult.png)
 
-### Deleting a person : `delete`
+### Deleting a client : `delete`
 
-Deletes the specified person from the address book with confirmation.
+Deletes the specified client from the address book with confirmation.
 
 Format: `delete INDEX`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* Deletes the client at the specified `INDEX`.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, …​
 * **Two-step confirmation**:
     * First run of `delete INDEX`: shows a confirmation message only (no deletion yet).
@@ -218,22 +211,28 @@ Format: `delete INDEX`
 Examples:
 
 * `list` followed by `delete 2`
-    * Shows confirmation message with the person's details (no deletion yet).
-    * Typing `delete 2` again confirms and deletes the 2nd person.
+    * Shows confirmation message with the client's details (no deletion yet).
+    * Typing `delete 2` again confirms and deletes the 2nd client.
 * `find --name=Betsy` followed by `delete 1`
-    * Shows confirmation message for the 1st person in the search results, if exists (no deletion yet).
-    * Typing `delete 1` again deletes that person.
+    * Shows confirmation message for the 1st client in the search results, if exists (no deletion yet).
+    * Typing `delete 1` again deletes that client.
 * `delete 1` followed by `list`
     * The pending deletion is cancelled. The list command executes normally.
 
-### Copying a person's address: `copyaddr`
+<box type="tip" seamless>
 
-Copies the specified person's address from the address book.
+**Tip:** After the first `delete 1` command, any of the following will confirm the deletion: `delete 1` or `delete 01`.
+Leading/trailing spaces and spaces between the command word and index are ignored, numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
+</box>
+
+### Copying a client's address: `copyaddr`
+
+Copies the specified client's address from the address book.
 
 Format: `copyaddr INDEX`
 
-* Copies the person's address at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* Copies the client's address at the specified `INDEX`.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 ### Copying a client's edit command format: `copyedit`
@@ -249,12 +248,12 @@ Format: `copyedit INDEX`
 
 ### Viewing client details: `view`
 
-Shows the specified person's full details.
+Shows the specified client's full details.
 
 Format: `view INDEX`
 
-* Shows the person's full details at the specified `INDEX` in the right-hand panel.
-* The index refers to the index number shown in the displayed person list.
+* Shows the client's full details at the specified `INDEX` in the right-hand panel.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 ### Adding a client log: `logadd`
@@ -300,7 +299,7 @@ Examples:
 
 ### Filtering clients by tags: `filter`
 
-Filters persons whose tags contain all the given keywords. If there is more than one person, the list returned is
+Filters clients whose tags contain all the given keywords. If there is more than one client, the list returned is
 sorted.
 
 Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
@@ -308,7 +307,7 @@ Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 * Multiple keywords can be provided, separated by spaces
 * The filter is case-insensitive. e.g `Plumbing` will match `plumbing`
 * Only filters by tags.
-* Only persons matching all one keyword will be returned (i.e. `AND` search).
+* Only clients matching all one keyword will be returned (i.e. `AND` search).
 
 ### Renaming a tag: `renametag`
 
@@ -422,7 +421,7 @@ the data of your previous LinkLine home folder.
  **Delete Tag**               | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                                                                                                                    
  **Edit**                     | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                                                                                                                    
  **Filter**                   | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                                                                                                                                   
- **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend` 
+ **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair` 
  **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                 
  **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                 
  **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                     
