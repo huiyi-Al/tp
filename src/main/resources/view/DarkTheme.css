@@ -390,7 +390,3 @@
 .tags-scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
-
-.tags-scroll-pane .scroll-bar:horizontal {
-    -fx-opacity: 0.6;
-}
