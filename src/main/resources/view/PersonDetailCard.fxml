@@ -4,28 +4,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.control.Separator?>
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <GridPane HBox.hgrow="ALWAYS">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
-        </columnConstraints>
+    <ScrollPane fx:id="cardScrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="614.0" prefWidth="500.0" styleClass="card-scroll-pane" vbarPolicy="AS_NEEDED">
+    <content>
         <VBox alignment="CENTER_LEFT" minHeight="105" spacing="5" styleClass="label-bright" GridPane.columnIndex="0">
             <padding>
                 <Insets bottom="10" left="5" right="5" top="10" />
             </padding>
-            <Label fx:id="name" styleClass="card_big_label" text="\$first" />
-            <FlowPane fx:id="tags" styleClass="label"/>
+            <Label fx:id="name" styleClass="card_big_label" text="\$first" wrapText="true"/>
+            <FlowPane fx:id="tags" styleClass="label" />
             <Region minHeight="5" prefHeight="5" />
             <Separator styleClass="dotted-separator" />
             <Label fx:id="phone" styleClass="card_small_label, emoji-label" text="\$phone">
@@ -35,7 +31,8 @@
                      <Image url="@../images/phone.png" />
                   </image>
                </ImageView>
-            </graphic></Label>
+            </graphic>
+         </Label>
             <Label fx:id="email" styleClass="card_small_label, emoji-label" text="\$email">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
@@ -43,7 +40,8 @@
                      <Image url="@../images/email.png" />
                   </image>
                </ImageView>
-            </graphic></Label>
+            </graphic>
+         </Label>
             <Label fx:id="address" styleClass="card_small_label, emoji-label" text="\$address">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
@@ -51,7 +49,8 @@
                      <Image url="@../images/address.png" />
                   </image>
                </ImageView>
-            </graphic></Label>
+            </graphic>
+         </Label>
              <VBox alignment="TOP_LEFT" spacing="4.0">
                 <HBox alignment="CENTER_LEFT" spacing="4.0">
                    <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
@@ -60,19 +59,14 @@
                       </image>
                    </ImageView>
                    <Label fx:id="notesPrefix" styleClass="card_small_label" text="Notes :" />
-                   <Label fx:id="notesInlineValue" managed="false" styleClass="card_small_label, note-empty-text"
-                          text="No notes" visible="false" />
+                   <Label fx:id="notesInlineValue" managed="false" styleClass="card_small_label, note-empty-text" text="No notes" visible="false" />
                 </HBox>
-                <ScrollPane fx:id="notesScrollPane" fitToWidth="true" focusTraversable="false"
-                            hbarPolicy="NEVER" minHeight="28.0" prefHeight="72.0"
-                            styleClass="notes-scroll-pane" vbarPolicy="AS_NEEDED"
-                            maxWidth="1.7976931348623157E308">
+                <ScrollPane fx:id="notesScrollPane" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" minHeight="28.0" prefHeight="72.0" styleClass="notes-scroll-pane" vbarPolicy="AS_NEEDED">
                    <VBox.margin>
                       <Insets left="18.0" />
                    </VBox.margin>
                    <content>
-                      <Label fx:id="notesValue" styleClass="card_small_label, notes-content-label"
-                             text="\$notes" wrapText="true" />
+                      <Label fx:id="notesValue" styleClass="card_small_label, notes-content-label" text="\$notes" wrapText="true" />
                    </content>
                 </ScrollPane>
              </VBox>
@@ -90,8 +84,6 @@
             <Label fx:id="noLogsLabel" styleClass="card_small_label, log-empty-label" text="No entries" />
             <Separator styleClass="dotted-separator" />
         </VBox>
-      <rowConstraints>
-         <RowConstraints />
-      </rowConstraints>
-    </GridPane>
+    </content>
+    </ScrollPane>
 </HBox>
