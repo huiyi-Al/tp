@@ -319,6 +319,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 2f. Notes provided is invalid by criteria given in feature specification.
     * `Linkline` returns error message informing `user` what criteria the notes must meet.
     * Use case ends.
+* 2g. Duplicate client detected (same phone number or email as an existing client).
+    * `Linkline` returns an error message informing the user that a client with the same phone number or email already exists.
+    * Use case ends.
 
 #### Use Case: UC02 - Search for a client
 
@@ -343,29 +346,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * `Linkline` gives a warning to `user` that command entered is in an invalid format.
     * Use case ends.
 
-#### Use Case: UC03 - Navigate to client address.
+#### Use Case: UC03 - Copy client address to clipboard.
 
 **System:** `Linkline`
-**Actor:** `user`, User's operating system `os`, and mapping software `map`
-**Preconditions:** A client address must be a valid address that `map` can parse.
+**Actor:** `user`
 
 **MSS**
 
-1. `user` copies client address into `os` via `Linkline` command by specifying index of client.
-2. `user` pastes the client address into `map`.
-3. `user` follows the instructions given by `map` to go to the client address.
+1. `user` requests to copy a client's address by specifying the client's index.
+2. `Linkline` copies the client's address to the system clipboard.
+3. `user` pastes the address into their desired application (e.g., maps).
 4. Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid, and does not point to a client.
-    * `Linkline` returns an error that informs `user` the index given is invalid.
-    * Use case ends.
-* 2a. `Linkline` fails to copy client address into `os` clipboard, for whatever reason.
-    * `Linkline` returns message informing `user` to copy the client address manually.
-    * `user` <ins>searches for the client (UC02)</ins>.
-    * `user` highlights client address and copies it.
-    * Use case resumes from step 2.
+* 1a. The index given is invalid (not a positive integer or out of range). 
+  * `Linkline` returns an error message informing the user that the index is invalid. 
+  * Use case ends.
+* 2a. `Linkline` fails to access the system clipboard. 
+  * `Linkline` returns an error message informing the user to copy the address manually from the details view. 
+  * `user` searches for the client (UC02) and copies the address manually from the displayed details. 
+  * Use case ends.
 
 #### Use Case: UC04 - Change client phone number
 
@@ -461,9 +462,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. The index given is invalid (not a positive integer or out of range).
     * `Linkline` returns an error message showing that the input index is invalid to the `user`.
     * Use case ends.
-* 1a. No field is provided.
+* 1b. No field is provided.
     * `Linkline` returns an error message to inform `user` adding at least one field.
     * Use case ends.
+* 1c. A tag provided is invalid according to the feature specification. 
+  * `Linkline` returns an error message informing `user` of the tag naming rules. 
+  * Use case ends.
 
 #### Use Case: UC09 - Filter clients by tags
 
