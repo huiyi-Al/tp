@@ -117,8 +117,6 @@ public class ModelManager implements Model {
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         resetPredicatesFilteredPersonList();
-
-        selectedPerson.set(person);
     }
 
     @Override

@@ -372,3 +372,21 @@
     -fx-pref-height: 1;
 
 }
+.card-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.card-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.tags-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+
+.tags-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
