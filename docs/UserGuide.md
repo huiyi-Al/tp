@@ -243,6 +243,43 @@ Format: `view INDEX`
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
+### Adding a client log: `logadd`
+
+Adds a timestamped log entry to the specified client.
+
+Format: `logadd INDEX LOG_MESSAGE`
+
+* Adds a new log entry to the client at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* `LOG_MESSAGE` must be between 1 and 1000 characters (measured in Unicode code points).
+
+Examples:
+
+* `logadd 1 Observed leakage beneath sink during site visit.`
+* `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
+
+### Deleting a client log: `logdelete`
+
+Deletes a specific log entry from the specified client with confirmation.
+
+Format: `logdelete PERSON_INDEX LOG_INDEX`
+
+* Deletes the log at `LOG_INDEX` for the client at `PERSON_INDEX`.
+* `PERSON_INDEX` refers to the index number shown in the displayed person list.
+* `LOG_INDEX` refers to the log number shown in the UI for that client.
+* Both indices **must be positive integers** 1, 2, 3, ...
+* **Two-step confirmation**: You will be prompted to confirm by typing the same `logdelete` command again.
+* Any other command typed after the first `logdelete` will cancel the pending log deletion.
+
+Examples:
+
+* `view 2` followed by `logdelete 2 1`
+    * Shows confirmation message for log `1` of client `2`.
+    * Typing `logdelete 2 1` again confirms and deletes that log.
+* `logdelete 2 1` followed by `list`
+    * The pending log deletion is cancelled. The list command executes normally.
+
 ### Filtering clients by tags: `filter`
 
 Filters persons whose tags contain all the given keywords. If there is more than one person, the list returned is
@@ -356,6 +393,8 @@ the data of your previous LinkLine home folder.
  **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend` 
  **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                 
  **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                 
+ **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                     
+ **Log Delete**               | `logdelete PERSON_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
  **Rename Tag**               | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                                     
  **View**                     | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                                        
 
