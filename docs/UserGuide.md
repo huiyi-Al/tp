@@ -254,8 +254,13 @@ Shows the specified person's full details.
 Format: `view INDEX`
 
 * Shows the person's full details at the specified `INDEX` in the right-hand panel.
-* The index refers to the index number shown in the displayed person list.
+* The index refers to the index number shown in the current displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+
+Examples:
+
+* `find --name=John Don` followed by `view 1`
+* `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01` followed by `view 1`
 
 ### Adding a client log: `logadd`
 
