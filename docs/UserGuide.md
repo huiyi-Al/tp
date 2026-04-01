@@ -198,16 +198,18 @@ Format: `delete INDEX`
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
-* **Two-step confirmation**: You will be prompted to confirm the deletion by typing the same command again.
-* Any other command typed after the first `delete` will cancel the pending deletion.
+* **Two-step confirmation**:
+    * First run of `delete INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `delete INDEX`: completes the deletion.
+* Any other command (including invalid command input) after the first `delete` will cancel the pending deletion.
 
 Examples:
 
 * `list` followed by `delete 2`
-    * Shows confirmation message with the person's details.
+    * Shows confirmation message with the person's details (no deletion yet).
     * Typing `delete 2` again confirms and deletes the 2nd person.
 * `find --name=Betsy` followed by `delete 1`
-    * Shows confirmation message for the 1st person in the search results.
+    * Shows confirmation message for the 1st person in the search results, if exists (no deletion yet).
     * Typing `delete 1` again deletes that person.
 * `delete 1` followed by `list`
     * The pending deletion is cancelled. The list command executes normally.
@@ -269,13 +271,15 @@ Format: `logdelete PERSON_INDEX LOG_INDEX`
 * `PERSON_INDEX` refers to the index number shown in the displayed person list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
 * Both indices **must be positive integers** 1, 2, 3, ...
-* **Two-step confirmation**: You will be prompted to confirm by typing the same `logdelete` command again.
-* Any other command typed after the first `logdelete` will cancel the pending log deletion.
+* **Two-step confirmation**:
+    * First run of `logdelete PERSON_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `logdelete PERSON_INDEX LOG_INDEX`: deletes the selected log.
+* Any other command (including invalid command input) after the first `logdelete` will cancel the pending log deletion.
 
 Examples:
 
 * `view 2` followed by `logdelete 2 1`
-    * Shows confirmation message for log `1` of client `2`.
+    * Shows confirmation message for log `1` of client `2` (no deletion yet).
     * Typing `logdelete 2 1` again confirms and deletes that log.
 * `logdelete 2 1` followed by `list`
     * The pending log deletion is cancelled. The list command executes normally.
@@ -316,7 +320,19 @@ Deletes a specific tag and removes it from all clients currently having it.
 Format: `deletetag TAG_NAME`
 
 * The `TAG_NAME` must exist in the address book.
+* **Two-step confirmation**:
+    * First run of `deletetag TAG_NAME`: shows a confirmation message only (no deletion yet).
+    * Second matching `deletetag TAG_NAME`: removes that tag globally from all clients.
+* Any other command (including invalid command input) after the first `deletetag` will cancel the pending tag deletion.
 * This operation cannot be undone.
+
+Examples:
+
+* `deletetag plumbing`
+    * Shows confirmation message for deleting tag `plumbing` (no deletion yet).
+    * Typing `deletetag plumbing` again confirms and removes it from all clients.
+* `deletetag plumbing` followed by `list`
+    * The pending tag deletion is cancelled. The list command executes normally.
 
 ### Clearing all entries : `clear`
 
@@ -326,8 +342,10 @@ Format: `clear`
 
 * This command does not accept any arguments.
 * Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
-* **Two-step confirmation**: You will be prompted to confirm the clearing by typing `clear` again.
-* Any other command typed after the first `clear` will cancel the pending action.
+* **Two-step confirmation**:
+    * First run of `clear`: shows a confirmation message only (no clearing yet).
+    * Second `clear`: clears all entries from the address book.
+* Any other command (including invalid command input) after the first `clear` will cancel the pending action.
 
 ### Exiting the program : `exit`
 
