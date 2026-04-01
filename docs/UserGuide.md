@@ -1,7 +1,7 @@
 ---
-  layout: default.md
-    title: "User Guide"
-    pageNav: 3
+layout: default.md
+title: "User Guide"
+pageNav: 3
 ---
 
 # Linkline User Guide
@@ -71,6 +71,18 @@ can get your contact management tasks done faster than traditional GUI apps.
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
   as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
+
+### Field constraints
+
+The following constraints apply to command fields:
+
+* `NAME`: must not be blank, up to 100 characters.
+* `PHONE_NUMBER`: must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digits.
+* `EMAIL`: must be in valid `local-part@domain` format and satisfy email length/rule checks.
+* `ADDRESS`: must not be blank.
+* `TAG`: must not be blank, 1 to 50 characters.
+* `NOTES`: 0 to 200 characters.
+* `LOG_MESSAGE`: must not be blank, 1 to 1000 characters.
 
 ### Viewing help : `help`
 
@@ -198,16 +210,18 @@ Format: `delete INDEX`
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
-* **Two-step confirmation**: You will be prompted to confirm the deletion by typing the same command again.
-* Any other command typed after the first `delete` will cancel the pending deletion.
+* **Two-step confirmation**:
+    * First run of `delete INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `delete INDEX`: completes the deletion.
+* Any other command (including invalid command input) after the first `delete` will cancel the pending deletion.
 
 Examples:
 
 * `list` followed by `delete 2`
-    * Shows confimation message with the person's details.
+    * Shows confirmation message with the person's details (no deletion yet).
     * Typing `delete 2` again confirms and deletes the 2nd person.
-* `find Betsy` followed by `delete 1`
-    * Shows confimation message for the 1st person in the search results.
+* `find --name=Betsy` followed by `delete 1`
+    * Shows confirmation message for the 1st person in the search results, if exists (no deletion yet).
     * Typing `delete 1` again deletes that person.
 * `delete 1` followed by `list`
     * The pending deletion is cancelled. The list command executes normally.
@@ -242,6 +256,47 @@ Format: `view INDEX`
 * Shows the person's full details at the specified `INDEX` in the right-hand panel.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+
+### Adding a client log: `logadd`
+
+Adds a timestamped log entry to the specified client.
+
+Format: `logadd INDEX LOG_MESSAGE`
+
+* Adds a new log entry to the client at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* `LOG_MESSAGE` must be between 1 and 1000 characters.
+
+Examples:
+
+* `logadd 1 Observed leakage beneath sink during site visit.`
+* `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
+
+### Deleting a client log: `logdelete`
+
+Deletes a specific log entry from the specified client with confirmation.
+
+Format: `logdelete PERSON_INDEX LOG_INDEX`
+
+* Deletes the log at `LOG_INDEX` for the client at `PERSON_INDEX`.
+* `PERSON_INDEX` refers to the index number shown in the displayed person list.
+* `LOG_INDEX` refers to the log number shown in the UI for that client.
+* **Log numbering note**: Logs are displayed newest-first, but numbered oldest-to-newest.
+  For example, if a client has 5 logs, the topmost (and the latest) log is `Log 5`.
+* Both indices **must be positive integers** 1, 2, 3, ...
+* **Two-step confirmation**:
+    * First run of `logdelete PERSON_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `logdelete PERSON_INDEX LOG_INDEX`: deletes the selected log.
+* Any other command (including invalid command input) after the first `logdelete` will cancel the pending log deletion.
+
+Examples:
+
+* `view 2` followed by `logdelete 2 1`
+    * Shows confirmation message for log `1` of client `2` (no deletion yet).
+    * Typing `logdelete 2 1` again confirms and deletes that log.
+* `logdelete 2 1` followed by `list`
+    * The pending log deletion is cancelled. The list command executes normally.
 
 ### Filtering clients by tags: `filter`
 
@@ -279,7 +334,19 @@ Deletes a specific tag and removes it from all clients currently having it.
 Format: `deletetag TAG_NAME`
 
 * The `TAG_NAME` must exist in the address book.
+* **Two-step confirmation**:
+    * First run of `deletetag TAG_NAME`: shows a confirmation message only (no deletion yet).
+    * Second matching `deletetag TAG_NAME`: removes that tag globally from all clients.
+* Any other command (including invalid command input) after the first `deletetag` will cancel the pending tag deletion.
 * This operation cannot be undone.
+
+Examples:
+
+* `deletetag plumbing`
+    * Shows confirmation message for deleting tag `plumbing` (no deletion yet).
+    * Typing `deletetag plumbing` again confirms and removes it from all clients.
+* `deletetag plumbing` followed by `list`
+    * The pending tag deletion is cancelled. The list command executes normally.
 
 ### Clearing all entries : `clear`
 
@@ -289,8 +356,10 @@ Format: `clear`
 
 * This command does not accept any arguments.
 * Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
-* **Two-step confirmation**: You will be prompted to confirm the clearing by typing `clear` again.
-* Any other command typed after the first `clear` will cancel the pending action.
+* **Two-step confirmation**:
+    * First run of `clear`: shows a confirmation message only (no clearing yet).
+    * Second `clear`: clears all entries from the address book.
+* Any other command (including invalid command input) after the first `clear` will cancel the pending action.
 
 ### Exiting the program : `exit`
 
@@ -348,7 +417,7 @@ the data of your previous LinkLine home folder.
  **Add**                      | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits`                                                                                                                  
  **Clear**                    | `clear`                                                                                                                                                                                                                                                                                                                                                                                                
  **Copy Address**             | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                                                                                                                                                
- **Copy Edit Command Format** | `copyedit INDEX`<br> e.g., `copyedit 2`                                                                                                                                                                                                                                                                                                                                                                |                                                                                                                                                                                                                                                                                                          |
+ **Copy Edit Command Format** | `copyedit INDEX`<br> e.g., `copyedit 2`                                                                                                                                                                                                                                                                                                                                                               
  **Delete**                   | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                                                                                                                                    
  **Delete Tag**               | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                                                                                                                    
  **Edit**                     | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                                                                                                                    
@@ -356,6 +425,8 @@ the data of your previous LinkLine home folder.
  **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Friend` 
  **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                 
  **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                 
+ **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                     
+ **Log Delete**               | `logdelete PERSON_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
  **Rename Tag**               | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                                     
  **View**                     | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                                        
 
