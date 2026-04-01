@@ -204,10 +204,10 @@ Format: `delete INDEX`
 Examples:
 
 * `list` followed by `delete 2`
-    * Shows confimation message with the person's details.
+    * Shows confirmation message with the person's details.
     * Typing `delete 2` again confirms and deletes the 2nd person.
-* `find Betsy` followed by `delete 1`
-    * Shows confimation message for the 1st person in the search results.
+* `find --name=Betsy` followed by `delete 1`
+    * Shows confirmation message for the 1st person in the search results.
     * Typing `delete 1` again deletes that person.
 * `delete 1` followed by `list`
     * The pending deletion is cancelled. The list command executes normally.
