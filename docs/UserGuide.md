@@ -72,6 +72,18 @@ can get your contact management tasks done faster than traditional GUI apps.
   as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
+### Field constraints
+
+The following constraints apply to command fields:
+
+* `NAME`: must not be blank, up to 100 characters.
+* `PHONE_NUMBER`: must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digits.
+* `EMAIL`: must be in valid `local-part@domain` format and satisfy email length/rule checks.
+* `ADDRESS`: must not be blank.
+* `TAG`: must not be blank, 1 to 50 characters.
+* `NOTES`: 0 to 200 characters.
+* `LOG_MESSAGE`: must not be blank, 1 to 1000 characters.
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -254,7 +266,7 @@ Format: `logadd INDEX LOG_MESSAGE`
 * Adds a new log entry to the client at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, ...
-* `LOG_MESSAGE` must be between 1 and 1000 characters (measured in Unicode code points).
+* `LOG_MESSAGE` must be between 1 and 1000 characters.
 
 Examples:
 
