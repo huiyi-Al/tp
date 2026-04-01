@@ -252,8 +252,8 @@ Shows the specified client's full details.
 
 Format: `view INDEX`
 
-* Shows the person's full details at the specified `INDEX` in the right-hand panel.
-* The index refers to the index number shown in the current displayed person list.
+* Shows the client's full details at the specified `INDEX` in the right-hand panel.
+* The index refers to the index number shown in the current displayed client list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
