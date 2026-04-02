@@ -37,6 +37,9 @@ import seedu.address.ui.UiManager;
 public class MainApp extends Application {
 
     public static final Version VERSION = new Version(0, 2, 2, true);
+    private static final String DATA_FILE_CORRUPTED_WARNING_FORMAT =
+            "Data file %s could not be loaded because it contains invalid or malformed data.%n"
+            + "Linkline started with an empty address book.";
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
@@ -45,6 +48,7 @@ public class MainApp extends Application {
     protected Storage storage;
     protected Model model;
     protected Config config;
+    private String startupWarningMessage;
 
     @Override
     public void init() throws Exception {
@@ -87,6 +91,7 @@ public class MainApp extends Application {
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty Linkline.");
+            startupWarningMessage = String.format(DATA_FILE_CORRUPTED_WARNING_FORMAT, storage.getAddressBookFilePath());
             initialData = new AddressBook();
         }
 
@@ -172,6 +177,9 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         logger.info("Starting Linkline " + MainApp.VERSION);
         ui.start(primaryStage);
+        if (startupWarningMessage != null) {
+            ui.showStartupMessage(startupWarningMessage);
+        }
     }
 
     @Override

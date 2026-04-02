@@ -164,6 +164,13 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Displays a message in the result display area.
+     */
+    void showResultMessage(String message) {
+        resultDisplay.setFeedbackToUser(message);
+    }
+
+    /**
      * Closes the application.
      */
     @FXML
