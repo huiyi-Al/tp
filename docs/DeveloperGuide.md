@@ -523,8 +523,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. `user` requests to delete a specific tag by tag name.
 2. `Linkline` displays the specified tag name and ask for confirmation.
-3. `Linkline` removes the tag from the global tag list.
-4. `Linkline` removes the tag from all clients with that tag name.
+3. `user` enters the same delete tag command again.
+4. `Linkline` removes the tag from the global tag list.
+5. `Linkline` removes the tag from all clients with that tag name.
+6. Use case ends.
 
 **Extensions**
 
