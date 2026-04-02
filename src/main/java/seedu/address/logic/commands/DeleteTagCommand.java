@@ -21,7 +21,7 @@ public class DeleteTagCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a tag globally from the address book.\n"
             + "Parameters: TAG_NAME (must be between 1-50 characters long)\n"
-            + "Example: " + COMMAND_WORD + " " + "Plumbing"
+            + "Example: " + COMMAND_WORD + " " + "Plumbing\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tag: %1$s";

@@ -25,8 +25,8 @@ public class LogDeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes a log entry from the client identified by the index number used "
-            + "in the displayed person list.\n"
-            + "Parameters: PERSON_INDEX LOG_INDEX\n"
+            + "in the displayed client list.\n"
+            + "Parameters: CLIENT_INDEX LOG_INDEX\n"
             + "Example: " + COMMAND_WORD + " 2 1\n"
             + "The LOG_INDEX refers to the log number shown in the UI.\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
@@ -98,7 +98,7 @@ public class LogDeleteCommand extends Command {
         if (!logger.isLoggable(Level.FINE)) {
             return;
         }
-        logger.fine(() -> String.format("Executing logdelete transition for person index %d: "
+        logger.fine(() -> String.format("Executing logdelete transition for client index %d: "
                         + "display index %d maps to storage index %d, current log count=%d, awaiting confirmation",
                 personIndexOneBased, displayIndex, storageIndex, currentLogCount));
     }

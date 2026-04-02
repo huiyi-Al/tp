@@ -23,12 +23,12 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + ": Deletes the client identified by the index number used in the displayed client list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Client: %1$s";
     public static final String MESSAGE_DELETE_CONFIRM =
             "Are you sure you want to delete %1$s (%2$s, %3$s)?\n"
                     + "Type '%4$s %5$d' again to confirm. "
@@ -65,7 +65,7 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        assert lastShownList != null : "Filtered person list should not be null";
+        assert lastShownList != null : "Filtered client list should not be null";
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             logger.info("Invalid index: " + targetIndex.getOneBased()
@@ -75,7 +75,7 @@ public class DeleteCommand extends Command {
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
 
-        assert personToDelete != null : "Person at valid index should not be null";
+        assert personToDelete != null : "Client at valid index should not be null";
 
         logger.info("Creating pending deletion for: " + personToDelete.getName().fullName);
 

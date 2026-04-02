@@ -125,7 +125,7 @@ How the `Logic` component works:
    a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which
    is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. The command can communicate with the `Model` when it is executed (e.g. to delete a client).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take
    several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -293,7 +293,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. `user` requests to add a client.
-2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the person on the
+2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the client on the
    CLI.
 3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details
    on the GUI.
@@ -536,7 +536,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Non-Functional Requirements
 
 1. Portability: Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2. Capacity & Performance: Should be able to hold up to 1000 persons without a noticeable sluggishness in performance
+2. Capacity & Performance: Should be able to hold up to 1000 clients without a noticeable sluggishness in performance
    for typical usage.
 3. Usability (Efficiency): A user with above average typing speed for regular English text (i.e. not code, not system
    admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
@@ -614,14 +614,14 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a client
 
-1. Deleting a person while all persons are being shown
+1. Deleting a client while all clients are being shown
 
-    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
 
     1. Test case: `delete 1`<br>
-       Expected: Expected: No person is deleted. Confirmation message with the person's details is shown. Status bar
+       Expected: Expected: No client is deleted. Confirmation message with the client's details is shown. Status bar
        remains the same. Pending deletion state is set for index 1.
 
     1. Test case: `delete 1` (immediately after the above) <br>
@@ -633,7 +633,7 @@ testers are expected to do more *exploratory* testing.
        confirmation again (not auto-deleted).
 
     1. Test case: `delete 0`<br>
-       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+       Expected: No client is deleted. Error details shown in the status message. Status bar remains the same.
 
     1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
        Expected: Similar to previous.

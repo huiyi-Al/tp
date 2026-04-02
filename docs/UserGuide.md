@@ -268,7 +268,7 @@ Adds a timestamped log entry to the specified client.
 Format: `logadd INDEX LOG_MESSAGE`
 
 * Adds a new log entry to the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, ...
 * `LOG_MESSAGE` must be between 1 and 1000 characters.
 
@@ -281,17 +281,17 @@ Examples:
 
 Deletes a specific log entry from the specified client with confirmation.
 
-Format: `logdelete PERSON_INDEX LOG_INDEX`
+Format: `logdelete CLIENT_INDEX LOG_INDEX`
 
-* Deletes the log at `LOG_INDEX` for the client at `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the index number shown in the displayed person list.
+* Deletes the log at `LOG_INDEX` for the client at `CLIENT_INDEX`.
+* `CLIENT_INDEX` refers to the index number shown in the displayed client list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
 * **Log numbering note**: Logs are displayed newest-first, but numbered oldest-to-newest.
   For example, if a client has 5 logs, the topmost (and the latest) log is `Log 5`.
 * Both indices **must be positive integers** 1, 2, 3, ...
 * **Two-step confirmation**:
-    * First run of `logdelete PERSON_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
-    * Second matching `logdelete PERSON_INDEX LOG_INDEX`: deletes the selected log.
+    * First run of `logdelete CLIENT_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `logdelete CLIENT_INDEX LOG_INDEX`: deletes the selected log.
 * Any other command (including invalid command input) after the first `logdelete` will cancel the pending log deletion.
 
 Examples:
@@ -430,7 +430,7 @@ the data of your previous LinkLine home folder.
  **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                 
  **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                 
  **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                     
- **Log Delete**               | `logdelete PERSON_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
+ **Log Delete**               | `logdelete CLIENT_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
  **Rename Tag**               | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                                     
  **View**                     | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                                        
 
