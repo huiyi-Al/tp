@@ -521,17 +521,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. `user` requests to delete a specific tag by name.
-2. `Linkline` removes the tag from the global tag list.
-3. `Linkline` removes the tag from all clients with that tag.
+1. `user` requests to delete a specific tag by tag name.
+2. `Linkline` displays the specified tag name and ask for confirmation.
+3. `user` enters the same delete tag command again.
+4. `Linkline` removes the tag from the global tag list.
+5. `Linkline` removes the tag from all clients with that tag name.
+6. Use case ends.
 
 **Extensions**
 
 * 1a. The tag name provided does not exist.
     * `Linkline` returns an error message informing the `user` that the tag was not found.
     * Use case ends.
-
-  *{More to be added}*
+* 2a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending deletion and executes the new command normally.
+    * Use case ends.
 
 ### Non-Functional Requirements
 
@@ -612,8 +616,6 @@ testers are expected to do more *exploratory* testing.
     1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a client
 
 1. Deleting a client while all clients are being shown
@@ -637,11 +639,3 @@ testers are expected to do more *exploratory* testing.
 
     1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
        Expected: Similar to previous.
-
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
