@@ -26,7 +26,7 @@ public class LogAddCommand extends Command {
     public static final String COMMAND_WORD = "logadd";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Adds a log entry to the client identified by the index number used in the displayed person list.\n"
+            + ": Adds a log entry to the client identified by the index number used in the displayed client list.\n"
             + "Parameters: "
             + "INDEX LOG_MESSAGE\n"
             + "Example: " + COMMAND_WORD + " "
@@ -69,7 +69,7 @@ public class LogAddCommand extends Command {
 
         Person targetPerson = lastShownList.get(personIndex.getZeroBased());
         int previousLogCount = targetPerson.getLogHistory().size();
-        logger.fine(() -> String.format("Executing logadd transition for person index %d: log count %d -> %d",
+        logger.fine(() -> String.format("Executing logadd transition for client index %d: log count %d -> %d",
                 personIndex.getOneBased(), previousLogCount, previousLogCount + 1));
         LocalDateTime timestamp = requireNonNull(timestampSupplier.get());
         LogEntry newLogEntry = new LogEntry(timestamp, logMessage);
@@ -100,7 +100,7 @@ public class LogAddCommand extends Command {
         if (!logger.isLoggable(Level.FINE)) {
             return;
         }
-        logger.fine(() -> String.format("logadd applied for person index %d. Log count: %d -> %d",
+        logger.fine(() -> String.format("logadd applied for client index %d. Log count: %d -> %d",
                 personIndexOneBased, beforeCount, afterCount));
     }
 

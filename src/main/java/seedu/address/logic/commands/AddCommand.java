@@ -25,7 +25,7 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a client to Linkline.\n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
@@ -42,8 +42,8 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "AC-Service "
             + PREFIX_TAG + "Plumbing";
 
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "A person with the same phone number (ignoring formatting)"
+    public static final String MESSAGE_SUCCESS = "New client added: %1$s";
+    public static final String MESSAGE_DUPLICATE_PERSON = "A client with the same phone number (ignoring formatting)"
             + " or email already exists";
     private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 

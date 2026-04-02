@@ -37,7 +37,7 @@ can get your contact management tasks done faster than traditional GUI apps.
     * `list` : Lists all contacts.
 
     * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01` : Adds a
-      contact named `John Doe` to the Address Book.
+      contact named `John Doe` to Linkline.
 
     * `copyaddr 3` : Copies the address of the 3rd contact shown in the current list to user's clipboard.
 
@@ -97,9 +97,9 @@ Format: `help`
 
 ### Adding a client: `add`
 
-Adds a client to the address book. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
+Adds a client to Linkline. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
 
-* Client with the same email or phone number as an existing client in the address book cannot be added as they are
+* Client with the same email or phone number as an existing client in Linkline cannot be added as they are
   considered duplicated clients.
 
 Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]`
@@ -116,7 +116,7 @@ Examples:
 
 ### Listing all clients : `list`
 
-Shows a sorted list of all clients in the address book.
+Shows a sorted list of all clients in Linkline.
 
 Format: `list`
 
@@ -125,7 +125,7 @@ Format: `list`
 
 ### Editing a client : `edit`
 
-Edits an existing client in the address book.
+Edits an existing client in Linkline.
 
 Format:
 `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`
@@ -138,7 +138,7 @@ Format:
 * When editing tags, the existing tags of the client will be removed i.e adding of tags is not cumulative.
 * You can remove all the client’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any
   tags after it.
-* If the edited client duplicates another existing client in the address book, the edit will fail.
+* If the edited client duplicates another existing client in Linkline, the edit will fail.
 
 Examples:
 
@@ -196,7 +196,7 @@ will return the same results as the previous command.<br>
 
 ### Deleting a client : `delete`
 
-Deletes the specified client from the address book with confirmation.
+Deletes the specified client from Linkline with confirmation.
 
 Format: `delete INDEX`
 
@@ -227,7 +227,7 @@ Leading/trailing spaces and spaces between the command word and index are ignore
 
 ### Copying a client's address: `copyaddr`
 
-Copies the specified client's address from the address book.
+Copies the specified client's address from Linkline.
 
 Format: `copyaddr INDEX`
 
@@ -268,7 +268,7 @@ Adds a timestamped log entry to the specified client.
 Format: `logadd INDEX LOG_MESSAGE`
 
 * Adds a new log entry to the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* The index refers to the index number shown in the displayed client list.
 * The index **must be a positive integer** 1, 2, 3, ...
 * `LOG_MESSAGE` must be between 1 and 1000 characters.
 
@@ -281,17 +281,17 @@ Examples:
 
 Deletes a specific log entry from the specified client with confirmation.
 
-Format: `logdelete PERSON_INDEX LOG_INDEX`
+Format: `logdelete CLIENT_INDEX LOG_INDEX`
 
-* Deletes the log at `LOG_INDEX` for the client at `PERSON_INDEX`.
-* `PERSON_INDEX` refers to the index number shown in the displayed person list.
+* Deletes the log at `LOG_INDEX` for the client at `CLIENT_INDEX`.
+* `CLIENT_INDEX` refers to the index number shown in the displayed client list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
 * **Log numbering note**: Logs are displayed newest-first, but numbered oldest-to-newest.
   For example, if a client has 5 logs, the topmost (and the latest) log is `Log 5`.
 * Both indices **must be positive integers** 1, 2, 3, ...
 * **Two-step confirmation**:
-    * First run of `logdelete PERSON_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
-    * Second matching `logdelete PERSON_INDEX LOG_INDEX`: deletes the selected log.
+    * First run of `logdelete CLIENT_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
+    * Second matching `logdelete CLIENT_INDEX LOG_INDEX`: deletes the selected log.
 * Any other command (including invalid command input) after the first `logdelete` will cancel the pending log deletion.
 
 Examples:
@@ -316,14 +316,14 @@ Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 
 ### Renaming a tag: `renametag`
 
-Renames an existing tag to a new name across the entire address book. All clients with the old tag will be updated with
+Renames an existing tag to a new name across Linkline. All clients with the old tag will be updated with
 the new tag name.
 
 Format: `renametag --tag=OLD_TAG --tag=NEW_TAG`
 
 * Tags have to be in this specific order and only 2 parameters are accepted.
-* The `OLD_TAG` must exist in the address book.
-* The `NEW_TAG` must be a valid tag name and should not already exist in the address book.
+* The `OLD_TAG` must exist in Linkline.
+* The `NEW_TAG` must be a valid tag name and should not already exist in Linkline.
 * Tag names are case-insensitive. e.g., `PLUMBING` and `plumbing` are considered the same tag.
 
 Examples:
@@ -337,7 +337,7 @@ Deletes a specific tag and removes it from all clients currently having it.
 
 Format: `deletetag TAG_NAME`
 
-* The `TAG_NAME` must exist in the address book.
+* The `TAG_NAME` must exist in Linkline.
 * **Two-step confirmation**:
     * First run of `deletetag TAG_NAME`: shows a confirmation message only (no deletion yet).
     * Second matching `deletetag TAG_NAME`: removes that tag globally from all clients.
@@ -354,7 +354,7 @@ Examples:
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries in Linkline.
 
 Format: `clear`
 
@@ -362,7 +362,7 @@ Format: `clear`
 * Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
 * **Two-step confirmation**:
     * First run of `clear`: shows a confirmation message only (no clearing yet).
-    * Second `clear`: clears all entries from the address book.
+    * Second `clear`: clears all entries in Linkline.
 * Any other command (including invalid command input) after the first `clear` will cancel the pending action.
 
 ### Exiting the program : `exit`
@@ -381,7 +381,7 @@ manually.
 
 ### Editing the data file
 
-LinkLine data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are
+LinkLine data are saved automatically as a JSON file `[JAR file location]/data/linkline.json`. Advanced users are
 welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
@@ -430,7 +430,7 @@ the data of your previous LinkLine home folder.
  **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                 
  **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                 
  **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                     
- **Log Delete**               | `logdelete PERSON_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
+ **Log Delete**               | `logdelete CLIENT_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                         
  **Rename Tag**               | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                                     
  **View**                     | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                                        
 

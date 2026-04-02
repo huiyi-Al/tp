@@ -13,7 +13,7 @@ public class ExitCommand extends Command {
             + "Note: this command does not accept any arguments.\n"
             + "Example: " + COMMAND_WORD;
 
-    public static final String MESSAGE_EXIT_ACKNOWLEDGEMENT = "Exiting Address Book as requested ...";
+    public static final String MESSAGE_EXIT_ACKNOWLEDGEMENT = "Exiting Linkline as requested ...";
 
     @Override
     public CommandResult execute(Model model) {

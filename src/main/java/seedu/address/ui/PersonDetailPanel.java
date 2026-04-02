@@ -59,7 +59,7 @@ public class PersonDetailPanel extends UiPart<Region> {
      * Displays the details of the given person.
      */
     private void displayPersonDetails(Person person) {
-        logger.info("Displaying person details");
+        logger.info("Displaying client details");
 
         noselectionLabel.setVisible(false);
         noselectionLabel.setManaged(false);

@@ -31,7 +31,7 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = MessageFormat.format(
             """
-                    {0}: Finds all persons whose details contain any of the given queries \
+                    {0}: Finds all clients whose details contain any of the given queries \
                     and displays them as a list with index numbers.
                     Preamble given will result in an error.
                     Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail \
@@ -63,10 +63,10 @@ public class FindCommand extends Command {
         Person lastSelectedPerson = model.getSelectedPerson().getValue();
         model.addPredicateFilteredPersonList(searchPredicate);
         int resultSize = model.getFilteredPersonList().size();
-        logger.fine(MessageFormat.format("Filtered person list size: {0}", resultSize));
+        logger.fine(MessageFormat.format("Filtered client list size: {0}", resultSize));
 
         if (lastSelectedPerson != null && !model.getFilteredPersonList().contains(lastSelectedPerson)) {
-            logger.fine("Last selected person no longer available. Resetting view panel");
+            logger.fine("Last selected client no longer available. Resetting view panel");
             model.setSelectedPerson(null);
         }
 
