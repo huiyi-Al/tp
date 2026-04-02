@@ -1,7 +1,10 @@
 package seedu.address;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -37,6 +40,16 @@ import seedu.address.ui.UiManager;
 public class MainApp extends Application {
 
     public static final Version VERSION = new Version(0, 2, 2, true);
+    private static final DateTimeFormatter BACKUP_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+    private static final String DATA_FILE_CORRUPTED_WARNING_FORMAT =
+            "Data file %s could not be loaded because it contains invalid or malformed data.%n"
+            + "Linkline started with an empty address book.";
+    private static final String DATA_FILE_CORRUPTED_BACKUP_WARNING_FORMAT =
+            "Data file %s could not be loaded because it contains invalid or malformed data.%n"
+            + "A backup of the original file was created at %s.%n"
+            + "Linkline started with an empty address book.";
+    private static final String CORRUPTED_BACKUP_FILENAME_FORMAT = "%s.corrupted-%s.bak";
+    private static final String CORRUPTED_BACKUP_FILENAME_WITH_COUNTER_FORMAT = "%s.corrupted-%s-%d.bak";
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
@@ -45,6 +58,7 @@ public class MainApp extends Application {
     protected Storage storage;
     protected Model model;
     protected Config config;
+    private String startupWarningMessage;
 
     @Override
     public void init() throws Exception {
@@ -87,6 +101,11 @@ public class MainApp extends Application {
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty Linkline.");
+            Path addressBookFilePath = storage.getAddressBookFilePath();
+            Optional<Path> backupPath = backupCorruptedAddressBookFile(addressBookFilePath);
+            startupWarningMessage = backupPath
+                    .map(path -> String.format(DATA_FILE_CORRUPTED_BACKUP_WARNING_FORMAT, addressBookFilePath, path))
+                    .orElse(String.format(DATA_FILE_CORRUPTED_WARNING_FORMAT, addressBookFilePath));
             initialData = new AddressBook();
         }
 
@@ -172,6 +191,9 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         logger.info("Starting Linkline " + MainApp.VERSION);
         ui.start(primaryStage);
+        if (startupWarningMessage != null) {
+            ui.showStartupMessage(startupWarningMessage);
+        }
     }
 
     @Override
@@ -182,5 +204,36 @@ public class MainApp extends Application {
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }
+    }
+
+    private Optional<Path> backupCorruptedAddressBookFile(Path addressBookFilePath) {
+        if (!Files.exists(addressBookFilePath)) {
+            return Optional.empty();
+        }
+
+        String timestamp = LocalDateTime.now().format(BACKUP_TIMESTAMP_FORMATTER);
+        String originalFileName = addressBookFilePath.getFileName().toString();
+        Path backupPath = createBackupFilePath(addressBookFilePath, originalFileName, timestamp);
+        try {
+            Files.copy(addressBookFilePath, backupPath);
+            logger.warning("Created backup of corrupted data file at " + backupPath);
+            return Optional.of(backupPath);
+        } catch (IOException ioe) {
+            logger.warning("Failed to create backup of corrupted data file at " + addressBookFilePath + ". "
+                    + StringUtil.getDetails(ioe));
+            return Optional.empty();
+        }
+    }
+
+    private Path createBackupFilePath(Path originalPath, String originalFileName, String timestamp) {
+        Path backupPath = originalPath.resolveSibling(
+                String.format(CORRUPTED_BACKUP_FILENAME_FORMAT, originalFileName, timestamp));
+        int counter = 1;
+        while (Files.exists(backupPath)) {
+            backupPath = originalPath.resolveSibling(
+                    String.format(CORRUPTED_BACKUP_FILENAME_WITH_COUNTER_FORMAT, originalFileName, timestamp, counter));
+            counter++;
+        }
+        return backupPath;
     }
 }
