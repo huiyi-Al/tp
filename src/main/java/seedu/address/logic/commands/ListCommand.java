@@ -12,7 +12,7 @@ public class ListCommand extends Command {
     public static final String COMMAND_WORD = "list";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Shows a sorted list of all clients in the address book.\n"
+            + ": Shows a sorted list of all clients in Linkline.\n"
             + "Note: this command does not accept any arguments.\n"
             + "Example: " + COMMAND_WORD;
 

@@ -507,10 +507,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 1a. The target tag name does not exist in the address book.
+* 1a. The target tag name does not exist in `Linkline`.
     * `Linkline` returns an error message informing the `user` that the tag was not found.
     * Use case ends.
-* 1b. The new tag name already exists in the address book.
+* 1b. The new tag name already exists in `Linkline`.
     * `Linkline` returns an error message informing the `user` that the new tag name is a duplicate.
     * Use case ends.
 
@@ -566,7 +566,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Client / Person**: The primary entity in the address book. Mandatory fields include Name, Phone, Email, and Address.
+* **Client / Person**: The primary entity in Linkline. Mandatory fields include Name, Phone, Email, and Address.
   Optional fields include Tags and Notes.
 * **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing
   commands rather than using a mouse.
