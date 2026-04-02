@@ -4,12 +4,14 @@ import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -139,12 +141,63 @@ public class MainWindow extends UiPart<Stage> {
      * Sets the default size based on {@code guiSettings}.
      */
     private void setWindowDefaultSize(GuiSettings guiSettings) {
-        primaryStage.setHeight(guiSettings.getWindowHeight());
-        primaryStage.setWidth(guiSettings.getWindowWidth());
-        if (guiSettings.getWindowCoordinates() != null) {
-            primaryStage.setX(guiSettings.getWindowCoordinates().getX());
-            primaryStage.setY(guiSettings.getWindowCoordinates().getY());
+        Rectangle2D visualBounds = resolveVisualBounds(guiSettings);
+        applySafeMinimumSize(visualBounds);
+
+        double launchWidth = clamp(guiSettings.getWindowWidth(), primaryStage.getMinWidth(), visualBounds.getWidth());
+        double launchHeight = clamp(guiSettings.getWindowHeight(), primaryStage.getMinHeight(),
+                visualBounds.getHeight());
+        primaryStage.setWidth(launchWidth);
+        primaryStage.setHeight(launchHeight);
+
+        if (guiSettings.getWindowCoordinates() == null) {
+            centerInBounds(visualBounds, launchWidth, launchHeight);
+            return;
         }
+
+        double launchX = clamp(guiSettings.getWindowCoordinates().getX(),
+                visualBounds.getMinX(), visualBounds.getMaxX() - launchWidth);
+        double launchY = clamp(guiSettings.getWindowCoordinates().getY(),
+                visualBounds.getMinY(), visualBounds.getMaxY() - launchHeight);
+        primaryStage.setX(launchX);
+        primaryStage.setY(launchY);
+    }
+
+    /**
+     * Resolves the best visual bounds to use for launch sizing and positioning.
+     */
+    private Rectangle2D resolveVisualBounds(GuiSettings guiSettings) {
+        if (guiSettings.getWindowCoordinates() == null) {
+            return Screen.getPrimary().getVisualBounds();
+        }
+
+        double x = guiSettings.getWindowCoordinates().getX();
+        double y = guiSettings.getWindowCoordinates().getY();
+        double width = Math.max(1, guiSettings.getWindowWidth());
+        double height = Math.max(1, guiSettings.getWindowHeight());
+        return Screen.getScreensForRectangle(x, y, width, height).stream()
+                .findFirst()
+                .orElse(Screen.getPrimary())
+                .getVisualBounds();
+    }
+
+    /**
+     * Caps stage minimum size so it never exceeds the usable screen area.
+     */
+    private void applySafeMinimumSize(Rectangle2D visualBounds) {
+        primaryStage.setMinWidth(Math.min(primaryStage.getMinWidth(), visualBounds.getWidth()));
+        primaryStage.setMinHeight(Math.min(primaryStage.getMinHeight(), visualBounds.getHeight()));
+    }
+
+    private void centerInBounds(Rectangle2D visualBounds, double width, double height) {
+        double centeredX = visualBounds.getMinX() + (visualBounds.getWidth() - width) / 2;
+        double centeredY = visualBounds.getMinY() + (visualBounds.getHeight() - height) / 2;
+        primaryStage.setX(centeredX);
+        primaryStage.setY(centeredY);
+    }
+
+    static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
     }
 
     /**
