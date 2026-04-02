@@ -29,7 +29,7 @@ public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        logger.fine(MessageFormat.format("Testing person: {0}", person));
+        logger.fine(MessageFormat.format("Testing client: {0}", person));
 
         if (tagKeywords.isEmpty()) {
             logger.fine("No tag keywords provided");

@@ -105,7 +105,7 @@ public class LogDeletePendingAction implements PendingAction {
         if (!logger.isLoggable(Level.FINE)) {
             return;
         }
-        logger.fine(() -> String.format("logdelete confirmed for person index %d. display index %d "
+        logger.fine(() -> String.format("logdelete confirmed for client index %d. display index %d "
                         + "(storage index %d). Log count: %d -> %d",
                 personIndex.getOneBased(),
                 displayLogIndex.getOneBased(),

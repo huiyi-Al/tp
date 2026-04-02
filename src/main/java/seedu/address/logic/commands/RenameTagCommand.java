@@ -21,7 +21,7 @@ public class RenameTagCommand extends Command {
             + "Example: " + COMMAND_WORD + " --tag=Plumbing --tag=Pipe-Repair";
 
     public static final String MESSAGE_SUCCESS = "Renamed Tag: %1$s to %2$s";
-    public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";
+    public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in Linkline.";
     public static final String MESSAGE_DUPLICATE_TAG = "The tag '%1$s' already exists.";
 
     private final Tag oldTag;

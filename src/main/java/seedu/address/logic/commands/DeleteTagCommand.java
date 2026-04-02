@@ -19,9 +19,9 @@ public class DeleteTagCommand extends Command {
     public static final String COMMAND_WORD = "deletetag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes a tag globally from the address book.\n"
+            + ": Deletes a tag globally from Linkline.\n"
             + "Parameters: TAG_NAME (must be between 1-50 characters long)\n"
-            + "Example: " + COMMAND_WORD + " " + "Plumbing"
+            + "Example: " + COMMAND_WORD + " " + "Plumbing\n"
             + "Note: You will be prompted to confirm the deletion by typing the command again.";
 
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tag: %1$s";
@@ -31,7 +31,7 @@ public class DeleteTagCommand extends Command {
                     + "(Leading/trailing spaces and spaces between the command word and tag are ignored)\n"
                     + "Any other command will cancel this pending deletion.";
 
-    public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in the address book.";
+    public static final String MESSAGE_TAG_NOT_FOUND = "The tag '%1$s' does not exist in Linkline.";
 
     private static final Logger logger = LogsCenter.getLogger(DeleteTagCommand.class);
 

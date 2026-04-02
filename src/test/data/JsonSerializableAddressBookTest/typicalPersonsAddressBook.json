@@ -19,7 +19,7 @@
       "timestamp" : "2026-03-21T10:18:02",
       "message" : "Client requested follow-up call next week."
     } ],
-    "tags" : [ "Plumbing", "AC-Service" ]
+    "tags" : [ "AC-Service", "Plumbing" ]
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
