@@ -55,11 +55,16 @@
             <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
           </VBox>
 
-          <VBox fx:id="personDetails" styleClass="pane-with-border" minWidth="300" prefWidth="300">
+          <VBox fx:id="personDetails" styleClass="pane-with-border" minWidth="300"
+                prefWidth="300" VBox.vgrow="ALWAYS">
             <padding>
               <Insets top="10" right="5" bottom="10" left="5" />
             </padding>
-            <StackPane fx:id="personDetailsPlaceholder" VBox.vgrow="ALWAYS" />
+            <StackPane fx:id="personDetailsPlaceholder" VBox.vgrow="ALWAYS">
+              <padding>
+                <Insets top="0" right="0" bottom="0" left="0" />
+              </padding>
+            </StackPane>
           </VBox>
 
         </SplitPane>
