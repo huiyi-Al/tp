@@ -639,3 +639,84 @@ testers are expected to do more *exploratory* testing.
 
     1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
        Expected: Similar to previous.
+
+### Editing a client
+
+1. **Editing a client while all clients are being shown**
+
+    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+
+    1. Test case: `edit 1 --name=Jane Doe`<br>
+       Expected: First client's name is changed to "Jane Doe". Success message with updated details shown.
+
+    1. Test case: `edit 1 --phone=91234567`<br>
+       Expected: First client's phone number is updated. Success message shown.
+
+    1. Test case: `edit 1 --tag=AC-Service`<br>
+       Expected: Tags are replaced with only "AC-Service". Previous tags are removed.
+
+    1. Test case: `edit 1 --tag=AC-Service --tag=Plumbing`<br>
+       Expected: Tags are replaced with both "AC-Service" and "Plumbing". Previous tags are removed.
+
+    1. Test case: `edit 1 --notes=Call before arriving`<br>
+       Expected: Notes field is updated.
+
+2. **Editing a client with invalid inputs**
+
+    1. Test case: `edit 1 --name=` (empty name)<br>
+       Expected: Error message shown. Client remains unchanged.
+
+    1. Test case: `edit 1 --phone=abc` (non-numeric)<br>
+       Expected: Error message shown. Client remains unchanged.
+
+    1. Test case: `edit 1 --email=invalid` (missing domain label)<br>
+       Expected: Error message shown. Client remains unchanged.
+
+3. **Editing a client with duplicate phone or email**
+
+    1. Prerequisites: Two clients exist:
+        - Client 1: Phone `91234567`, Email `john@example.com`
+        - Client 2: Phone `98765432`, Email `jane@example.com`
+
+    1. Test case: `edit 2 --phone=91234567` (same phone as Client 1)<br>
+       Expected: Error message: "This client already exists in Linkline". Client 2 remains unchanged.
+
+    1. Test case: `edit 2 --email=john@example.com` (same email as Client 1)<br>
+       Expected: Error message shown. Client 2 remains unchanged.
+
+    1. Test case: `edit 1 --phone=91234567` (same phone as itself)<br>
+       Expected: Success. No duplicate error (editing to same value is allowed).
+
+4. **Editing a client with multiple fields**
+
+    1. Test case: `edit 1 --name=John Tan --phone=88888888 --tag=AC-Service`<br>
+       Expected: Name, phone, and tags are all updated simultaneously. Success message shows all changes.
+
+5. **Invalid index**
+
+    1. Test case: `edit 0 --name=John`<br>
+       Expected: Error message shown.
+
+6. **No fields provided**
+
+    1. Test case: `edit 1`<br>
+       Expected: Error: "At least one field to edit must be provided."
+
+--------------------------------------------------------------------------------------------------------------------
+## **Appendix: Planned Enhancements**
+
+1. Enhance `find` command
+    1. Extend the find command to search through additional fields:
+       - Tags – Find clients with tags containing the specified substring 
+       - Notes – Search within client notes for keywords 
+       - Logs – Search through log history entries for matching text
+
+2. Enhance `filter` command
+   1. Enhance the `filter` command to return clients with no tags when `--tag=` is provided without a value.
+
+3. Quoted Arguments in CLI Syntax
+    1. Support quoted arguments to allow: Spaces within field values without ambiguity and special characters (e.g., ", ', \) using escape sequences
+
+4. New `logedit` command
+
+   1. Add an `logedit` command to allow users to modify existing log entries
