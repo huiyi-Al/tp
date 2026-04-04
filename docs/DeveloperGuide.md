@@ -359,12 +359,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 1a. The index given is invalid (not a positive integer or out of range). 
-  * `Linkline` returns an error message informing the user that the index is invalid. 
+* 1a. The index given is invalid (not a positive integer or out of range).
+  * `Linkline` returns an error message informing the user that the index is invalid.
   * Use case ends.
-* 2a. `Linkline` fails to access the system clipboard. 
-  * `Linkline` returns an error message informing the user to copy the address manually from the details view. 
-  * `user` searches for the client (UC02) and copies the address manually from the displayed details. 
+* 2a. `Linkline` fails to access the system clipboard.
+  * `Linkline` returns an error message informing the user to copy the address manually from the details view.
+  * `user` searches for the client (UC02) and copies the address manually from the displayed details.
   * Use case ends.
 
 #### Use Case: UC04 - Change client phone number
@@ -464,8 +464,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1b. No field is provided.
     * `Linkline` returns an error message to inform `user` adding at least one field.
     * Use case ends.
-* 1c. A tag provided is invalid according to the feature specification. 
-  * `Linkline` returns an error message informing `user` of the tag naming rules. 
+* 1c. A tag provided is invalid according to the feature specification.
+  * `Linkline` returns an error message informing `user` of the tag naming rules.
   * Use case ends.
 
 #### Use Case: UC09 - Filter clients by tags
@@ -746,8 +746,8 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 1. Enhance `find` command
     1. Extend the find command to search through additional fields:
-       - Tags – Find clients with tags containing the specified substring 
-       - Notes – Search within client notes for keywords 
+       - Tags – Find clients with tags containing the specified substring
+       - Notes – Search within client notes for keywords
        - Logs – Search through log history entries for matching text
 
 2. Enhance `filter` command
