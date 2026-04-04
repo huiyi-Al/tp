@@ -276,7 +276,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | solo residential service technician | import clients from other files into my existing list                                              | bring over contacts from older tools or files quickly                        |
 | `*`      | solo residential service technician | undo or redo recent actions                                                                        | recover from mistakes quickly                                                |
 
-*{More to be added}*
 
 ### Use cases
 
@@ -616,6 +615,30 @@ testers are expected to do more *exploratory* testing.
     1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
+### Copying a client's address
+
+1. Copying address while all clients are being shown
+
+    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+
+    1. Test case: `copyaddr 1`<br>
+       Expected: Address of the first client is copied to clipboard.
+
+    1. Test case: `copyaddr 0`<br>
+       Expected: Error message shown.
+
+### Copying edit command format
+
+1. Copying edit format while all clients are being shown
+
+    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+
+    1. Test case: `copyedit 1`<br>
+       Expected: Edit command format of the first client is copied to clipboard.
+
+    1. Test case: `copyedit 0`<br>
+       Expected: Error message shown.
+
 ### Deleting a client
 
 1. Deleting a client while all clients are being shown
@@ -623,22 +646,20 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
 
     1. Test case: `delete 1`<br>
-       Expected: Expected: No client is deleted. Confirmation message with the client's details is shown. Status bar
-       remains the same. Pending deletion state is set for index 1.
+       Expected: No client is deleted. Confirmation message with the client's details is shown. Pending deletion state is set for index 1.
 
     1. Test case: `delete 1` (immediately after the above) <br>
        Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
-       Timestamp in the status bar is updated.
 
     1. Test case: `delete 1` then `list` then `delete 1` <br>
        Expected: First `delete 1` shows confirmation. `list` cancels the pending deletion. Second `delete 1` shows
        confirmation again (not auto-deleted).
 
     1. Test case: `delete 0`<br>
-       Expected: No client is deleted. Error details shown in the status message. Status bar remains the same.
+       Expected: Error message shown.
 
     1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+       Expected: Error message shown.
 
 ### Editing a client
 
@@ -702,6 +723,24 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `edit 1`<br>
        Expected: Error: "At least one field to edit must be provided."
 
+--------------------------------------------------------------------------------------------------------------------
+## **Appendix: Effort**
+This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a client management system tailored for solo service technicians. While AB3 serves as a simple contact manager, Linkline introduces domain-specific features such as service logs, confirmation flows and corrupted file handling.
+
+<box type="info" seamless>
+
+### Difficulty Level & Challenges
+
+| **Challenge** | **Description**                                                                                                                                                               |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Multiple entity types** | AB3 manages only `Person` and `Tag`. Linkline adds `LogHistory`, `LogEntry`, and `LogMessage` as first-class entities with their own validation, storage, and UI representation. |
+| **Complex CLI syntax** | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                       |
+| **Two-step confirmation** | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                        |
+| **Duplicate detection** | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                  |
+| **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `addressbook.json` without auto-overwriting.                                                                  |
+| **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |
+
+</box>
 --------------------------------------------------------------------------------------------------------------------
 ## **Appendix: Planned Enhancements**
 
