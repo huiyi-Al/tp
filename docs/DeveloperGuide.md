@@ -4,7 +4,7 @@ title: "Developer Guide"
 pageNav: 3
 ---
 
-# LinkLine Developer Guide
+# Linkline Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -724,6 +724,7 @@ testers are expected to do more *exploratory* testing.
        Expected: Error: "At least one field to edit must be provided."
 
 --------------------------------------------------------------------------------------------------------------------
+
 ## **Appendix: Effort**
 This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a client management system tailored for solo service technicians. While AB3 serves as a simple contact manager, Linkline introduces domain-specific features such as service logs, confirmation flows and corrupted file handling.
 
@@ -741,7 +742,9 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 | **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |
 
 </box>
+
 --------------------------------------------------------------------------------------------------------------------
+
 ## **Appendix: Planned Enhancements**
 
 1. Enhance `find` command
