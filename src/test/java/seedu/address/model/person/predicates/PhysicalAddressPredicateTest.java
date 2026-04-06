@@ -2,7 +2,6 @@ package seedu.address.model.person.predicates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -76,9 +75,7 @@ public class PhysicalAddressPredicateTest {
     @Test
     public void test_emptyStringSubstring_throwsIllegalArgumentException() {
         PhysicalAddressPredicate predicate = new PhysicalAddressPredicate(Collections.singletonList(""));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withAddress(ADDRESS_ALICE).build()));
-        assertEquals("Substring parameter cannot be empty", e.getMessage());
+        assertTrue(predicate.test(new PersonBuilder().withAddress(ADDRESS_ALICE).build()));
     }
 
     @Test

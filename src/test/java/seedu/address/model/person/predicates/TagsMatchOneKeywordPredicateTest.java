@@ -59,6 +59,23 @@ public class TagsMatchOneKeywordPredicateTest {
     }
 
     @Test
+    public void test_nullMatch_returnsFalse() {
+        TagsMatchOneKeywordPredicate predicate =
+                new TagsMatchOneKeywordPredicate(null);
+
+        assertFalse(predicate.test(new PersonBuilder().withTags("Plumbing").build()));
+    }
+
+    @Test
+    public void test_singularEmptyStringMatch_returnsPersonEmptyTags() {
+        TagsMatchOneKeywordPredicate predicate =
+                new TagsMatchOneKeywordPredicate(Collections.singletonList(""));
+
+        assertTrue(predicate.test(new PersonBuilder().build()));
+        assertFalse(predicate.test(new PersonBuilder().withTags("Plumbing").build()));
+    }
+
+    @Test
     public void test_singleKeywordMatch_returnsTrue() {
         TagsMatchOneKeywordPredicate predicate =
                 new TagsMatchOneKeywordPredicate(Collections.singletonList("Plumbing"));
@@ -117,12 +134,27 @@ public class TagsMatchOneKeywordPredicateTest {
 
     @Test
     public void toString_validKeywords_returnsFormattedString() {
-        List<String> keywords = List.of("Plumbing", "Urgent");
+        List<String> subTags = List.of("Plumbing", "Urgent");
         TagsMatchOneKeywordPredicate predicate =
-                new TagsMatchOneKeywordPredicate(keywords);
+                new TagsMatchOneKeywordPredicate(subTags);
 
-        String expected = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{tagKeywords=" + keywords + "}";
+        String expected = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{subTags=" + subTags + "}";
 
         assertEquals(expected, predicate.toString());
+    }
+
+    @Test
+    public void toString_nullAndEmptyKeywords_returnsEmptyString() {
+        List<String> subTags1 = null;
+        TagsMatchOneKeywordPredicate predicate1 =
+                new TagsMatchOneKeywordPredicate(subTags1);
+        String expected1 = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{subTags=[]}";
+        assertEquals(expected1, predicate1.toString());
+
+        List<String> subTags2 = Collections.singletonList("");
+        TagsMatchOneKeywordPredicate predicate2 =
+                new TagsMatchOneKeywordPredicate(subTags2);
+        String expected2 = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{subTags=" + subTags2 + "}";
+        assertEquals(expected2, predicate2.toString());
     }
 }

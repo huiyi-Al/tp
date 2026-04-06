@@ -31,9 +31,15 @@ public class FindCommandParser implements Parser<FindCommand> {
         boolean preamblePresent = !argMultimap.getPreamble().isEmpty();
         boolean nonePresent = EXPECTED_PREFIXES.stream()
                 .allMatch(p -> argMultimap.getValue(p).isEmpty());
-        boolean anyPresentButEmpty = EXPECTED_PREFIXES.stream()
-                .anyMatch(p -> argMultimap.getValue(p).map(String::isEmpty).orElse(false));
-        if (preamblePresent || nonePresent || anyPresentButEmpty) {
+        boolean anyPresentButInvalidEmpty = EXPECTED_PREFIXES.stream()
+                .anyMatch(p -> {
+                    if (p.equals(PREFIX_TAG)) {
+                        return false;
+                    }
+                    return argMultimap.getValue(p).map(String::isEmpty).orElse(false);
+                });
+
+        if (preamblePresent || nonePresent || anyPresentButInvalidEmpty) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
