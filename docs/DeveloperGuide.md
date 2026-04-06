@@ -383,55 +383,55 @@ This keeps validation centralized and consistent for both command execution and 
 
 **Target user profile**:
 
-* is a solo (one-person) residential on-site service technician (e.g., aircon cleaning / handyman / appliance servicing)
-* manages repeat customers and needs fast recall of client contact + exact service-location details
-* often works from a laptop/desktop between jobs and prefers a fast, typing-first workflow
-* can type quickly and prefers keyboard shortcuts / CLI-style commands over mouse-heavy interactions
-* needs to store service-location context to avoid mistakes on-site
+* is a solo residential on-site service technician (e.g. aircon servicing, handyman work, appliance repair)
+* manages repeat clients and needs each client's contact details, address, notes, and service history in one place
+* often works from a laptop or desktop between jobs and prefers a fast keyboard-first workflow
+* can type quickly and would rather use commands than navigate mouse-heavy forms
+* needs to review past client context quickly before revisits to avoid on-site mistakes
 
-**Value proposition**: A fast, typing-first address book that helps solo residential service technicians avoid mistakes
-and wasted time by keeping client contact details tightly coupled with service-location context, searchable in seconds.
+**Value proposition**: Linkline is a keyboard-first desktop address book for solo residential service technicians. It keeps client contact details, service-location notes, tags, and timestamped service logs together so the user can find and work with the right client context quickly between jobs.
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                             | I want to …​                                                                                       | So that I can…​                                                              |
-|----------|-------------------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| `* * *`  | solo residential service technician | add a new client with name, phone, email, and service address details                              | record the exact contact details and service-location details                |
-| `* * *`  | solo residential service technician | delete a client record                                                                             | remove one-off customers who are not likely to become repeat customers       |
-| `* * *`  | solo residential service technician | find a client by name                                                                              | locate the correct client quickly                                            |
-| `* * *`  | solo residential service technician | view a list of clients stored                                                                      | get an overview of my business                                               |
-| `* * *`  | solo residential service technician | keep data in a human-editable local file that the app can load                                     | access client information between sessions                                   |
-| `* *`    | solo residential service technician | update a client's contact details                                                                  | keep client records accurate when details change                             |
-| `* *`    | solo residential service technician | have the list view sorted by name (lexicographic order)                                            | quickly skim the list to find certain clients                                |
-| `* *`    | solo residential service technician | find a specific client's details quickly (e.g., by typing part of an address)                      | retrieve the correct client even if I don't remember their name              |
-| `* *`    | solo residential service technician | add special requirements or precautions specified by each client                                   | avoid mistakes and prepare properly before a visit                           |
-| `* *`    | solo residential service technician | see a compact view when listing clients and view full details only when I select a client          | scan my list quickly without losing access to details                        |
-| `* *`    | solo residential service technician | copy a client's service address to the clipboard                                                   | paste it quickly into maps or other apps                                     |
-| `* *`    | solo residential service technician | append a timestamped service note to a client's record as a visit log                              | track what was done previously and follow up correctly                       |
-| `* *`    | solo residential service technician | sort the contact list by most recent interaction                                                   | prioritize clients I worked with recently                                    |
-| `* *`    | solo residential service technician | attach tags to a client                                                                            | recognize customer types or service types at a glance                        |
-| `* *`    | solo residential service technician | filter clients by tag                                                                              | narrow down to the relevant subset                                           |
-| `* *`    | solo residential service technician | see a "Today's Visits" list when I tag clients with a date and remove them from the list when done | manage my daily visits quickly                                               |
-| `*`      | new user                            | start with sample data on first launch                                                             | understand how the app is supposed to look without entering everything first |
-| `*`      | solo residential service technician | be prompted by the app when I want to delete a client with service history                         | avoid accidentally losing important past records                             |
-| `*`      | solo residential service technician | group tags into larger categories                                                                  | categorize clients and services more systematically                          |
-| `*`      | solo residential service technician | update or rename a tag globally (cascading)                                                        | keep my tagging consistent when I change my conventions                      |
-| `*`      | solo residential service technician | delete a tag globally (cascading)                                                                  | keep my tagging consistent when I change my conventions                      |
-| `*`      | solo residential service technician | pin frequent clients to a "Favorites" quick-access list                                            | view my regular clients with a single command                                |
-| `*`      | solo residential service technician | store multiple service locations under one client                                                  | handle clients who have more than one address (e.g., home + property)        |
-| `*`      | solo residential service technician | set one service location as the default                                                            | quickly use the most common address without extra steps                      |
-| `*`      | solo residential service technician | record the brand and model of an appliance for a client                                            | prepare the right tools or parts before visiting                             |
-| `*`      | solo residential service technician | see the list of clients visited within a certain time period                                       | manage clients based on loyalty or recency                                   |
-| `*`      | solo residential service technician | set a warranty end date for a specific repair                                                      | know whether a follow-up is still under warranty                             |
-| `*`      | solo residential service technician | archive or hide inactive clients                                                                   | reduce clutter while keeping records for reference                           |
-| `*`      | solo residential service technician | clear all data                                                                                     | reset the app completely when needed (e.g., for demo or testing)             |
-| `*`      | solo residential service technician | be warned when adding a client that looks like a duplicate                                         | avoid creating repeated records accidentally                                 |
-| `*`      | solo residential service technician | merge two client records                                                                           | combine duplicates into a single correct record                              |
-| `*`      | solo residential service technician | import clients from other files into my existing list                                              | bring over contacts from older tools or files quickly                        |
-| `*`      | solo residential service technician | undo or redo recent actions                                                                        | recover from mistakes quickly                                                |
-
+| Priority | As a ...                            | I want to ...                                                                          | So that I can ...                                                |
+|----------|-------------------------------------|----------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| `* * *`  | solo residential service technician | add a new client with name, phone, email, and service address details                 | record the exact contact details and service-location details   |
+| `* * *`  | solo residential service technician | delete a client record                                                                 | remove one-off customers who are not likely to become repeat customers |
+| `* * *`  | solo residential service technician | find a client by name or another known detail                                          | locate the correct client quickly                               |
+| `* * *`  | solo residential service technician | view a list of stored clients                                                          | get an overview of my business                                  |
+| `* * *`  | solo residential service technician | keep data in a human-editable local file that the app can load                         | access client information between sessions                      |
+| `* *`    | solo residential service technician | update a client's contact details                                                      | keep client records accurate when details change                |
+| `* *`    | solo residential service technician | have the list view sorted by name                                                      | quickly skim the list to find certain clients                   |
+| `* *`    | solo residential service technician | find a specific client's details quickly, for example by typing part of an address     | retrieve the correct client even if I do not remember the name  |
+| `* *`    | solo residential service technician | add special requirements or precautions specified by each client                       | avoid mistakes and prepare properly before a visit              |
+| `* *`    | solo residential service technician | scan a compact client list and view full details only when needed                      | move quickly without losing access to important details         |
+| `* *`    | solo residential service technician | copy a client's service address to the clipboard                                       | paste it quickly into maps or other apps                        |
+| `* *`    | solo residential service technician | copy a ready-made edit command for an existing client                                  | update a client record with fewer typing mistakes               |
+| `* *`    | solo residential service technician | append a timestamped service note to a client's record as a visit log                  | track what was done previously and follow up correctly          |
+| `* *`    | solo residential service technician | delete an incorrect log entry                                                          | keep a client's service history accurate                        |
+| `* *`    | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
+| `* *`    | solo residential service technician | attach tags to a client                                                                | recognize customer types or service types at a glance           |
+| `* *`    | solo residential service technician | filter clients by tag                                                                  | narrow down to the relevant subset                              |
+| `* *`    | solo residential service technician | see a "Today's Visits" list when I tag clients with a date and remove them when done   | manage my daily visits quickly                                  |
+| `*`      | new user                            | start with sample data on first launch                                                 | understand how the app is supposed to look without entering everything first |
+| `*`      | solo residential service technician | be prompted before deleting a client record                                            | avoid accidentally losing important past records                |
+| `*`      | solo residential service technician | group tags into larger categories                                                      | categorize clients and services more systematically             |
+| `*`      | solo residential service technician | update or rename a tag globally                                                        | keep my tagging consistent when I change my conventions         |
+| `*`      | solo residential service technician | delete a tag globally                                                                  | keep my tagging consistent when I change my conventions         |
+| `*`      | solo residential service technician | pin frequent clients to a quick-access list                                            | view my regular clients with a single command                   |
+| `*`      | solo residential service technician | store multiple service locations under one client                                      | handle clients who have more than one address                   |
+| `*`      | solo residential service technician | set one service location as the default                                                | quickly use the most common address without extra steps         |
+| `*`      | solo residential service technician | record the brand and model of an appliance for a client                                | prepare the right tools or parts before visiting                |
+| `*`      | solo residential service technician | see the list of clients visited within a certain time period                           | manage clients based on loyalty or recency                      |
+| `*`      | solo residential service technician | set a warranty end date for a specific repair                                          | know whether a follow-up is still under warranty                |
+| `*`      | solo residential service technician | archive or hide inactive clients                                                       | reduce clutter while keeping records for reference              |
+| `*`      | solo residential service technician | clear all data                                                                         | reset the app completely when needed, for example for a demo or testing |
+| `*`      | solo residential service technician | be warned when adding a client that looks like a duplicate                             | avoid creating repeated records accidentally                    |
+| `*`      | solo residential service technician | merge two client records                                                               | combine duplicates into a single correct record                 |
+| `*`      | solo residential service technician | import clients from other files into my existing list                                  | bring over contacts from older tools or files quickly           |
+| `*`      | solo residential service technician | undo or redo recent actions                                                            | recover from mistakes quickly                                   |
 
 ### Use cases
 
@@ -439,310 +439,341 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### Use Case: UC01 - Add new client
 
-**System:** `Linkline`
-**Actor:** `user`
-**Guarantees:**
-
-* The number of clients is either unchanged (unsuccessful) or incremented (successful).
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
+**Guarantees:** The number of clients is either unchanged (unsuccessful) or incremented (successful).
 
 **MSS**
 
-1. `user` requests to add a client.
-2. `user` fills in the details (name, phone, email, address, with optional tag and notes field) of the client on the
-   CLI.
-3. `Linkline` creates a new client, inserts them into the list in lexicographical order by name and displays the details
-   on the GUI.
-4. Use case ends.
+1. `user` requests to add a client, providing the client's name, phone number, email address, physical address, and any optional tags or notes.
+2. `Linkline` validates the provided details.
+3. `Linkline` adds the client to the client list and saves the updated data.<br>
+Use case ends.
 
 **Extensions**
 
-* 2a. Name provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the name must meet.
-    * Use case ends.
-* 2b. Phone number provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the phone number must meet.
-    * Use case ends.
-* 2c. Email address provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the email address must meet.
-    * Use case ends.
-* 2d. Address provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the address must meet.
-    * Use case ends.
-* 2e. Tag provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the tag must meet.
-    * Use case ends.
-* 2f. Notes provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the notes must meet.
-    * Use case ends.
-* 2g. Duplicate client detected (same phone number or email as an existing client).
-    * `Linkline` returns an error message informing the user that a client with the same phone number or email already exists.
-    * Use case ends.
+* 1a. A field provided is invalid according to the feature specification.
+    * `Linkline` returns an error message describing the name constraints.<br>
+    Use case ends.
+* 2a. A duplicate client (client with the same normalized phone number or case-insensitive email address) already exists.
+    * `Linkline` returns an error message indicating that the client would be a duplicate.<br>
+    Use case ends.
 
 #### Use Case: UC02 - Search for a client
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` specifies one or multiple fields (name, phone number, email address, physical address, tags) with one or
-   multiple keywords per field as a search query.
-2. `Linkline` uses the query provided to search and list (lexicographically by name) the clients who have at least one
-   field match successfully against the specified fields (This search is done only against the currently filtered
-   clients).
-3. Use case ends.
+1. `user` specifies one or more fields with one or more keywords as a search query.
+2. `Linkline` searches the currently displayed client list for clients that match at least one keyword in the specified fields.
+   A client is included if any supplied keyword matches within any of the specified fields.
+3. `Linkline` shows the matching clients.<br>
+  Use case ends.
 
 **Extensions**
 
 * 1a. The search command does not specify any field.
-    * `Linkline` gives a warning to `user` that command entered is in an invalid format.
-    * Use case ends.
-* 1b. The search command has at least one specified field with no keywords (is empty).
-    * `Linkline` gives a warning to `user` that command entered is in an invalid format.
-    * Use case ends.
+    * `Linkline` returns the command usage message.<br>
+    Use case ends.
+* 1b. The search command contains a specified field with no keyword.
+    * `Linkline` returns the command usage message.<br>
+    Use case ends.
+* 2a. No clients match the search query.
+    * `Linkline` shows an empty client list.<br>
+    Use case ends.
 
-#### Use Case: UC03 - Copy client address to clipboard.
+#### Use Case: UC03 - Copy client address to clipboard
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` requests to copy a client's address by specifying the client's index.
-2. `Linkline` copies the client's address to the system clipboard.
-3. `user` pastes the address into their desired application (e.g., maps).
-4. Use case ends.
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to copy the client's address by specifying the client's index.
+3. `Linkline` copies the client's address to the system clipboard and shows success.
+4. `user` pastes the address into another application.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid (not a positive integer or out of range).
-  * `Linkline` returns an error message informing the user that the index is invalid.
-  * Use case ends.
-* 2a. `Linkline` fails to access the system clipboard.
-  * `Linkline` returns an error message informing the user to copy the address manually from the details view.
-  * `user` searches for the client (UC02) and copies the address manually from the displayed details.
-  * Use case ends.
+* 2a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
+* 3a. `Linkline` fails to access the system clipboard.
+    * `Linkline` returns an error message asking the user to copy the address manually from the displayed client details.<br>
+    Use case ends.
 
 #### Use Case: UC04 - Change client phone number
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` edits a client's detail via `Linkline` command by specifying their index and new phone number, and re-sorts
-   the list to maintain lexicographical order.
-2. `Linkline` displays new fields of the updated client.
-3. Use case ends.
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to change the client's phone number by specifying the client's index and the new phone number.
+3. `Linkline` validates the new phone number and duplicate rules.
+4. `Linkline` updates the client's phone number, keeps the client list name-sorted, and saves the updated data.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid, and does not point to a client.
-    * `Linkline` returns an error that informs `user` the index given is invalid.
-    * Use case ends.
-* 2a. Provided phone number is same as phone number of another client.
-    * `Linkline` returns error message informing `user` that the phone number is already in use.
-    * Use case ends.
+* 2a. The index given is invalid.
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
+* 2b. The phone number provided is invalid according to the feature specification.
+    * `Linkline` returns an error message describing the phone number constraints.<br>
+    Use case ends.
+* 3a. The new phone number would duplicate another client's details.
+    * `Linkline` returns an error message indicating that the edit would create a duplicate client.<br>
+    Use case ends.
 
 #### Use Case: UC05 - Delete a client
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` enters delete command with the index of the target client.
-2. `Linkline` displays the client's details and ask for confirmation.
-3. `user` enters the same delete command again.
-4. `Linkline` deletes the client and confirms the deletion.
-5. Use case ends.
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to delete that client by index.
+3. `Linkline` shows a confirmation message identifying the client to be deleted.
+4. `user` repeats the same delete command.
+5. `Linkline` deletes the client and saves the updated data.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid (not a positive integer or out of range).
-    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
-    * Use case ends.
-* 2a. `user` enters any other command instead of confirming.
-    * `Linkline` cancels the pending deletion and executes the new command normally.
-    * Use case ends.
+* 2a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
+* 4a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending deletion and executes the new command normally.<br>
+    Use case ends.
 
-#### Use Case: UC06 - List Clients
+#### Use Case: UC06 - List clients
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` requests to view all client added in `Linkline` via command.
-2. `Linkeline` shows list with all clients sorted lexicographically by name.
-3. Use case ends.
+1. `user` requests to list all stored clients.
+2. `Linkline` shows all clients in name-sorted order.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. There are no client added yet.
-    * `Linkline` returns an error message to remind `user` to add at least one client before listing them.
-    * Use case ends.
+* 2a. No clients are stored.
+    * `Linkline` shows an empty client list.<br>
+    Use case ends.
 
 #### Use Case: UC07 - View client detail
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` confirms personal detail of a specific client via `Linkline` by specifying the index of target client.
-2. `Linkline` shows full details of the client including name, phone, email, full address and precautions.
-3. Use case ends.
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to view the client's details by specifying the client's index.
+3. `Linkline` shows the full details of the client.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid (not a positive integer or out of range).
-    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
-    * Use case ends.
+* 2a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
 
-#### Use Case: UC08 - Edit existing client details
+#### Use Case: UC08 - Edit client notes or tags
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` edit client detail by adding new tag(s) or/and notes via `Linkline` by specifying client index, tag content
-   or/and notes content.
-2. `Linkline` displays new fields of the updated client.
-3. Use case ends.
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to edit the client's tags and/or notes by specifying the client's index and the updated values.
+3. `Linkline` validates the updated values.
+4. `Linkline` updates the client's record and saves the updated data.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The index given is invalid (not a positive integer or out of range).
-    * `Linkline` returns an error message showing that the input index is invalid to the `user`.
-    * Use case ends.
-* 1b. No field is provided.
-    * `Linkline` returns an error message to inform `user` adding at least one field.
-    * Use case ends.
-* 1c. A tag provided is invalid according to the feature specification.
-  * `Linkline` returns an error message informing `user` of the tag naming rules.
-  * Use case ends.
+* 2a. The index given is invalid (not a positive integer or out of range).
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
+* 2b. No editable field is provided.
+    * `Linkline` returns an error message indicating that at least one field must be edited.<br>
+    Use case ends.
+* 2c. A tag provided is invalid according to the feature specification.
+    * `Linkline` returns an error message describing the tag constraints.<br>
+    Use case ends.
+* 2d. Notes provided are invalid according to the feature specification.
+    * `Linkline` returns an error message describing the notes constraints.<br>
+    Use case ends.
 
 #### Use Case: UC09 - Filter clients by tags
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` enters one or multiple keywords as a filter query.
-2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags
-   that match the query.
-3. Use case ends.
+1. `user` enters one or more tags as a filter query.
+2. `Linkline` filters the currently displayed client list to clients that match all specified tags.
+   A client is included only if all specified tags are present on that client.
+3. `Linkline` shows the matching clients.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The filter query does not match against any of the clients' tags.
-    * `Linkline` returns an empty page that informs `user` no matching clients were found.
-    * Use case ends.
-* 1b. No filter query was provided.
-    * `Linkline` returns error message informing `user` that at least one word must be provided as a filter query.
-    * Use case ends.
-* 1c. Filter query provided is invalid by criteria given in feature specification.
-    * `Linkline` returns error message informing `user` what criteria the query must meet.
-    * Use case ends.
+* 1a. No filter query is provided.
+    * `Linkline` returns the command usage message.<br>
+    Use case ends.
+* 1b. A provided tag is invalid according to the feature specification.
+    * `Linkline` returns an error message describing the tag constraints.<br>
+    Use case ends.
+* 2a. No clients match the filter query.
+    * `Linkline` shows an empty client list.<br>
+    Use case ends.
 
 #### Use Case: UC10 - Rename a tag
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
 1. `user` requests to rename an existing tag to a new name.
-2. `Linkline` renames the tag in the global tag list.
-3. `Linkline` updates all clients currently having the old tag to reflect the new tag name.
-4. Use case ends.
+2. `Linkline` validates the request.
+3. `Linkline` renames the tag in the global tag list and updates all affected clients.
+4. `Linkline` saves the updated data.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The target tag name does not exist in `Linkline`.
-    * `Linkline` returns an error message informing the `user` that the tag was not found.
-    * Use case ends.
-* 1b. The new tag name already exists in `Linkline`.
-    * `Linkline` returns an error message informing the `user` that the new tag name is a duplicate.
-    * Use case ends.
+* 1a. The command format is invalid.
+    * `Linkline` returns the command usage message.<br>
+    Use case ends.
+* 2a. The target tag does not exist in `Linkline`.
+    * `Linkline` returns an error message informing the user that the tag was not found.<br>
+    Use case ends.
+* 2b. The new tag name is invalid or already exists in `Linkline`.
+    * `Linkline` returns an error message indicating why the rename cannot be applied.<br>
+    Use case ends.
 
 #### Use Case: UC11 - Delete a tag
 
-**System:** `Linkline`
-**Actor:** `user`
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
 
 **MSS**
 
-1. `user` requests to delete a specific tag by tag name.
-2. `Linkline` displays the specified tag name and ask for confirmation.
-3. `user` enters the same delete tag command again.
-4. `Linkline` removes the tag from the global tag list.
-5. `Linkline` removes the tag from all clients with that tag name.
-6. Use case ends.
+1. `user` requests to delete an existing tag by name.
+2. `Linkline` validates that the tag exists and shows a confirmation message identifying the tag to be deleted.
+3. `user` repeats the same delete tag command.
+4. `Linkline` removes the tag from the global tag list and from all affected clients.
+5. `Linkline` saves the updated data.<br>
+  Use case ends.
 
 **Extensions**
 
-* 1a. The tag name provided does not exist.
-    * `Linkline` returns an error message informing the `user` that the tag was not found.
-    * Use case ends.
-* 2a. `user` enters any other command instead of confirming.
-    * `Linkline` cancels the pending deletion and executes the new command normally.
-    * Use case ends.
+* 1a. The command format is invalid.
+    * `Linkline` returns the command usage message.<br>
+    Use case ends.
+* 2a. The tag name provided does not exist.
+    * `Linkline` returns an error message informing the user that the tag was not found.<br>
+    Use case ends.
+* 3a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending tag deletion and executes the new command normally.<br>
+    Use case ends.
+
+#### Use Case: UC12 - Add a service log
+
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
+
+**MSS**
+
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to add a log entry to that client by specifying the client's index and providing the log message.
+3`Linkline` timestamps the log entry, adds it to the client's log history, and saves the updated data.<br>
+  Use case ends.
+
+**Extensions**
+
+* 2a. The index given is invalid and does not point to a client in the displayed list.
+    * `Linkline` returns an error message informing the user that the index is invalid.<br>
+    Use case ends.
+* 2b. The log message is missing or invalid according to the feature specification.
+    * `Linkline` returns an error message describing the log message constraints.<br>
+    Use case ends.
+
+#### Use Case: UC13 - Delete a service log
+
+**System:** `Linkline`<br>
+**Actor:** `user`<br>
+
+**MSS**
+
+1. `user` locates the target client in the displayed client list.
+2. `user` requests to delete a log entry by client index and displayed log number.
+3. `Linkline` shows a confirmation message identifying the targeted log entry.
+4. `user` repeats the same log deletion command.
+5. `Linkline` deletes the log entry and saves the updated data.<br>
+  Use case ends.
+
+**Extensions**
+
+* 2a. The client index given is invalid.
+    * `Linkline` returns an error message informing the user that the client index is invalid.<br>
+    Use case ends.
+* 2b. The selected client has no log entries.
+    * `Linkline` returns an error message indicating that there are no logs to delete.<br>
+    Use case ends.
+* 2c. The displayed log number is invalid for the selected client.
+    * `Linkline` returns an error message indicating that the log number is invalid.<br>
+    Use case ends.
+* 4a. `user` enters any other command instead of confirming.
+    * `Linkline` cancels the pending log deletion and executes the new command normally.<br>
+    Use case ends.
 
 ### Non-Functional Requirements
 
-1. Portability: Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2. Capacity & Performance: Should be able to hold up to 1000 clients without a noticeable sluggishness in performance
-   for typical usage.
-3. Usability (Efficiency): A user with above average typing speed for regular English text (i.e. not code, not system
-   admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4. Data Integrity (Duplicate Prevention): The system must prevent duplicate client entries by enforcing uniqueness on
-   normalized phone number and normalized email address. An attempt to add or edit a client resulting in a duplicate
-   must be rejected with a clear error message.
-5. Data Persistence (Safety): All data-modifying commands (`add`, `delete`, `edit`) must trigger an automatic save to
-   the local JSON file. The save mechanism must use a safe write strategy (e.g., write to temp file then rename) to
-   prevent data corruption in case of a system crash during write.
-6. Fault Tolerance (Load Failure): If the data file is missing, corrupted, or in an invalid format on startup, the
-   application must not crash.
-7. Performance (Command Response): Every user command that does not modify data (e.g., find, list, view) should display
-   the result within 500 milliseconds for a database of up to 1000 clients.
-8. Performance (Startup Latency): The application should be ready for user input within 3 seconds on a standard hardware
-   configuration (e.g., a laptop from the last 5 years) with a dataset of up to 500 clients.
-9. Usability (Learnability): A first-time user who has never used a command-line interface before should be able to
-   understand the basic workflow (add, list, find) within 10 minutes, aided by sample data and a comprehensive help
-   command.
-10. Consistency (User Experience): The application must strictly adhere to the command format, parameter rules, and
-    error messages defined in the functional specification to ensure a predictable and reliable user experience.
-11. Constraint (Scope): The system is designed exclusively for a solo technician. Features requiring multi-user access,
-    cloud synchronization, or network communication are explicitly out of scope for the MVP.
-12. Constraint (Storage Format): Data persistence is limited to a human-editable JSON file. No external database
-    systems (e.g., MySQL, PostgreSQL) shall be used.
-13. Accessibility (Error Clarity): All error messages must be user-friendly and actionable, specifying exactly what went
-    wrong and how to correct it, rather than displaying technical stack traces or cryptic codes.
+1. Should work on any mainstream OS with Java `17` or above installed.
+2. Should be able to hold up to 1000 clients without noticeable sluggishness during typical operations such as `list`, `find`, `filter`, `view`, `add`, `edit`, `logadd`, and `logdelete`.
+3. A user who can type at an average speed for regular English text should be able to complete frequent tasks faster using commands than using a mouse-driven workflow.
+4. A first-time user should be able to learn the basic workflow (`add`, `list`, `find`, `view`, `edit`) within about 10 minutes using sample data and the help command.
+5. Client identity must remain unique based on normalized phone number and case-insensitive email address.
+6. Client data must remain available across application restarts using a local human-editable JSON file.
+7. If the main data file is missing, malformed, or otherwise unreadable on startup, the application should not crash. It should start with an empty address book, warn the user, and preserve the original file as a backup when possible.
+8. The application is intended for a single local user. Multi-user collaboration, cloud synchronization, and networked storage are out of scope.
+9. Data persistence is limited to a local human-editable JSON file. External database systems are out of scope.
+10. Error messages should be actionable and should describe either the violated field constraints or the correct command usage, rather than exposing technical stack traces.
+11. Command behavior should remain consistent with the documented command format and index conventions.
+12. The application should remain usable without network access because technicians may need it between jobs or in locations with unreliable connectivity.
 
 ### Glossary
 
-* **Client / Person**: The primary entity in Linkline. Mandatory fields include Name, Phone, Email, and Address.
-  Optional fields include Tags and Notes.
-* **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing
-  commands rather than using a mouse.
-* **Compact View**: A display mode in the GUI where client records are shown with limited information (name and phone
-  only), allowing the user to scan many records at once without excessive scrolling.
-* **Duplicate Client**: Two clients are considered duplicates if they share the same normalized phone number or
-  normalized email address.
-* **Full View**: A details panel (or an expanded display mode) where all information for a specific client (name, phone,
-  email, full address, tags and notes) is visible to the user.
-* **JSON (JavaScript Object Notation)**: The lightweight, text-based data format used by the Storage component to
-  persist data to the hard disk.
-* **Mainstream OS**: Widely used operating systems like Windows, Linux, Unix, MacOS
-* **Service-Location Context**: Precise physical details about a client's address (e.g., precise address, access
-  instructions, precautions, or special requirements) critical for an on-site technician.
-* **Solo Technician**: The target user of the app.
-
---------------------------------------------------------------------------------------------------------------------
+* **Client / Person**: The primary entity in Linkline. Mandatory fields include Name, Phone, Email, and Address. Optional fields include Tags, Notes, and service logs.
+* **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing commands rather than using a mouse.
+* **Compact view**: The left-pane summary view that shows a concise list of clients for quick scanning.
+* **Displayed list**: The subset of clients currently shown after commands such as `list`, `find`, or `filter`.
+* **Duplicate client**: Two clients considered the same because they share the same normalized phone number or case-insensitive email address.
+* **Full view**: The detailed view that shows all available information for the currently selected client.
+* **JSON (JavaScript Object Notation)**: The text-based format used by the Storage component to persist data on disk.
+* **Log entry**: A timestamped service note attached to a client record.
+* **Display log number**: The log number shown in the UI. It counts from oldest to newest even though log entries are displayed newest first.
+* **Mainstream OS**: Widely used operating systems such as Windows, macOS, and mainstream Linux distributions.
+* **Pending action**: A temporary confirmation state stored after the first execution of a destructive command such as `delete`, `clear`, `deletetag`, or `logdelete`.
+* **Selected client**: The client whose full details are currently shown in the details pane.
+* **Service-location context**: Physical details about a client's service address, access instructions, precautions, or special requirements that matter during an on-site visit.
+* **Solo technician**: The primary target user of Linkline.
 
 ## **Appendix: Instructions for manual testing**
 
@@ -905,9 +936,9 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 1. Enhance `find` command
     1. Extend the find command to search through additional fields:
-       - Tags – Find clients with tags containing the specified substring
-       - Notes – Search within client notes for keywords
-       - Logs – Search through log history entries for matching text
+       - Tags Ã¢â‚¬â€œ Find clients with tags containing the specified substring
+       - Notes Ã¢â‚¬â€œ Search within client notes for keywords
+       - Logs Ã¢â‚¬â€œ Search through log history entries for matching text
 
 2. Enhance `filter` command
    1. Enhance the `filter` command to return clients with no tags when `--tag=` is provided without a value.
