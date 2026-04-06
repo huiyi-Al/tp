@@ -79,7 +79,8 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in `Ui.java`.
+The **API** of this component is specified in 
+[`Ui.java`](https://github.com/AY2526S2-CS2103-F09-4/tp/blob/master/src/main/java/seedu/address/ui/Ui.java).
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
@@ -110,7 +111,8 @@ The `UI` component,
 
 ### Logic component
 
-**API** : `Logic.java`
+The **API** of this component is specified in
+[`Logic.java`](https://github.com/AY2526S2-CS2103-F09-4/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -161,7 +163,8 @@ How the parsing works:
 
 ### Model component
 
-**API** : `Model.java`
+The **API** of this component is specified in
+[`Model.java`](https://github.com/AY2526S2-CS2103-F09-4/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -187,7 +190,8 @@ layer. This is an implementation shortcut for the current search feature, not an
 
 ### Storage component
 
-**API** : `Storage.java`
+The **API** of this component is specified in
+[`Storage.java`](https://github.com/AY2526S2-CS2103-F09-4/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
