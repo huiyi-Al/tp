@@ -116,9 +116,14 @@ Examples:
 
 `add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
 
+![add command result](images/addCommandResult.png)
+
+
 ### Listing all clients : `list`
 
 Shows a sorted list of all clients in Linkline.
+
+![list command result](images/listCommandResult.png)
 
 Format: `list`
 
@@ -230,6 +235,10 @@ Examples:
 * `delete 1` followed by `list`
     * The pending deletion is cancelled. The list command executes normally.
 
+![pending delete command result](images/pendingDeleteCommandResult.png)
+
+![confirmed delete command result](images/confirmedDeleteCommandResult.png)
+
 <box type="tip" seamless>
 
 **Tip:** After the first `delete 1` command, any of the following will confirm the deletion: `delete 1` or `delete 01`.
@@ -274,6 +283,8 @@ Examples:
 * `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01` followed by
   `view 1`
 
+![view command result](images/viewCommandResult.png)
+
 ### Adding a client log: `logadd`
 
 Adds a timestamped log entry to the specified client.
@@ -289,6 +300,8 @@ Examples:
 
 * `logadd 1 Observed leakage beneath sink during site visit.`
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
+
+![logadd command result](images/logaddCommandResult.png)
 
 ### Deleting a client log: `logdelete`
 
@@ -315,6 +328,8 @@ Examples:
 * `logdelete 2 1` followed by `list`
     * The pending log deletion is cancelled. The list command executes normally.
 
+![confirmed logdelete command result](images/logdeleteCommandResult.png)
+
 ### Filtering clients by tags: `filter`
 
 Filters clients whose tags contain all the given keywords. If there is more than one client, the list returned is
@@ -326,6 +341,8 @@ Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 * The filter is case-insensitive. e.g `Plumbing` will match `plumbing`
 * Only filters by tags.
 * Only clients matching all one keyword will be returned (i.e. `AND` search).
+
+![filtertag command result](images/filtertagCommandResult.png)
 
 ### Renaming a tag: `renametag`
 
@@ -343,6 +360,8 @@ Examples:
 
 * `renametag --tag=AC-Service --tag=Aircon-Repair` renames all instances of `AC-Service` to `Aircon-Repair`.
 * `renametag --tag=plumbing --tag=General-Maintenance` renames the `plumbing` tag to `General-Maintenance`.
+
+![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
 
@@ -365,9 +384,13 @@ Examples:
 * `deletetag plumbing` followed by `list`
     * The pending tag deletion is cancelled. The list command executes normally.
 
+![confirmed deletetag command result](images/deletetagCommandResult.png)
+
 ### Clearing all entries : `clear`
 
 Clears all entries in Linkline.
+
+![clear command result](images/clearCommandResult.png)
 
 Format: `clear`
 
