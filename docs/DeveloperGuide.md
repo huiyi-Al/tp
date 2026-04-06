@@ -50,19 +50,6 @@ The bulk of the app's work is done by the following four components:
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
-**How Linkline differs from AB3**
-
-While the overall component structure is unchanged, Linkline extends AB3 in several important ways:
-
-* The `UI` supports a split-pane workflow with a compact client list on the left and a selected-client details panel
-  on the right.
-* The `Model` stores additional domain data such as `Notes`, `LogHistory`, and a global tag list derived from all
-  clients.
-* Some commands are confirmation-based and therefore complete through a pending-action flow rather than in a single
-  command execution.
-* `find` and `filter` are designed to chain over the currently displayed list, instead of always starting from the full
-  client list.
-
 **How the architecture components interact with each other**
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues
