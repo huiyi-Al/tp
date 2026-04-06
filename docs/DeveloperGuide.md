@@ -92,27 +92,34 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [
-`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in `Ui.java`.
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`,
-`StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures
-the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` made up of smaller parts such as `CommandBox`, `ResultDisplay`, `PersonListPanel`,
+`PersonDetailPanel`, and `StatusBarFooter`. All these, including `MainWindow`, inherit from the abstract `UiPart`
+class, which captures the common behavior of visible GUI parts.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that
-are in the `src/main/resources/view` folder. For example, the layout of the [
-`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java)
-is specified in [
-`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+Linkline's UI is organized around a split-pane workflow:
+
+* `PersonListPanel` renders the current filtered client list in a compact form through `PersonCard`, showing only the
+  displayed index, name, and phone number.
+* `PersonDetailPanel` renders the currently selected client through `PersonDetailCard`, showing the full contact
+  details, notes, tags, and service logs.
+* When no client is selected, the details pane shows a placeholder instead of a detail card.
+
+The UI uses the JavaFX framework. The layout of each UI part is defined in a matching `.fxml` file under
+`src/main/resources/view`. For example, `MainWindow` is backed by `MainWindow.fxml`.
 
 The `UI` component,
 
 * executes user commands using the `Logic` component.
-* listens for changes to `Model` data so that the UI can be updated with the modified data.
+* observes the filtered client list exposed by `Logic`, so the left pane updates automatically when commands such as
+  `list`, `find`, and `filter` change the displayed set of clients.
+* observes the selected client exposed by `Logic`, so the right pane updates automatically when commands such as `view`
+  change which client is currently in focus.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component because it renders `Person` and `LogEntry` objects residing in the `Model`.
 
 ### Logic component
 
@@ -160,24 +167,29 @@ How the parsing works:
 
 ### Model component
 
-**API** : [
-`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : `Model.java`
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` and `Tag` objects (which are contained in `UniquePersonList` and a
-  `UniqueTagList` objects respectively).
-* stores each `Person`'s `LogHistory`, which contains zero or more `LogEntry` records.
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which
-  is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to
-  this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a
-  `ReadOnlyUserPref` objects.
-* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they
-  should make sense on their own without depending on other components)
+* stores Linkline's client data inside `AddressBook`, which owns a `UniquePersonList` and a `UniqueTagList`.
+* stores each `Person`'s `Notes`, `LogHistory`, and tags as part of the domain model.
+* stores the currently displayed subset of clients as a separate *filtered* list, which is exposed to outsiders as an
+  unmodifiable `ObservableList<Person>`. This allows the client list panel in the UI to update automatically when
+  commands such as `list`, `find`, and `filter` change the displayed set of clients.
+* stores the currently selected `Person` separately from the filtered list. This is exposed to outsiders as
+  `ObservableValue<Person>`, which allows the details panel in the UI to update automatically when the selected client
+  changes.
+* enforces client uniqueness using normalized phone number or case-insensitive email comparison.
+* maintains a global tag list derived from the tags currently attached to stored clients.
+* stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as
+  `ReadOnlyUserPrefs`.
+
+The `Model` is still intended to be largely independent of the other main components. However, the current
+implementation contains one localized coupling: `SearchPredicate` accepts `ArgumentMultimap` from the `Logic` parsing
+layer. This is an implementation shortcut for the current search feature, not an intended architectural dependency.
 
 ### Storage component
 
