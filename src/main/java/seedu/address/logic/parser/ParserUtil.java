@@ -16,6 +16,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.log.LogMessage;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -118,6 +119,21 @@ public class ParserUtil {
             throw new ParseException(Notes.MESSAGE_CONSTRAINTS);
         }
         return new Notes(trimmedNotes);
+    }
+
+    /**
+     * Parses a {@code String message} into a {@code LogMessage}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code message} is invalid.
+     */
+    public static LogMessage parseLogMessage(String message) throws ParseException {
+        requireNonNull(message);
+        String trimmedMessage = message.trim();
+        if (!LogMessage.isValidLogMessage(trimmedMessage)) {
+            throw new ParseException(LogMessage.MESSAGE_CONSTRAINTS);
+        }
+        return new LogMessage(trimmedMessage);
     }
 
     /**
