@@ -219,22 +219,149 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### CLI parsing strategy
+
+Linkline currently uses two command-parsing styles:
+
+* Prefix-based commands such as `add`, `edit`, `find`, `filter`, and `renametag`
+* Positional commands such as `view`, `delete`, `copyaddr`, `copyedit`, `logadd`, `logdelete`, and `deletetag`
+
+`AddressBookParser` first separates the command word from the remaining argument string, then delegates to a dedicated parser for that command. Prefix-based parsers typically rely on `ArgumentTokenizer`, `ArgumentMultimap`, and `CliSyntax` to parse Linkline's `--field=` format.
+
+The current tokenizer has several important characteristics:
+
+* A prefix is only recognized when the tokenizer sees whitespace immediately before that prefix.
+* Repeated prefixes are accumulated in insertion order.
+* Argument values are trimmed before being stored in `ArgumentMultimap`.
+* Empty values are still preserved, which allows commands such as `edit 1 --tag=` and `edit 1 --notes=` to represent
+  clearing a field.
+
+This design keeps most prefix-based commands consistent, but it also explains several current limitations:
+
+* values cannot contain another recognized prefix in the middle unless quoting/escaping is added in future
+* leading and trailing whitespace in user input cannot be preserved
+* the parser does not currently support quoted arguments or escape sequences
+
+These limitations are acceptable for the current command set, but they are also the reason quoted/escaped CLI syntax is
+listed as a future enhancement.
+
+### Confirmation-based commands with `PendingAction`
+
+Some destructive commands in Linkline require confirmation before they take effect. This behavior is implemented using `PendingAction` and handled centrally by `LogicManager`.
+
+Commands currently using this mechanism include:
+
+* `delete`
+* `clear`
+* `deletetag`
+* `logdelete`
+
+The first execution of such a command does not immediately mutate the model. Instead:
+
+1. The command validates the request and creates a concrete `PendingAction` object.
+1. The command returns a `CommandResult` carrying both the confirmation message and the pending action.
+1. `LogicManager` stores that pending action instead of saving data immediately.
+
+When the next user command arrives, `LogicManager` checks whether it matches the stored pending action:
+
+* If it matches, `LogicManager` calls `PendingAction#complete(model)`, clears the pending action, and then saves the
+  updated address book.
+* If it does not match, `LogicManager` discards the pending action and executes the new command normally.
+* If parsing or command execution fails, `LogicManager` also clears the pending action.
+
+This approach keeps confirmation behavior out of `LogicManager`'s command-dispatch logic while allowing multiple
+commands to share the same workflow. The sequence diagram in the Logic component section illustrates the first
+`delete 1`, which creates and stores a `DeletePendingAction`.
+
+### Chained `find` and `filter`
+
+Linkline's `find` and `filter` commands narrow the currently displayed list incrementally instead of always restarting from the full address book.
+
+This is implemented in
+`ModelManager` using:
+
+* a `FilteredList<Person>` named `filteredPersons`
+* a list of active predicates named `activePredicates`
+
+The commands interact with the model as follows:
+
+* `find` constructs a `SearchPredicate` and adds it through `addPredicateFilteredPersonList(...)`
+* `filter` constructs a `TagsMatchAllKeywordsPredicate` and adds it in the same way
+* `list` resets the accumulated predicates through `resetPredicatesFilteredPersonList()`
+
+As a result:
+
+* repeated `find` and `filter` commands are combined using logical `AND` across commands
+* within a single `find`, the supplied fields are combined using logical `OR` by `SearchPredicate`
+* within a single `filter`, all supplied tags must match because `TagsMatchAllKeywordsPredicate` uses logical `AND`
+
+This behavior is intentional. `find` and `filter` are navigation commands, so they preserve the user's current
+context by continuing to narrow the currently displayed list instead of resetting it to the full address book.
+
+Both `FindCommand` and `FilterCommand` also clear the selected client if that client is no longer present in the newly filtered list. This prevents the details panel from showing a client that is no longer visible in the list pane.
+
+### Global tag operations
+
+Linkline treats tags as address-book-level data rather than as isolated strings attached independently to each client. This is why `renametag` and `deletetag` operate globally.
+
+The main logic lives in
+`AddressBook`:
+
+* `rebuildTagList()` derives the global `UniqueTagList` from the tags currently attached to all stored clients
+* `setTag(...)` renames a tag globally by updating the tag list and recreating every affected `Person` with the new tag
+* `removeTag(...)` deletes a tag globally by removing it from the tag list and recreating every affected `Person`
+  without that tag
+
+`ModelManager` adds two extra responsibilities on top of that:
+
+* it resets the filtered list after tag rename or delete so the left pane shows all possibly affected clients
+* it refreshes the selected client if that client was affected by the tag change, so the details panel shows the
+  updated tags immediately
+
+This design centralizes tag-update logic in the model layer and avoids duplicating the same cascading behavior across multiple commands.
+
+### Log history and display indices
+
+Each client stores a `LogHistory`, which is implemented as an immutable, newest-first list of `LogEntry` objects.
+
+This has two important consequences:
+
+* `logadd` creates a new `LogEntry`, produces an updated `LogHistory`, constructs a new `Person`, and replaces the
+  original client in the model
+* `logdelete` also works by creating a new `LogHistory` and then replacing the original client with an updated `Person`
+
+There is also a deliberate distinction between list order and UI numbering:
+
+* `LogHistory` stores entries newest first
+* the details panel displays the newest entry at the top
+* however, the UI labels logs as `Log 1`, `Log 2`, ... from oldest to newest through `LogEntryDisplayIndex`
+
+This is intentional. Linkline shows the most recent interaction first, but it keeps log numbers aligned with insertion
+order: `Log 1` is the earliest recorded log, and the largest log number is the most recently added one.
+
+This means `logdelete CLIENT_INDEX LOG_INDEX` cannot directly use the displayed log number as the internal list index.
+Instead, `LogDeleteCommand` converts the displayed log number into the internal zero-based list index using:
+
+`internal index = total logs - display index`
+
+This conversion ensures that the command deletes the same log entry that the user sees labeled in the UI.
+
 ### Field validation constraints
 
-#### Implementation
+Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Tag`, `Notes`,
+`LogMessage`) and reused by parsers through `ParserUtil`.
+User-provided field values are trimmed in `ParserUtil` before validation. `LogAddCommandParser` still performs custom
+splitting to separate the client index from the free-text log message before delegating both parts to `ParserUtil`.
 
-Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Tag`, `Notes`) and reused
-by parsers via `ParserUtil`.
-All user-provided values are trimmed in `ParserUtil` before validation.
-
-| Field     | Constraint summary                                                                                                                            |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| `Name`    | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`).                                                                 |
-| `Phone`   | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
-| `Email`   | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
-| `Address` | Must not be blank (first non-whitespace character required).                                                                                  |
-| `Tag`     | 1 to 50 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
-| `Notes`   | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
+| Field        | Constraint summary                                                                                                                            |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`       | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`).                                                                 |
+| `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
+| `Email`      | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
+| `Address`    | Must not be blank (first non-whitespace character required).                                                                                  |
+| `Tag`        | 1 to 50 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
+| `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
+| `LogMessage` | Log message must contain 1 to 1000 Unicode code points after trimming (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                    |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.
 
