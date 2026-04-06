@@ -786,129 +786,184 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
-### Launch and shutdown
+The test cases below assume Linkline is launched in a fresh folder so that the built-in sample data is loaded. Some
+test cases modify stored data. If a later test case assumes the original sample data, restart with a fresh app folder
+or restore `data/addressbook.json` first.
+
+### Launch and window placement
 
 1. Initial launch
 
-    1. Download the jar file and copy into an empty folder
+    1. Download the jar file and copy it into an empty folder.
 
-    1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be
-       optimum.
+    1. Open a terminal in that folder and run `java -jar linkline.jar`.<br>
+       Expected: The GUI opens with the built-in sample clients. The initial window size may not be optimal.
 
-1. Saving window preferences
+1. Recovering from oversized and off-screen saved window preferences
 
-    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    1. Prerequisites: Launch the app once and close it so that `preferences.json` exists.
 
-    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+    1. Open `preferences.json` and change the saved `guiSettings` to values that would not fit on the current screen,
+       for example a very large (e.g., 100000) `windowWidth` and `windowHeight`, together with off-screen `windowCoordinates`
+       such as `x = -400` and `y = -200`.
 
-### Copying a client's address
+    1. Re-launch the app with `java -jar linkline.jar`.<br>
+       Expected: Linkline readjusts the saved size and position so that the window fits within the visible screen area
+       instead of opening oversized or partially hidden.
 
-1. Copying address while all clients are being shown
+1. Recovering from a corrupted data file
 
-    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+    1. Prerequisites: Launch the app once, execute `list`, and close the app so that `data/addressbook.json` exists.
+
+    1. Open `data/addressbook.json` and replace the file content with `not valid json` (e.g., change "name" field to "names").
+
+    1. Re-launch the app.<br>
+       Expected: Linkline starts with an empty client list, shows a startup warning about malformed data, and creates
+       a backup file named `addressbook.json.corrupted-<timestamp>.bak` in the same folder when permissions allow.
+
+### Navigating and narrowing the displayed list
+
+1. Finding and filtering clients
+
+    1. Prerequisites: Fresh launch with the built-in sample data.
+
+    1. Test case: `find --name=Alex`<br>
+       Expected: Only `Alex Yeoh` remains in the displayed list.
+
+    1. Test case: `list` followed by `find --tag=Plumbing`<br>
+       Expected: Only `Bernice Yu` and `Charlotte Oliveiro` remain in the displayed list.
+
+    1. Test case: `list` followed by `find --name=Alex --tag=Plumbing`<br>
+       Expected: `Alex Yeoh`, `Bernice Yu`, and `Charlotte Oliveiro` are shown because a single `find` command
+       matches any supplied field.
+
+    1. Test case: `filter --tag=Plumbing --tag=Electrical Wiring`<br>
+       Expected: Only `Bernice Yu` is shown because `filter` requires all specified tags to be present.
+
+1. Viewing client details
+
+    1. Prerequisites: `list`
+
+    1. Test case: `view 1`<br>
+       Expected: The first displayed client's full details appear in the right-hand panel.
+
+    1. Test case: `find --name=Alex` followed by `view 1` followed by `filter --tag=Plumbing`<br>
+       Expected: After `view 1`, `Alex Yeoh` is shown in the right-hand panel. After
+       `filter --tag=Plumbing`, the displayed list becomes empty and the right-hand panel returns to its placeholder
+       state because the previously selected client is no longer shown.
+
+### Adding, copying, and editing clients
+
+1. Adding a client
+
+    1. Test case:
+       `add --name=Ethan Lim --phone=97861234 --email=ethanlim@example.com --address=Blk 123 Tampines Street 11, #08-12 --notes=Gate code 2048 --tag=Plumbing`<br>
+       Expected: Success message shown. `Ethan Lim` appears in the displayed list in sorted order.
+
+    1. Test case:
+       `add --name=Ethan Clone --phone=9786 1234 --email=ethan.clone@example.com --address=Blk 9 Test Road`<br>
+       Expected: Duplicate-client error shown because phone numbers are compared ignoring formatting.
+
+1. Copying a client's address
+
+    1. Prerequisites: `list`
 
     1. Test case: `copyaddr 1`<br>
-       Expected: Address of the first client is copied to clipboard.
+       Expected: The address of the first displayed client is copied to the system clipboard.
 
     1. Test case: `copyaddr 0`<br>
-       Expected: Error message shown.
+       Expected: Error message shown because `0` is not a valid client index.
 
-### Copying edit command format
+1. Copying an edit command template
 
-1. Copying edit format while all clients are being shown
-
-    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+    1. Prerequisites: `list`
 
     1. Test case: `copyedit 1`<br>
-       Expected: Edit command format of the first client is copied to clipboard.
+       Expected: A ready-to-edit `edit 1 ...` command for the first displayed client is copied to the system
+       clipboard.
 
-    1. Test case: `copyedit 0`<br>
-       Expected: Error message shown.
+    1. Paste the copied command into the command box, change one field such as `--phone=81112222`, and execute it.<br>
+       Expected: The first client's details are updated successfully.
 
-### Deleting a client
+1. Editing a client to a duplicate identity
 
-1. Deleting a client while all clients are being shown
+    1. Prerequisites: Use a fresh app folder or restore the original sample data. Execute `list`.
 
-    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+    1. Test case: `edit 2 --phone=87438807`<br>
+       Expected: Duplicate-client error shown because that phone number already belongs to `Alex Yeoh`.
+
+### Confirmation-based deletion and clearing
+
+1. Deleting a client
+
+    1. Prerequisites: `list`
 
     1. Test case: `delete 1`<br>
-       Expected: No client is deleted. Confirmation message with the client's details is shown. Pending deletion state is set for index 1.
+       Expected: No client is deleted yet. A confirmation message identifying the first displayed client is shown.
 
-    1. Test case: `delete 1` (immediately after the above) <br>
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
+    1. Test case: `delete 1` immediately again<br>
+       Expected: The first displayed client is deleted from the list.
 
-    1. Test case: `delete 1` then `list` then `delete 1` <br>
-       Expected: First `delete 1` shows confirmation. `list` cancels the pending deletion. Second `delete 1` shows
-       confirmation again (not auto-deleted).
+    1. Test case: `delete 1` then `list` then `delete 1`<br>
+       Expected: The first `delete 1` shows confirmation. `list` cancels the pending deletion. The second `delete 1`
+       asks for confirmation again instead of deleting immediately.
 
-    1. Test case: `delete 0`<br>
-       Expected: Error message shown.
+1. Clearing all clients
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Error message shown.
+    1. Prerequisites: Use a fresh app folder or restore the original sample data.
 
-### Editing a client
+    1. Test case: `clear` then `help`<br>
+       Expected: `help` cancels the pending clear action and opens the help window.
 
-1. **Editing a client while all clients are being shown**
+    1. Test case: `clear` then `clear`<br>
+       Expected: All clients are removed and the displayed list becomes empty.
 
-    1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+### Working with service logs
 
-    1. Test case: `edit 1 --name=Jane Doe`<br>
-       Expected: First client's name is changed to "Jane Doe". Success message with updated details shown.
+1. Adding a log
 
-    1. Test case: `edit 1 --phone=91234567`<br>
-       Expected: First client's phone number is updated. Success message shown.
+    1. Prerequisites: Use a fresh app folder or restore the original sample data. Execute `view 1` so that
+       `Alex Yeoh` is selected in the right-hand panel.
 
-    1. Test case: `edit 1 --tag=AC-Service`<br>
-       Expected: Tags are replaced with only "AC-Service". Previous tags are removed.
+    1. Test case: `logadd 1 Observed condensation near living room unit.`<br>
+       Expected: Success message shown. The right-hand panel refreshes and shows a new latest log at the top, labeled
+       `Log 3`.
 
-    1. Test case: `edit 1 --tag=AC-Service --tag=Plumbing`<br>
-       Expected: Tags are replaced with both "AC-Service" and "Plumbing". Previous tags are removed.
+1. Deleting a log
 
-    1. Test case: `edit 1 --notes=Call before arriving`<br>
-       Expected: Notes field is updated.
+    1. Test case: `logdelete 1 3`<br>
+       Expected: No log is deleted yet. A confirmation message identifies the latest log of `Alex Yeoh`.
 
-2. **Editing a client with invalid inputs**
+    1. Test case: `logdelete 1 3` immediately again<br>
+       Expected: The newly added log is deleted. The right-hand panel returns to showing two logs, with the latest
+       visible one labeled `Log 2`.
 
-    1. Test case: `edit 1 --name=` (empty name)<br>
-       Expected: Error message shown. Client remains unchanged.
+    1. Test case: `logdelete 3 1`<br>
+       Expected: Error message shown because the third sample client (`Charlotte Oliveiro`) has no logs.
 
-    1. Test case: `edit 1 --phone=abc` (non-numeric)<br>
-       Expected: Error message shown. Client remains unchanged.
+### Global tag operations
 
-    1. Test case: `edit 1 --email=invalid` (missing domain label)<br>
-       Expected: Error message shown. Client remains unchanged.
+1. Renaming a tag
 
-3. **Editing a client with duplicate phone or email**
+    1. Prerequisites: Use a fresh app folder or restore the original sample data. Execute `list`.
 
-    1. Prerequisites: Two clients exist:
-        - Client 1: Phone `91234567`, Email `john@example.com`
-        - Client 2: Phone `98765432`, Email `jane@example.com`
+    1. Test case: `renametag --tag=AC-Service --tag=Aircon-Service`<br>
+       Expected: All clients that previously had `AC-Service` now show `Aircon-Service`, and the full client list
+       remains displayed.
 
-    1. Test case: `edit 2 --phone=91234567` (same phone as Client 1)<br>
-       Expected: Error message: "This client already exists in Linkline". Client 2 remains unchanged.
+    1. Test case: `renametag --tag=Plumbing --tag=Electrical Wiring`<br>
+       Expected: Error shown because the new tag already exists.
 
-    1. Test case: `edit 2 --email=john@example.com` (same email as Client 1)<br>
-       Expected: Error message shown. Client 2 remains unchanged.
+1. Deleting a tag
 
-    1. Test case: `edit 1 --phone=91234567` (same phone as itself)<br>
-       Expected: Success. No duplicate error (editing to same value is allowed).
+    1. Test case: `deletetag Plumbing`<br>
+       Expected: No tag is deleted yet. A confirmation message is shown.
 
-4. **Editing a client with multiple fields**
+    1. Test case: `deletetag Plumbing` immediately again<br>
+       Expected: `Plumbing` is removed from all clients and the full client list is shown.
 
-    1. Test case: `edit 1 --name=John Tan --phone=88888888 --tag=AC-Service`<br>
-       Expected: Name, phone, and tags are all updated simultaneously. Success message shows all changes.
-
-5. **Invalid index**
-
-    1. Test case: `edit 0 --name=John`<br>
-       Expected: Error message shown.
-
-6. **No fields provided**
-
-    1. Test case: `edit 1`<br>
-       Expected: Error: "At least one field to edit must be provided."
+    1. Test case: `deletetag Electrical Wiring` then `find --name=Bernice`<br>
+       Expected: The `find` command cancels the pending tag deletion. `Electrical Wiring` is not removed.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -934,18 +989,19 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 ## **Appendix: Planned Enhancements**
 
-1. Enhance `find` command
-    1. Extend the find command to search through additional fields:
-       - Tags Ã¢â‚¬â€œ Find clients with tags containing the specified substring
-       - Notes Ã¢â‚¬â€œ Search within client notes for keywords
-       - Logs Ã¢â‚¬â€œ Search through log history entries for matching text
+Team size: 5
 
-2. Enhance `filter` command
-   1. Enhance the `filter` command to return clients with no tags when `--tag=` is provided without a value.
-
-3. Quoted Arguments in CLI Syntax
-    1. Support quoted arguments to allow: Spaces within field values without ambiguity and special characters (e.g., ", ', \) using escape sequences
-
-4. New `logedit` command
-
-   1. Add an `logedit` command to allow users to modify existing log entries
+1. Enhance `find` to search notes and log text: The current `find` command can search names, phone numbers, emails,
+   addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find` with support
+   for fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
+   job records.
+2. Enhance `filter` to support clients without tags: The current `filter` command can only keep clients that match one
+   or more specified tags. We plan to make `filter --tag=` return clients whose tag list is empty, so users can easily
+   identify untagged clients that still need categorization.
+3. Add `logedit` to correct existing log entries: Linkline currently supports `logadd` and `logdelete`, but fixing a
+   mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a `logedit` command
+   so users can update an existing log message directly while keeping the rest of the client's log history intact.
+4. Add quoted and escaped CLI field values: The current parser does not handle quoted values, which makes it awkward
+   to enter text containing prefix-like substrings, preserved whitespace, or special characters. We plan to support
+   quoted input such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`,
+   and `\n`.
