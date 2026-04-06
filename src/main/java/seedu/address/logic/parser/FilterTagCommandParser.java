@@ -6,14 +6,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
 
-import seedu.address.logic.commands.FilterCommand;
+import seedu.address.logic.commands.FilterTagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FilterCommand object
  */
-public class FilterCommandParser implements Parser<FilterCommand> {
+public class FilterTagCommandParser implements Parser<FilterTagCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the FilterCommand
@@ -22,7 +22,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     @Override
-    public FilterCommand parse(String args) throws ParseException {
+    public FilterTagCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
@@ -39,9 +39,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 
         if (isTagListEmpty || hasPreamble || hasBlankTags) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterCommand.MESSAGE_USAGE));
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_USAGE));
         }
 
-        return new FilterCommand(new TagsMatchAllKeywordsPredicate(tagKeywords));
+        return new FilterTagCommand(new TagsMatchAllKeywordsPredicate(tagKeywords));
     }
 }

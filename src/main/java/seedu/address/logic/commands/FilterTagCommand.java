@@ -13,9 +13,9 @@ import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
  * Finds and lists all persons in address book with specified tags.
  * Keyword matching is case-insensitive.
  */
-public class FilterCommand extends Command {
+public class FilterTagCommand extends Command {
 
-    public static final String COMMAND_WORD = "filter";
+    public static final String COMMAND_WORD = "filtertag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters clients by tags. "
             + "Returns clients with all specified tags.\n"
@@ -24,7 +24,7 @@ public class FilterCommand extends Command {
 
     private final TagsMatchAllKeywordsPredicate predicate;
 
-    public FilterCommand(TagsMatchAllKeywordsPredicate predicate) {
+    public FilterTagCommand(TagsMatchAllKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
 
@@ -46,11 +46,11 @@ public class FilterCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof FilterCommand)) {
+        if (!(other instanceof FilterTagCommand)) {
             return false;
         }
 
-        FilterCommand otherFilterCommand = (FilterCommand) other;
+        FilterTagCommand otherFilterCommand = (FilterTagCommand) other;
         return predicate.equals(otherFilterCommand.predicate);
     }
 
