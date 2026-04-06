@@ -1,7 +1,9 @@
 package seedu.address.model.person.predicates;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -80,7 +82,7 @@ public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
         }
 
         TagsMatchOneKeywordPredicate otherPredicate = (TagsMatchOneKeywordPredicate) other;
-        boolean result = subTags.equals(otherPredicate.subTags);
+        boolean result = Objects.equals(subTags, otherPredicate.subTags);
 
         logger.fine(MessageFormat.format("Equality result: {0}", result));
         return result;
@@ -89,7 +91,7 @@ public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
     @Override
     public String toString() {
         String result = new ToStringBuilder(this)
-                .add("subTags", subTags)
+                .add("subTags", subTags != null ? subTags : new ArrayList<>())
                 .toString();
 
         logger.fine(MessageFormat.format("toString result: {0}", result));

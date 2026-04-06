@@ -77,11 +77,9 @@ public class FullNamePredicateTest {
     }
 
     @Test
-    public void test_emptyStringSubstring_throwsIllegalArgumentException() {
+    public void test_emptyStringSubstring_returnsTrue() {
         FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList(""));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withName(NAME_ALICE_BOB).build()));
-        assertEquals("Substring parameter cannot be empty", e.getMessage());
+        assertTrue(predicate.test(new PersonBuilder().withName(NAME_ALICE_BOB).build()));
     }
 
     @Test

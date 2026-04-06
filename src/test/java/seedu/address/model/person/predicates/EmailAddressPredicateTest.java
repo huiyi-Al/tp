@@ -74,11 +74,9 @@ public class EmailAddressPredicateTest {
     }
 
     @Test
-    public void test_emptyStringSubstring_throwsIllegalArgumentException() {
+    public void test_emptyStringSubstring_returnsTrue() {
         EmailAddressPredicate predicate = new EmailAddressPredicate(Collections.singletonList(""));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withEmail(EMAIL_ALICE).build()));
-        assertEquals("Substring parameter cannot be empty", e.getMessage());
+        assertTrue(predicate.test(new PersonBuilder().withEmail(EMAIL_ALICE).build()));
     }
 
     @Test

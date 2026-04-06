@@ -121,7 +121,7 @@ public class TagsMatchOneKeywordPredicateTest {
         TagsMatchOneKeywordPredicate predicate =
                 new TagsMatchOneKeywordPredicate(keywords);
 
-        String expected = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{tagKeywords=" + keywords + "}";
+        String expected = TagsMatchOneKeywordPredicate.class.getCanonicalName() + "{subTags=" + keywords + "}";
 
         assertEquals(expected, predicate.toString());
     }
