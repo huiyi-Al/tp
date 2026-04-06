@@ -453,7 +453,7 @@ Use case ends.
 **Extensions**
 
 * 1a. A field provided is invalid according to the feature specification.
-    * `Linkline` returns an error message describing the name constraints.<br>
+    * `Linkline` returns an error message describing the violated field constraints.<br>
     Use case ends.
 * 2a. A duplicate client (client with the same normalized phone number or case-insensitive email address) already exists.
     * `Linkline` returns an error message indicating that the client would be a duplicate.<br>
@@ -702,7 +702,7 @@ Use case ends.
 
 1. `user` locates the target client in the displayed client list.
 2. `user` requests to add a log entry to that client by specifying the client's index and providing the log message.
-3`Linkline` timestamps the log entry, adds it to the client's log history, and saves the updated data.<br>
+3. `Linkline` timestamps the log entry, adds it to the client's log history, and saves the updated data.<br>
   Use case ends.
 
 **Extensions**
