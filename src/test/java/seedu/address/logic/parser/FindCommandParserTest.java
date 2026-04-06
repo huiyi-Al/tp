@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -131,6 +132,11 @@ public class FindCommandParserTest {
     public void parse_emptyField_throwsParseException() {
         assertParseFailure(parser, MessageFormat.format("{0}{1}", PREFIX_NAME, TEST_EMPTY),
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_emptyTag_returnsSuccessful() {
+        assertDoesNotThrow(() -> parser.parse(MessageFormat.format("{0}", PREFIX_TAG)));
     }
 
     @Test

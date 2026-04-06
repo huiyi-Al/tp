@@ -112,7 +112,9 @@ Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [-
 Examples:
 
 * `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01`
-* `add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
+*
+
+`add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
 
 ### Listing all clients : `list`
 
@@ -152,29 +154,33 @@ Examples:
 Finds clients whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
 specified per field. A sorted list of such clients is returned.
 
+The search works on a disjunction basis between fields (i.e. OR matching).
+
+For example, if a particular find command
+matches client A by name, and client B by phone number, both clients will be returned.
+
 Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filtertag` operations can be
 chained together to shorten the list.
 
 For example, if there are 10 clients initially on the list, and a `find` / `filtertag` operations shortens it to 5 clients,
 any subsequent `find` / `filtertag` operations would only search within those 5 clients.
 
+In order to reset the clients list to show all clients again, type `list`.
+
 Format:
-`find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`
+`find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=[TAG] [--tag=[MORE_TAGS]] ...]`
 
 * Any preamble given will result in an error.
 * At least one of the optional fields must be provided.
-* If a field is specified, it must not be empty.
+* If a field is specified, it must not be empty. The only exception to this is the tags field, which will search for
+  people with no tags if left empty.
 * A field can be specified as many times as keywords are required.
 * The order in which the fields are specified does not matter.
 * Only the fields specified are searched against.
 * In all fields, the search is case-insensitive. e.g. In name field, `hans` will match `Hans`.
 * In all fields, the order of the keywords does not matter. e.g. In name field, `Hans Bo` will match `Bo Hans`.
-* In name, phone number, email address, physical address fields, clients whose field matches at least one keyword in
-  that specified field as a substring will be returned (i.e. `OR` search). e.g. In name field, `Gru Ya` will match
-  `Hans Gruber`, `Bo Yang`.
-* In tag field, clients whose field match at least one keyword in that specified field exactly will be returned (i.e.
-  `OR` search) as a union with the other fields mentioned. e.g. In
-  tag field `AC-Service` will match only `AC-Service`.
+* In all fields, clients whose field matches at least one keyword in that specified field as a substring will be
+  returned (i.e. `OR` search). e.g. In name field, `Gru Ya` will match `Hans Gruber`, `Bo Yang`.
 
 Examples:
 
@@ -187,9 +193,14 @@ Examples:
 * `find --email=.edu` can return clients with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.
 * `find --address=Street` can return clients with physical addresses `Woodlands Street`, `Admiralty Street`
 * `find --tag=wiring` can return clients with tag `Wiring`, but not `ElectricalWiring`,
-* `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair`
+*
+
+`find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair`
 is a valid combination of all fields.
-* `find --phone=123 --phone=4567 --name=James --name=Jake --tag=Aircon-Repair --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
+
+*
+
+`find --phone=123 --phone=4567 --name=James --name=Jake --tag=Aircon-Repair --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
 will return the same results as the previous command.<br>
 
 ![find command result](images/findCommandResult.png)
@@ -222,7 +233,8 @@ Examples:
 <box type="tip" seamless>
 
 **Tip:** After the first `delete 1` command, any of the following will confirm the deletion: `delete 1` or `delete 01`.
-Leading/trailing spaces and spaces between the command word and index are ignored, numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
+Leading/trailing spaces and spaces between the command word and index are ignored, numbers with leading zeros (e.g., '
+01', '001') also confirm the deletion.
 </box>
 
 ### Copying a client's address: `copyaddr`
@@ -259,7 +271,8 @@ Format: `view INDEX`
 Examples:
 
 * `find --name=John Don` followed by `view 1`
-* `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01` followed by `view 1`
+* `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01` followed by
+  `view 1`
 
 ### Adding a client log: `logadd`
 

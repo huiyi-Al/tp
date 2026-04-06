@@ -65,7 +65,7 @@ public class SearchPredicateTest {
             {2}'{subNumbers='{3}'}', \
             {4}'{subEmailAddresses='{5}'}', \
             {6}'{subPhysicalAddresses='{7}'}', \
-            {8}'{tagKeywords='{9}'}'\
+            {8}'{subTags='{9}'}'\
             """;
     private static final Person TEST_PERSON_NAME_MATCH_ONLY =
             new PersonBuilder().withName("Alan").withPhone("92355671").build();

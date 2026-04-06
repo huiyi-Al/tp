@@ -276,7 +276,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | solo residential service technician | import clients from other files into my existing list                                              | bring over contacts from older tools or files quickly                        |
 | `*`      | solo residential service technician | undo or redo recent actions                                                                        | recover from mistakes quickly                                                |
 
-
 ### Use cases
 
 (For all use cases below, `Linkline` is the system, and the `user` is the sole Actor, unless specified otherwise)
@@ -319,7 +318,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * `Linkline` returns error message informing `user` what criteria the notes must meet.
     * Use case ends.
 * 2g. Duplicate client detected (same phone number or email as an existing client).
-    * `Linkline` returns an error message informing the user that a client with the same phone number or email already exists.
+    * `Linkline` returns an error message informing the user that a client with the same phone number or email already
+      exists.
     * Use case ends.
 
 #### Use Case: UC02 - Search for a client
@@ -341,7 +341,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. The search command does not specify any field.
     * `Linkline` gives a warning to `user` that command entered is in an invalid format.
     * Use case ends.
-* 1b. The search command has at least one specified field with no keywords (is empty).
+* 1b. The search command has any of name, phone, email, address specified field(s) with no keywords (is empty).
     * `Linkline` gives a warning to `user` that command entered is in an invalid format.
     * Use case ends.
 
@@ -360,12 +360,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 * 1a. The index given is invalid (not a positive integer or out of range).
-  * `Linkline` returns an error message informing the user that the index is invalid.
-  * Use case ends.
+    * `Linkline` returns an error message informing the user that the index is invalid.
+    * Use case ends.
 * 2a. `Linkline` fails to access the system clipboard.
-  * `Linkline` returns an error message informing the user to copy the address manually from the details view.
-  * `user` searches for the client (UC02) and copies the address manually from the displayed details.
-  * Use case ends.
+    * `Linkline` returns an error message informing the user to copy the address manually from the details view.
+    * `user` searches for the client (UC02) and copies the address manually from the displayed details.
+    * Use case ends.
 
 #### Use Case: UC04 - Change client phone number
 
@@ -465,8 +465,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * `Linkline` returns an error message to inform `user` adding at least one field.
     * Use case ends.
 * 1c. A tag provided is invalid according to the feature specification.
-  * `Linkline` returns an error message informing `user` of the tag naming rules.
-  * Use case ends.
+    * `Linkline` returns an error message informing `user` of the tag naming rules.
+    * Use case ends.
 
 #### Use Case: UC09 - Filter clients by tags
 
@@ -647,7 +647,8 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
 
     1. Test case: `delete 1`<br>
-       Expected: No client is deleted. Confirmation message with the client's details is shown. Pending deletion state is set for index 1.
+       Expected: No client is deleted. Confirmation message with the client's details is shown. Pending deletion state
+       is set for index 1.
 
     1. Test case: `delete 1` (immediately after the above) <br>
        Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
@@ -725,38 +726,44 @@ testers are expected to do more *exploratory* testing.
        Expected: Error: "At least one field to edit must be provided."
 
 --------------------------------------------------------------------------------------------------------------------
+
 ## **Appendix: Effort**
-This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a client management system tailored for solo service technicians. While AB3 serves as a simple contact manager, Linkline introduces domain-specific features such as service logs, confirmation flows and corrupted file handling.
+
+This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a client management system tailored for solo
+service technicians. While AB3 serves as a simple contact manager, Linkline introduces domain-specific features such as
+service logs, confirmation flows and corrupted file handling.
 
 <box type="info" seamless>
 
 ### Difficulty Level & Challenges
 
-| **Challenge** | **Description**                                                                                                                                                               |
-|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Multiple entity types** | AB3 manages only `Person` and `Tag`. Linkline adds `LogHistory`, `LogEntry`, and `LogMessage` as first-class entities with their own validation, storage, and UI representation. |
-| **Complex CLI syntax** | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                       |
-| **Two-step confirmation** | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                        |
-| **Duplicate detection** | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                  |
-| **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `addressbook.json` without auto-overwriting.                                                                  |
-| **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |
+| **Challenge**               | **Description**                                                                                                                                                                              |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Multiple entity types**   | AB3 manages only `Person` and `Tag`. Linkline adds `LogHistory`, `LogEntry`, and `LogMessage` as first-class entities with their own validation, storage, and UI representation.             |
+| **Complex CLI syntax**      | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                                      |
+| **Two-step confirmation**   | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                                       |
+| **Duplicate detection**     | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                                 |
+| **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `addressbook.json` without auto-overwriting.                                                                                 |
+| **UI improvements**         | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`). |
 
 </box>
 --------------------------------------------------------------------------------------------------------------------
+
 ## **Appendix: Planned Enhancements**
 
 1. Enhance `find` command
     1. Extend the find command to search through additional fields:
-       - Tags – Find clients with tags containing the specified substring
-       - Notes – Search within client notes for keywords
-       - Logs – Search through log history entries for matching text
+        - Tags – Find clients with tags containing the specified substring
+        - Notes – Search within client notes for keywords
+        - Logs – Search through log history entries for matching text
 
 2. Enhance `filter` command
-   1. Enhance the `filter` command to return clients with no tags when `--tag=` is provided without a value.
+    1. Enhance the `filter` command to return clients with no tags when `--tag=` is provided without a value.
 
 3. Quoted Arguments in CLI Syntax
-    1. Support quoted arguments to allow: Spaces within field values without ambiguity and special characters (e.g., ", ', \) using escape sequences
+    1. Support quoted arguments to allow: Spaces within field values without ambiguity and special characters (
+       e.g., ", ', \) using escape sequences
 
 4. New `logedit` command
 
-   1. Add an `logedit` command to allow users to modify existing log entries
+    1. Add an `logedit` command to allow users to modify existing log entries
