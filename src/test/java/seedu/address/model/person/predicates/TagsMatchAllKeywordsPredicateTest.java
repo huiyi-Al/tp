@@ -53,6 +53,10 @@ public class TagsMatchAllKeywordsPredicateTest {
         // Case-insensitive check
         predicate = new TagsMatchAllKeywordsPredicate(Arrays.asList("ac-SERVICE", "TV-SERVICE"));
         assertTrue(predicate.test(new PersonBuilder().withTags("AC-Service", "TV-Service").build()));
+
+        // Empty tag match
+        predicate = new TagsMatchAllKeywordsPredicate(List.of(""));
+        assertTrue(predicate.test(new PersonBuilder().withTags().build()));
     }
 
     @Test

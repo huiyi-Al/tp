@@ -29,17 +29,26 @@ public class FilterTagCommandParser implements Parser<FilterTagCommand> {
         List<String> tagKeywords = argMultimap.getAllValues(PREFIX_TAG);
 
         // Ensure at least one --tag= prefix was provided.
-        boolean isTagListEmpty = tagKeywords.isEmpty();
+        boolean isPrefixMissing = argMultimap.getValue(PREFIX_TAG).isEmpty();
 
         // Ensure the preamble is empty.
         boolean hasPreamble = !argMultimap.getPreamble().isEmpty();
 
-        // Ensure no provided tag is empty or just whitespace
-        boolean hasBlankTags = tagKeywords.stream().anyMatch(tag -> tag.trim().isEmpty());
-
-        if (isTagListEmpty || hasPreamble || hasBlankTags) {
+        if (isPrefixMissing || hasPreamble) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_USAGE));
+        }
+
+        long blankCount = tagKeywords.stream().filter(String::isBlank).count();
+        long nonBlankCount = tagKeywords.size() - blankCount;
+
+        if (blankCount > 0 && nonBlankCount > 0) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_MIX_COMMAND));
+        }
+
+        if (blankCount > 0) {
+            return new FilterTagCommand(new TagsMatchAllKeywordsPredicate(List.of("")));
         }
 
         return new FilterTagCommand(new TagsMatchAllKeywordsPredicate(tagKeywords));

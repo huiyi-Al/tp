@@ -18,9 +18,13 @@ public class FilterTagCommand extends Command {
     public static final String COMMAND_WORD = "filtertag";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters clients by tags. "
-            + "Returns clients with all specified tags.\n"
+            + "Returns clients with all specified tags. Commands cannot have a mix of specific tags and blank tags. "
+            + "If there is a blank tag, clients with no tags are filtered.\n"
             + "Parameters: " + PREFIX_TAG + "TAG [" + PREFIX_TAG + "MORE_TAGS]...\n"
             + "Example: " + COMMAND_WORD + PREFIX_TAG + "AC-Service " + PREFIX_TAG + "Plumbing";
+
+    public static final String MESSAGE_MIX_COMMAND =
+            "A mix of specific tags and blank tags are not allowed in filtertag.";
 
     private final TagsMatchAllKeywordsPredicate predicate;
 

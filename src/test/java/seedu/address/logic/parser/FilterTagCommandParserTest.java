@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +29,9 @@ public class FilterTagCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        // Empty tag value
-        assertParseFailure(parser, " --tag=",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_USAGE));
-
         // Multiple tags with one empty
         assertParseFailure(parser, " --tag=Plumbing --tag= ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTagCommand.MESSAGE_MIX_COMMAND));
 
         // Preamble present
         assertParseFailure(parser, " someText --tag=Urgent",
@@ -55,5 +52,13 @@ public class FilterTagCommandParserTest {
 
         // Case with trailing/leading spaces around prefix
         assertParseSuccess(parser, "    --tag=AC-Service   --tag=Electrical  ", expectedFilterCommand);
+
+        // Empty tag with prefix
+        assertParseSuccess(parser, " --tag=",
+                new FilterTagCommand(new TagsMatchAllKeywordsPredicate(List.of(""))));
+
+        // Multiple empty tags -> Parser collapses this to List.of("")
+        assertParseSuccess(parser, " --tag= --tag=",
+                new FilterTagCommand(new TagsMatchAllKeywordsPredicate(List.of(""))));
     }
 }
