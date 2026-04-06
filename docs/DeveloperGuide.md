@@ -475,9 +475,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. `user` enters one or multiple keywords as a filter query.
-2. `Linkline` uses the query provided to filter and list (lexicographically) the clients who have the specified tags
-   that match the query.
+1. `user` enters one, multiple keywords or a blank tag as a filter query.
+2. `Linkline` uses the query provided to filter the clients and list them lexicographically
+    * If keywords are provided, `Linkline` finds all the clients who have the specified tags that match the query. 
+    * If the filter query has a blank tag, `Linkline` finds all the clients with no tags.
 3. Use case ends.
 
 **Extensions**
@@ -485,8 +486,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. The filter query does not match against any of the clients' tags.
     * `Linkline` returns an empty page that informs `user` no matching clients were found.
     * Use case ends.
-* 1b. No filter query was provided.
-    * `Linkline` returns error message informing `user` that at least one word must be provided as a filter query.
+* 1b. The filter query contains a mix of specific keywords and blank tags.
+    * `Linkline` returns an error message informing `user` that they cannot mix specific tags and blank tags in the same command.
     * Use case ends.
 * 1c. Filter query provided is invalid by criteria given in feature specification.
     * `Linkline` returns error message informing `user` what criteria the query must meet.
