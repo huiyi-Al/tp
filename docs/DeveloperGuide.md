@@ -110,17 +110,17 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [
-`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : `Logic.java`
 
 Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API
-call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking the first execution of
+`execute("delete 1")` API call as an example.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<puml src="diagrams/DeleteSequenceDiagram.puml"
+      alt="Interactions Inside the Logic Component for the first `delete 1` command" />
 
 <box type="info" seamless>
 
@@ -130,14 +130,17 @@ PlantUML, the lifeline continues till the end of diagram.
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates
-   a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which
-   is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a client).<br>
-   Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take
-   several interactions (between the command object and the `Model`) to achieve.
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+1. When `Logic` is called upon to execute a command, `LogicManager` passes the raw command text to
+   `AddressBookParser`.
+1. `AddressBookParser` extracts the command word, chooses a matching parser (e.g., `DeleteCommandParser`), and uses it
+   to parse the remaining arguments.
+1. This produces a `Command` object (more precisely, an object of one of its subclasses such as `DeleteCommand`) which
+   is then executed by `LogicManager`.
+1. The command may communicate with the `Model` during execution to read or modify in-memory data.
+1. The result of the command execution is encapsulated as a `CommandResult` object and returned back from `Logic`.
+1. If the `CommandResult` carries a `PendingAction`, `LogicManager` stores it and waits for a matching follow-up
+   command instead of completing the action immediately. Otherwise, `LogicManager` persists the updated address book
+   through `Storage` before returning the result to the UI.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -151,6 +154,10 @@ How the parsing works:
   `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser`
   interface so that they can be treated similarly where possible e.g, during testing.
+* Prefix-based commands such as `add`, `edit`, `find`, `filter`, and `renametag` rely on `ArgumentTokenizer` and
+  `CliSyntax` to parse Linkline's `--field=` format.
+* Positional commands such as `view`, `delete`, `copyaddr`, `copyedit`, `logadd`, `logdelete`, and `deletetag`
+  parse their arguments directly from the remaining input string.
 
 ### Model component
 

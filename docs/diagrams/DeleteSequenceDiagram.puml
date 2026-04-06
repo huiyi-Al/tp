@@ -56,10 +56,10 @@ activate Model
 Model --> DeleteCommand : personList
 deactivate Model
 
-DeleteCommand -> Model : get(0)
-activate Model
-Model --> DeleteCommand : personToDelete
-deactivate Model
+note right of DeleteCommand
+Reads the target client
+from the returned list
+end note
 
 create DeletePendingAction
 DeleteCommand -> DeletePendingAction
