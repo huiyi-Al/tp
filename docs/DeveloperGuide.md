@@ -187,8 +187,7 @@ layer. This is an implementation shortcut for the current search feature, not an
 
 ### Storage component
 
-**API** : [
-`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : `Storage.java`
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -196,10 +195,15 @@ The `Storage` component,
 
 * can save both address book data and user preference data in JSON format, and read them back into corresponding
   objects.
-* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only
+* stores each client's notes, tags, and log history as part of the JSON representation of that client record.
+* inherits from both `AddressBookStorage` and `UserPrefsStorage`, which means it can be treated as either one (if only
   the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects
-  that belong to the `Model`)
+  that belong to the `Model`).
+
+If address book data is malformed or violates model constraints, the storage layer reports the load failure through
+`DataLoadingException`. Linkline's fallback behavior for such startup failures, including creating a backup of the
+corrupted file when possible, is coordinated by `MainApp` rather than by the `Storage` component itself.
 
 ### Common classes
 
