@@ -131,6 +131,8 @@ Examples:
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
 * `add --name=Ravi Kumar --phone=9876-5432 --email=ravi@example.com --address=45 Tampines Street 20, #08-12 --notes=Call before arriving --tag=AC-Service --tag=Condo`
 
+![add command result](images/addCommandResult.png)
+
 ### Editing a client: `edit`
 
 Edits an existing client in Linkline.
@@ -178,6 +180,10 @@ Examples:
 * `delete 1` followed by `find --name=Bernice`
     * The pending deletion is canceled by the `find` command.
 
+![pending delete command result](images/pendingDeleteCommandResult.png)
+
+![confirmed delete command result](images/confirmedDeleteCommandResult.png)
+
 <box type="tip" seamless>
 
 **Tip:** After the first `delete 1`, commands such as `delete 1` and `delete 01` both confirm the deletion because Linkline compares the parsed index value. Leading/trailing spaces and spaces between the command word and index are ignored. Numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
@@ -195,6 +201,8 @@ Format: `clear`
     * The second `clear` clears all entries.
 * Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
+![clear command result](images/clearCommandResult.png)
+
 ### Listing all clients: `list`
 
 Shows all clients.
@@ -204,6 +212,8 @@ Format: `list`
 * This command resets any previous `find` or `filtertag`.
 * This command does not accept any arguments.
 
+![list command result](images/listCommandResult.png)
+
 ### Viewing client details: `view`
 
 Shows the specified client's full details in the right-hand panel.
@@ -212,6 +222,8 @@ Format: `view INDEX`
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer such as `1`, `2`, or `3`.
+
+![view command result](images/viewCommandResult.png)
 
 <box type="tip" seamless>
 
@@ -288,6 +300,8 @@ Examples:
 * `filtertag --tag=`
 * `find --address=Tampines` followed by `filtertag --tag=Electrical Wiring`
 
+![filtertag command result](images/filtertagCommandResult.png)
+
 ### Copying a client's address: `copyaddr`
 
 Copies the specified client's address to your system clipboard.
@@ -342,6 +356,8 @@ Examples:
 * `logadd 1 Observed leakage beneath sink during site visit.`
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
 
+![logadd command result](images/logaddCommandResult.png)
+
 ### Deleting a client log: `logdelete`
 
 Deletes one log entry from the specified client with confirmation.
@@ -368,6 +384,8 @@ Examples:
 * `logdelete 2 1` followed by `find --name=Bernice`
   * The pending deletion is canceled by the `find` command.
 
+![confirmed logdelete command result](images/logdeleteCommandResult.png)
+
 ### Renaming a tag: `renametag`
 
 Renames an existing tag across all clients in Linkline.
@@ -385,6 +403,8 @@ Examples:
 
 * `renametag --tag=AC-Service --tag=Aircon-Repair`
 * `renametag --tag=Electrical Wiring --tag=Electrical`
+
+![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
 
@@ -406,6 +426,8 @@ Examples:
   * If you enter `deletetag plumbing` again, the tag `plumbing` is deleted.
 * `deletetag Electrical Wiring` followed by `find --name=Bernice`
   * The pending deletion is canceled by the `find` command.
+
+![confirmed deletetag command result](images/deletetagCommandResult.png)
 
 ### Exiting Linkline: `exit`
 
