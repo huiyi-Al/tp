@@ -129,8 +129,9 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
-* `add --name=Ravi Kumar --phone=9876-5432 --email=ravi@example.com --address=45 Tampines Street 20, #08-12 --notes=Call before arriving --tag=AC-Service --tag=Condo`
+* `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
+Example result after a `add` command:
 ![add command result](images/addCommandResult.png)
 
 ### Editing a client: `edit`
@@ -174,12 +175,13 @@ Format: `delete INDEX`
 
 Examples:
 
-* `delete 2`
-  * Shows confirmation message for deleting the client at index 2.
-  * If you enter `delete 2` again, the client at index 2 is deleted.
 * `delete 1` followed by `find --name=Bernice`
     * The pending deletion is canceled by the `find` command.
+* `delete 1`
+  * Shows confirmation message for deleting the client at index 1.
+  * If you enter `delete 1` again, the client at index 1 is deleted.
 
+Example result after a `delete` command (with confirmation):
 ![pending delete command result](images/pendingDeleteCommandResult.png)
 
 ![confirmed delete command result](images/confirmedDeleteCommandResult.png)
@@ -201,6 +203,7 @@ Format: `clear`
     * The second `clear` clears all entries.
 * Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
+Example result after a `clear` command:
 ![clear command result](images/clearCommandResult.png)
 
 ### Listing all clients: `list`
@@ -212,6 +215,7 @@ Format: `list`
 * This command resets any previous `find` or `filtertag`.
 * This command does not accept any arguments.
 
+Example result after a `list` command:
 ![list command result](images/listCommandResult.png)
 
 ### Viewing client details: `view`
@@ -223,6 +227,7 @@ Format: `view INDEX`
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer such as `1`, `2`, or `3`.
 
+Example result after a `view` command:
 ![view command result](images/viewCommandResult.png)
 
 <box type="tip" seamless>
@@ -261,13 +266,13 @@ find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address
 
 Examples:
 
-* `find --name=alex`
 * `find --phone=9927`
 * `find --email=@example.com`
 * `find --address=Tampines`
 * `find --tag=Electrical`
 * `find --tag=`
 * `find --name=Alex` followed by `filtertag --tag=AC-Service`
+* `find --name=alex --name=bernice --name=oliveiro --name=david --name=irfan --name=roy`
 
 Example result after a `find` command:
 ![find command result](images/findCommandResult.png)
@@ -296,10 +301,11 @@ filtertag --tag=[TAG] [--tag=[MORE_TAGS]]...
 Examples:
 
 * `filtertag --tag=AC-Service`
-* `filtertag --tag=Plumbing --tag=Electrical Wiring`
 * `filtertag --tag=`
 * `find --address=Tampines` followed by `filtertag --tag=Electrical Wiring`
+* `filtertag --tag=Plumbing --tag=Electrical Wiring`
 
+Example result after a `filtertag` command:
 ![filtertag command result](images/filtertagCommandResult.png)
 
 ### Copying a client's address: `copyaddr`
@@ -355,7 +361,9 @@ Examples:
 
 * `logadd 1 Observed leakage beneath sink during site visit.`
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
+* `logadd 3 Fixed plumbing issue for toilet in master bedroom. Recommended plumbing services for other toilets.`
 
+Example result after a `logadd` command:
 ![logadd command result](images/logaddCommandResult.png)
 
 ### Deleting a client log: `logdelete`
@@ -378,12 +386,13 @@ Format: `logdelete CLIENT_INDEX LOG_INDEX`
 
 Examples:
 
-* `logdelete 2 1`
-  * Shows confirmation message for deleting log `1` of client `2`.
-  * If you enter `logdelete 2 1` again, the corresponding log is deleted.
-* `logdelete 2 1` followed by `find --name=Bernice`
-  * The pending deletion is canceled by the `find` command.
+* `logdelete 3 1` followed by `find --name=Bernice`
+    * The pending deletion is canceled by the `find` command.
+* `logdelete 3 1`
+  * Shows confirmation message for deleting log `1` of client `3`.
+  * If you enter `logdelete 3 1` again, the corresponding log is deleted.
 
+Example result after a `logdelete` command:
 ![confirmed logdelete command result](images/logdeleteCommandResult.png)
 
 ### Renaming a tag: `renametag`
@@ -401,9 +410,10 @@ Format: `renametag --tag=OLD_TAG --tag=NEW_TAG`
 
 Examples:
 
-* `renametag --tag=AC-Service --tag=Aircon-Repair`
 * `renametag --tag=Electrical Wiring --tag=Electrical`
+* `renametag --tag=AC-Service --tag=AC-Repair`
 
+Example result after a `renametag` command:
 ![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
@@ -421,12 +431,13 @@ Format: `deletetag TAG_NAME`
 
 Examples:
 
-* `deletetag plumbing`
-  * Shows confirmation message for deleting tag `plumbing`.
-  * If you enter `deletetag plumbing` again, the tag `plumbing` is deleted.
 * `deletetag Electrical Wiring` followed by `find --name=Bernice`
   * The pending deletion is canceled by the `find` command.
+* `deletetag ac-repair`
+    * Shows confirmation message for deleting tag `ac-repair`.
+    * If you enter `deletetag ac-repair` again, the tag `ac-repair` is deleted.
 
+Example result after a `deletetag` command:
 ![confirmed deletetag command result](images/deletetagCommandResult.png)
 
 ### Exiting Linkline: `exit`
@@ -471,21 +482,21 @@ Even when the JSON format is valid, values outside Linkline's accepted constrain
 
 ## Command summary
 
-| Action | Format, Examples |
-|--------|------------------|
+| Action | Format, Examples                                                                                                                                                                                                                         |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Add** | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NOTES] [--tag=TAG]...`<br>Example: `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05 --tag=AC-Service` |
-| **Clear** | `clear` |
-| **Copy Address** | `copyaddr INDEX`<br>Example: `copyaddr 1` |
-| **Copy Edit Command** | `copyedit INDEX`<br>Example: `copyedit 1` |
-| **Delete** | `delete INDEX`<br>Example: `delete 2` |
-| **Delete Tag** | `deletetag TAG_NAME`<br>Example: `deletetag plumbing` |
-| **Edit** | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--notes=NOTES] [--tag=TAG]...`<br>Example: `edit 2 --phone=91234567 --notes=Client requested morning slot` |
-| **Exit** | `exit` |
-| **Filter Tag** | `filtertag --tag=[TAG] [--tag=[MORE_TAGS]]...`<br>Example: `filtertag --tag=Plumbing --tag=Electrical Wiring` |
-| **Find** | `find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address=SUBADDRESS]... [--tag=[TAG]]...`<br>Example: `find --name=Alex --tag=AC-Service` |
-| **Help** | `help` |
-| **List** | `list` |
-| **Log Add** | `logadd INDEX LOG_MESSAGE`<br>Example: `logadd 1 Completed AC servicing and replaced filter.` |
-| **Log Delete** | `logdelete CLIENT_INDEX LOG_INDEX`<br>Example: `logdelete 2 1` |
-| **Rename Tag** | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br>Example: `renametag --tag=AC-Service --tag=Aircon-Repair` |
-| **View** | `view INDEX`<br>Example: `view 1` |
+| **Clear** | `clear`                                                                                                                                                                                                                                  |
+| **Copy Address** | `copyaddr INDEX`<br>Example: `copyaddr 1`                                                                                                                                                                                                |
+| **Copy Edit Command** | `copyedit INDEX`<br>Example: `copyedit 1`                                                                                                                                                                                                |
+| **Delete** | `delete INDEX`<br>Example: `delete 2`                                                                                                                                                                                                    |
+| **Delete Tag** | `deletetag TAG_NAME`<br>Example: `deletetag plumbing`                                                                                                                                                                                    |
+| **Edit** | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--notes=NOTES] [--tag=TAG]...`<br>Example: `edit 2 --phone=91234567 --notes=Client requested morning slot`                                         |
+| **Exit** | `exit`                                                                                                                                                                                                                                   |
+| **Filter Tag** | `filtertag --tag=[TAG] [--tag=[MORE_TAGS]]...`<br>Example: `filtertag --tag=Plumbing --tag=Electrical Wiring`                                                                                                                            |
+| **Find** | `find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address=SUBADDRESS]... [--tag=[TAG]]...`<br>Example: `find --name=Alex --tag=AC-Service`                                                                       |
+| **Help** | `help`                                                                                                                                                                                                                                   |
+| **List** | `list`                                                                                                                                                                                                                                   |
+| **Log Add** | `logadd INDEX LOG_MESSAGE`<br>Example: `logadd 1 Completed AC servicing and replaced filter.`                                                                                                                                            |
+| **Log Delete** | `logdelete CLIENT_INDEX LOG_INDEX`<br>Example: `logdelete 2 1`                                                                                                                                                                           |
+| **Rename Tag** | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br>Example: `renametag --tag=AC-Service --tag=AC-Repair`                                                                                                                                         |
+| **View** | `view INDEX`<br>Example: `view 1`                                                                                                                                                                                                        |
