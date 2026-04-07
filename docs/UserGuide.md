@@ -98,7 +98,9 @@ The following constraints apply whenever these field values are entered in comma
 
 <box type="tip" seamless>
 
-**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number. Commands that modify or redisplay clients, such as `add`, `list`, `find`, and `filtertag`, preserve that order within the currently shown subset.
+**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number. Whenever a command changes
+which clients are shown, whether by modifying data, resetting the list, or narrowing it, the displayed list remains
+sorted in that order.
 </box>
 
 ### Viewing help: `help`
