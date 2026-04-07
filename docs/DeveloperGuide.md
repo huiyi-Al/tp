@@ -103,7 +103,7 @@ The `UI` component,
 
 * executes user commands using the `Logic` component.
 * observes the filtered client list exposed by `Logic`, so the left pane updates automatically when commands such as
-  `list`, `find`, and `filter` change the displayed set of clients.
+  `list`, `find`, and `filtertag` change the displayed set of clients.
 * observes the selected client exposed by `Logic`, so the right pane updates automatically when commands such as `view`
   change which client is currently in focus.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
@@ -156,7 +156,7 @@ How the parsing works:
   `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser`
   interface so that they can be treated similarly where possible e.g, during testing.
-* Prefix-based commands such as `add`, `edit`, `find`, `filter`, and `renametag` rely on `ArgumentTokenizer` and
+* Prefix-based commands such as `add`, `edit`, `find`, `filtertag`, and `renametag` rely on `ArgumentTokenizer` and
   `CliSyntax` to parse Linkline's `--field=` format.
 * Positional commands such as `view`, `delete`, `copyaddr`, `copyedit`, `logadd`, `logdelete`, and `deletetag`
   parse their arguments directly from the remaining input string.
@@ -175,7 +175,7 @@ The `Model` component,
 * stores each `Person`'s `Notes`, `LogHistory`, and tags as part of the domain model.
 * stores the currently displayed subset of clients as a separate *filtered* list, which is exposed to outsiders as an
   unmodifiable `ObservableList<Person>`. This allows the client list panel in the UI to update automatically when
-  commands such as `list`, `find`, and `filter` change the displayed set of clients.
+  commands such as `list`, `find`, and `filtertag` change the displayed set of clients.
 * stores the currently selected `Person` separately from the filtered list. This is exposed to outsiders as
   `ObservableValue<Person>`, which allows the details panel in the UI to update automatically when the selected client
   changes.
@@ -223,7 +223,7 @@ This section describes some noteworthy details on how certain features are imple
 
 Linkline currently uses two command-parsing styles:
 
-* Prefix-based commands such as `add`, `edit`, `find`, `filter`, and `renametag`
+* Prefix-based commands such as `add`, `edit`, `find`, `filtertag`, and `renametag`
 * Positional commands such as `view`, `delete`, `copyaddr`, `copyedit`, `logadd`, `logdelete`, and `deletetag`
 
 `AddressBookParser` first separates the command word from the remaining argument string, then delegates to a dedicated parser for that command. Prefix-based parsers typically rely on `ArgumentTokenizer`, `ArgumentMultimap`, and `CliSyntax` to parse Linkline's `--field=` format.
@@ -233,8 +233,10 @@ The current tokenizer has several important characteristics:
 * A prefix is only recognized when the tokenizer sees whitespace immediately before that prefix.
 * Repeated prefixes are accumulated in insertion order.
 * Argument values are trimmed before being stored in `ArgumentMultimap`.
-* Empty values are still preserved, which allows commands such as `edit 1 --tag=` and `edit 1 --notes=` to represent
-  clearing a field.
+* Empty values are still preserved, which allows commands such as `edit 1 --tag=`, `edit 1 --notes=`, `find --tag=`,
+  and `filtertag --tag=` to give command-specific meaning to an intentionally empty field.
+
+In the documentation, command formats use `--field=[VALUE]` when a command accepts such an intentionally empty value.
 
 This design keeps most prefix-based commands consistent, but it also explains several current limitations:
 
@@ -273,32 +275,37 @@ This approach keeps confirmation behavior out of `LogicManager`'s command-dispat
 commands to share the same workflow. The sequence diagram in the Logic component section illustrates the first
 `delete 1`, which creates and stores a `DeletePendingAction`.
 
-### Chained `find` and `filter`
+### Chained `find` and `filtertag`
 
-Linkline's `find` and `filter` commands narrow the currently displayed list incrementally instead of always restarting from the full address book.
+Linkline treats `find` and `filtertag` as incremental navigation commands. Instead of restarting from the full address
+book every time, each command further narrows the currently displayed list.
 
-This is implemented in
-`ModelManager` using:
+This is implemented in `ModelManager` using:
 
 * a `FilteredList<Person>` named `filteredPersons`
 * a list of active predicates named `activePredicates`
 
-The commands interact with the model as follows:
+When `find` or `filtertag` is executed, the command constructs a predicate and appends it through
+`addPredicateFilteredPersonList(...)`. When `list` is executed, `ModelManager` clears the accumulated predicates
+through `resetPredicatesFilteredPersonList()` and restores the full client list.
 
-* `find` constructs a `SearchPredicate` and adds it through `addPredicateFilteredPersonList(...)`
-* `filter` constructs a `TagsMatchAllKeywordsPredicate` and adds it in the same way
-* `list` resets the accumulated predicates through `resetPredicatesFilteredPersonList()`
+This leads to two levels of combination:
 
-As a result:
+* across commands, repeated `find` and `filtertag` operations are combined using logical `AND`
+* within one `find`, `SearchPredicate` combines the supplied fields using logical `OR`
+* within one `filtertag`, `TagsMatchAllKeywordsPredicate` requires all supplied non-empty tags using logical `AND`
 
-* repeated `find` and `filter` commands are combined using logical `AND` across commands
-* within a single `find`, the supplied fields are combined using logical `OR` by `SearchPredicate`
-* within a single `filter`, all supplied tags must match because `TagsMatchAllKeywordsPredicate` uses logical `AND`
+There are also command-specific tag cases:
 
-This behavior is intentional. `find` and `filter` are navigation commands, so they preserve the user's current
-context by continuing to narrow the currently displayed list instead of resetting it to the full address book.
+* in `find`, tag queries use case-insensitive substring matching, while `find --tag=` matches only clients with no tags
+* in `filtertag`, `filtertag --tag=` is a special case that matches only clients with no tags
+* `FilterTagCommandParser` rejects mixed blank and non-blank tag values in the same `filtertag` command
 
-Both `FindCommand` and `FilterCommand` also clear the selected client if that client is no longer present in the newly filtered list. This prevents the details panel from showing a client that is no longer visible in the list pane.
+This behavior is intentional. `find` and `filtertag` are meant to preserve the user's current context while narrowing
+results step by step.
+
+Both `FindCommand` and `FilterTagCommand` also clear the selected client if that client is no longer present in the
+newly filtered list. This prevents the details panel from showing a client that is no longer visible in the list pane.
 
 ### Global tag operations
 
@@ -350,8 +357,10 @@ This conversion ensures that the command deletes the same log entry that the use
 
 Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Tag`, `Notes`,
 `LogMessage`) and reused by parsers through `ParserUtil`.
-User-provided field values are trimmed in `ParserUtil` before validation. `LogAddCommandParser` still performs custom
-splitting to separate the client index from the free-text log message before delegating both parts to `ParserUtil`.
+For command input, `ParserUtil` trims leading and trailing whitespace from field values before validation. This means
+the length-based limits below apply after boundary whitespace has been removed. `LogAddCommandParser` first separates
+the client index from the free-text log message, then passes the message through `ParserUtil.parseLogMessage`, so log
+messages follow the same trimming rule as other parser-handled fields.
 
 | Field        | Constraint summary                                                                                                                            |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -361,7 +370,7 @@ splitting to separate the client index from the free-text log message before del
 | `Address`    | Must not be blank (first non-whitespace character required).                                                                                  |
 | `Tag`        | 1 to 50 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
 | `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
-| `LogMessage` | Log message must contain 1 to 1000 Unicode code points after trimming (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                    |
+| `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                             |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.
 
@@ -466,18 +475,15 @@ Use case ends.
 
 **MSS**
 
-1. `user` specifies one or more fields with one or more keywords as a search query.
-2. `Linkline` searches the currently displayed client list for clients that match at least one keyword in the specified fields.
-   A client is included if any supplied keyword matches within any of the specified fields.
+1. `user` specifies one or more search fields and queries.
+2. `Linkline` searches the currently displayed client list for clients that match at least one supplied query in the
+   specified fields.
 3. `Linkline` shows the matching clients.<br>
   Use case ends.
 
 **Extensions**
 
-* 1a. The search command does not specify any field.
-    * `Linkline` returns the command usage message.<br>
-    Use case ends.
-* 1b. The search command contains a specified field with no keyword.
+* 1a. The search command format is invalid.
     * `Linkline` returns the command usage message.<br>
     Use case ends.
 * 2a. No clients match the search query.
@@ -626,13 +632,12 @@ Use case ends.
 
 1. `user` enters one or more tags as a filter query.
 2. `Linkline` filters the currently displayed client list to clients that match all specified tags.
-   A client is included only if all specified tags are present on that client.
 3. `Linkline` shows the matching clients.<br>
   Use case ends.
 
 **Extensions**
 
-* 1a. No filter query is provided.
+* 1a. The filter command format is invalid.
     * `Linkline` returns the command usage message.<br>
     Use case ends.
 * 1b. A provided tag is invalid according to the feature specification.
@@ -746,7 +751,7 @@ Use case ends.
 ### Non-Functional Requirements
 
 1. Should work on any mainstream OS with Java `17` or above installed.
-2. Should be able to hold up to 1000 clients without noticeable sluggishness during typical operations such as `list`, `find`, `filter`, `view`, `add`, `edit`, `logadd`, and `logdelete`.
+2. Should be able to hold up to 1000 clients without noticeable sluggishness during typical operations such as `list`, `find`, `filtertag`, `view`, `add`, `edit`, `logadd`, and `logdelete`.
 3. A user who can type at an average speed for regular English text should be able to complete frequent tasks faster using commands than using a mouse-driven workflow.
 4. A first-time user should be able to learn the basic workflow (`add`, `list`, `find`, `view`, `edit`) within about 10 minutes using sample data and the help command.
 5. Client identity must remain unique based on normalized phone number and case-insensitive email address.
@@ -763,7 +768,7 @@ Use case ends.
 * **Client / Person**: The primary entity in Linkline. Mandatory fields include Name, Phone, Email, and Address. Optional fields include Tags, Notes, and service logs.
 * **CLI (Command Line Interface)**: A text-based interface where the user interacts with the application by typing commands rather than using a mouse.
 * **Compact view**: The left-pane summary view that shows a concise list of clients for quick scanning.
-* **Displayed list**: The subset of clients currently shown after commands such as `list`, `find`, or `filter`.
+* **Displayed list**: The subset of clients currently shown after commands such as `list`, `find`, or `filtertag`.
 * **Duplicate client**: Two clients considered the same because they share the same normalized phone number or case-insensitive email address.
 * **Full view**: The detailed view that shows all available information for the currently selected client.
 * **JSON (JavaScript Object Notation)**: The text-based format used by the Storage component to persist data on disk.
@@ -788,7 +793,7 @@ testers are expected to do more *exploratory* testing.
 
 The test cases below assume Linkline is launched in a fresh folder so that the built-in sample data is loaded. Some
 test cases modify stored data. If a later test case assumes the original sample data, restart with a fresh app folder
-or restore `data/addressbook.json` first.
+or restore `data/linkline.json` first.
 
 ### Launch and window placement
 
@@ -813,13 +818,13 @@ or restore `data/addressbook.json` first.
 
 1. Recovering from a corrupted data file
 
-    1. Prerequisites: Launch the app once, execute `list`, and close the app so that `data/addressbook.json` exists.
+    1. Prerequisites: Launch the app once, execute `list`, and close the app so that `data/linkline.json` exists.
 
-    1. Open `data/addressbook.json` and replace the file content with `not valid json` (e.g., change "name" field to "names").
+    1. Open `data/linkline.json` and replace the file content with `not valid json` (e.g., change `"name"` to `"names"`).
 
     1. Re-launch the app.<br>
        Expected: Linkline starts with an empty client list, shows a startup warning about malformed data, and creates
-       a backup file named `addressbook.json.corrupted-<timestamp>.bak` in the same folder when permissions allow.
+       a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder when permissions allow.
 
 ### Navigating and narrowing the displayed list
 
@@ -830,15 +835,24 @@ or restore `data/addressbook.json` first.
     1. Test case: `find --name=Alex`<br>
        Expected: Only `Alex Yeoh` remains in the displayed list.
 
-    1. Test case: `list` followed by `find --tag=Plumbing`<br>
+    1. Test case: `list` followed by `find --tag=Plumb`<br>
        Expected: Only `Bernice Yu` and `Charlotte Oliveiro` remain in the displayed list.
 
     1. Test case: `list` followed by `find --name=Alex --tag=Plumbing`<br>
        Expected: `Alex Yeoh`, `Bernice Yu`, and `Charlotte Oliveiro` are shown because a single `find` command
        matches any supplied field.
 
-    1. Test case: `filter --tag=Plumbing --tag=Electrical Wiring`<br>
-       Expected: Only `Bernice Yu` is shown because `filter` requires all specified tags to be present.
+    1. Test case: `list` followed by `find --tag=`<br>
+       Expected: The displayed list becomes empty because the built-in sample data has no untagged clients.
+
+    1. Test case: `list` followed by `filtertag --tag=Plumbing --tag=Electrical Wiring`<br>
+       Expected: Only `Bernice Yu` is shown because `filtertag` requires all specified tags to be present.
+
+    1. Test case: `list` followed by `edit 3 --tag=` followed by `filtertag --tag=`<br>
+       Expected: Only `Charlotte Oliveiro` is shown because `filtertag --tag=` keeps only clients with no tags.
+
+    1. Test case: `list` followed by `filtertag --tag=Plumbing --tag=`<br>
+       Expected: Error message shown because `filtertag` does not allow blank and non-blank tag values in the same command.
 
 1. Viewing client details
 
@@ -847,9 +861,9 @@ or restore `data/addressbook.json` first.
     1. Test case: `view 1`<br>
        Expected: The first displayed client's full details appear in the right-hand panel.
 
-    1. Test case: `find --name=Alex` followed by `view 1` followed by `filter --tag=Plumbing`<br>
+    1. Test case: `find --name=Alex` followed by `view 1` followed by `filtertag --tag=Plumbing`<br>
        Expected: After `view 1`, `Alex Yeoh` is shown in the right-hand panel. After
-       `filter --tag=Plumbing`, the displayed list becomes empty and the right-hand panel returns to its placeholder
+       `filtertag --tag=Plumbing`, the displayed list becomes empty and the right-hand panel returns to its placeholder
        state because the previously selected client is no longer shown.
 
 ### Adding, copying, and editing clients
@@ -980,7 +994,7 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 | **Complex CLI syntax** | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                       |
 | **Two-step confirmation** | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                        |
 | **Duplicate detection** | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                  |
-| **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `addressbook.json` without auto-overwriting.                                                                  |
+| **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `linkline.json` without auto-overwriting.                                                                     |
 | **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |
 
 </box>
@@ -995,13 +1009,10 @@ Team size: 5
    addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find` with support
    for fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
    job records.
-2. Enhance `filter` to support clients without tags: The current `filter` command can only keep clients that match one
-   or more specified tags. We plan to make `filter --tag=` return clients whose tag list is empty, so users can easily
-   identify untagged clients that still need categorization.
-3. Add `logedit` to correct existing log entries: Linkline currently supports `logadd` and `logdelete`, but fixing a
+2. Add `logedit` to correct existing log entries: Linkline currently supports `logadd` and `logdelete`, but fixing a
    mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a `logedit` command
    so users can update an existing log message directly while keeping the rest of the client's log history intact.
-4. Add quoted and escaped CLI field values: The current parser does not handle quoted values, which makes it awkward
+3. Add quoted and escaped CLI field values: The current parser does not handle quoted values, which makes it awkward
    to enter text containing prefix-like substrings, preserved whitespace, or special characters. We plan to support
    quoted input such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`,
    and `\n`.
