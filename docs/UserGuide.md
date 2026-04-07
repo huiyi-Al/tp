@@ -164,11 +164,11 @@ The search works on a disjunction basis between fields (i.e. OR matching).
 For example, if a particular find command
 matches client A by name, and client B by phone number, both clients will be returned.
 
-Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filter` operations can be
+Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filtertag` operations can be
 chained together to shorten the list.
 
-For example, if there are 10 clients initially on the list, and a `find` / `filter` operations shortens it to 5 clients,
-any subsequent `find` / `filter` operations would only search within those 5 clients.
+For example, if there are 10 clients initially on the list, and a `find` / `filtertag` operations shortens it to 5 clients,
+any subsequent `find` / `filtertag` operations would only search within those 5 clients.
 
 In order to reset the clients list to show all clients again, type `list`.
 
@@ -330,17 +330,25 @@ Examples:
 
 ![confirmed logdelete command result](images/logdeleteCommandResult.png)
 
-### Filtering clients by tags: `filter`
+### Filtering clients by tags: `filtertag`
 
-Filters clients whose tags contain all the given keywords. If there is more than one client, the list returned is
+Filters clients whose tags contain all the given keywords or clients with no tags. If there is more than one client, the list returned is
 sorted.
 
-Format: `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
+Format: `filtertag --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
 
 * Multiple keywords can be provided, separated by spaces
 * The filter is case-insensitive. e.g `Plumbing` will match `plumbing`
 * Only filters by tags.
 * Only clients matching all one keyword will be returned (i.e. `AND` search).
+* Providing a blank `TAG_KEYWORD` will return a list of clients with no tags.
+* The `filtertag` command does not accept a mix of specified `TAG_KEYWORD` and blank `TAG_KEYWORD`.
+* Multiple `filtertag` operations can be chained together to shorten the list (refer to [Locating clients by personal details: `find`](#locating-clients-by-personal-details-find)).
+
+Examples:
+
+* `filtertag --tag=AC-Service --tag=Plumbing` filters all clients with tags `AC-Service` and `Plumbing`.
+* `filtertag --tag=` filters all clients with no tags.
 
 ![filtertag command result](images/filtertagCommandResult.png)
 
@@ -461,7 +469,7 @@ the data of your previous LinkLine home folder.
 | **Delete**                   | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                                                                                                                                           |
 | **Delete Tag**               | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                                                                                                                           |
 | **Edit**                     | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                                                                                                                           |
-| **Filter**                   | `filter --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filter --tag=Plumbing`                                                                                                                                                                                                                                                                                                                          |
+| **Filter Tag**               | `filtertag --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filtertag --tag=Plumbing`                                                                                                                                                                                                                                                                                                                    |
 | **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair` |
 | **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                        |
 | **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                        |

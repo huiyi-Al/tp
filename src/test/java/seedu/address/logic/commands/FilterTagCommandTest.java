@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.predicates.TagsMatchAllKeywordsPredicate;
 
-public class FilterCommandTest {
+public class FilterTagCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -31,14 +33,14 @@ public class FilterCommandTest {
         TagsMatchAllKeywordsPredicate secondPredicate =
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("Plumbing"));
 
-        FilterCommand filterFirstCommand = new FilterCommand(firstPredicate);
-        FilterCommand filterSecondCommand = new FilterCommand(secondPredicate);
+        FilterTagCommand filterFirstCommand = new FilterTagCommand(firstPredicate);
+        FilterTagCommand filterSecondCommand = new FilterTagCommand(secondPredicate);
 
         // same object -> returns true
         assertTrue(filterFirstCommand.equals(filterFirstCommand));
 
         // same values -> returns true
-        FilterCommand filterFirstCommandCopy = new FilterCommand(firstPredicate);
+        FilterTagCommand filterFirstCommandCopy = new FilterTagCommand(firstPredicate);
         assertTrue(filterFirstCommand.equals(filterFirstCommandCopy));
 
         // different types -> returns false
@@ -56,7 +58,7 @@ public class FilterCommandTest {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays
                 .asList("AC-Service", "Plumbing"));
-        FilterCommand command = new FilterCommand(predicate);
+        FilterTagCommand command = new FilterTagCommand(predicate);
         expectedModel.singlePredicateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(BENSON), model.getFilteredPersonList());
@@ -68,7 +70,7 @@ public class FilterCommandTest {
         // Filtering for a tag that no one has
         TagsMatchAllKeywordsPredicate predicate =
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("NonExistentTag"));
-        FilterCommand command = new FilterCommand(predicate);
+        FilterTagCommand command = new FilterTagCommand(predicate);
 
         expectedModel.singlePredicateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -82,7 +84,7 @@ public class FilterCommandTest {
 
         TagsMatchAllKeywordsPredicate predicate =
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("AC-Service"));
-        FilterCommand command = new FilterCommand(predicate);
+        FilterTagCommand command = new FilterTagCommand(predicate);
 
         command.execute(model);
 
@@ -96,7 +98,7 @@ public class FilterCommandTest {
 
         TagsMatchAllKeywordsPredicate predicate =
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("AC-Service"));
-        FilterCommand command = new FilterCommand(predicate);
+        FilterTagCommand command = new FilterTagCommand(predicate);
 
         command.execute(model);
 
@@ -110,7 +112,7 @@ public class FilterCommandTest {
 
         TagsMatchAllKeywordsPredicate predicate =
                 new TagsMatchAllKeywordsPredicate(Collections.singletonList("NonExistentTag"));
-        FilterCommand command = new FilterCommand(predicate);
+        FilterTagCommand command = new FilterTagCommand(predicate);
 
         command.execute(model);
 
@@ -118,10 +120,24 @@ public class FilterCommandTest {
     }
 
     @Test
+    public void execute_emptyTagSearch_taglessPersonFound() {
+        model.resetPredicatesFilteredPersonList();
+        model.setSelectedPerson(CARL);
+
+        TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(List.of(""));
+        FilterTagCommand command = new FilterTagCommand(predicate);
+
+        command.execute(model);
+
+        assertTrue(model.getFilteredPersonList().contains(CARL));
+        assertFalse(model.getFilteredPersonList().contains(BENSON));
+    }
+
+    @Test
     public void toStringMethod() {
         TagsMatchAllKeywordsPredicate predicate = new TagsMatchAllKeywordsPredicate(Arrays.asList("AC-Service"));
-        FilterCommand filterCommand = new FilterCommand(predicate);
-        String expected = FilterCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
+        FilterTagCommand filterCommand = new FilterTagCommand(predicate);
+        String expected = FilterTagCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, filterCommand.toString());
     }
 }

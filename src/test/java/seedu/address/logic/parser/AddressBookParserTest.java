@@ -28,7 +28,7 @@ import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FilterCommand;
+import seedu.address.logic.commands.FilterTagCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -176,14 +176,14 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_filter() throws Exception {
         List<String> keywords = Arrays.asList("AC-Servicing", "Plumbing", "Urgent");
-        String userInput = FilterCommand.COMMAND_WORD + " "
+        String userInput = FilterTagCommand.COMMAND_WORD + " "
                 + keywords.stream()
                 .map(tag -> PREFIX_TAG + tag)
                 .collect(Collectors.joining(" "));
 
-        FilterCommand command = (FilterCommand) parser.parseCommand(userInput);
+        FilterTagCommand command = (FilterTagCommand) parser.parseCommand(userInput);
 
-        assertEquals(new FilterCommand(new TagsMatchAllKeywordsPredicate(keywords)), command);
+        assertEquals(new FilterTagCommand(new TagsMatchAllKeywordsPredicate(keywords)), command);
     }
 
     @Test

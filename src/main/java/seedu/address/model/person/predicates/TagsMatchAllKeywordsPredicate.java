@@ -31,9 +31,14 @@ public class TagsMatchAllKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         logger.fine(MessageFormat.format("Testing client: {0}", person));
 
-        if (tagKeywords.isEmpty()) {
-            logger.fine("No tag keywords provided");
+        if (tagKeywords == null || tagKeywords.isEmpty()) {
             return false;
+        }
+
+        boolean isSearchingForEmpty = tagKeywords.get(0).isBlank();
+
+        if (isSearchingForEmpty) {
+            return person.getTags().isEmpty();
         }
 
         boolean result = tagKeywords.stream()
