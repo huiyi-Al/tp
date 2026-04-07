@@ -55,7 +55,6 @@ public class StringUtil {
         requireNonNull(substring);
 
         String preppedSubstring = substring.trim().toLowerCase();
-        checkArgument(!preppedSubstring.isEmpty(), "Substring parameter cannot be empty");
         String preppedSentence = sentence.toLowerCase();
 
         return preppedSentence.contains(preppedSubstring);

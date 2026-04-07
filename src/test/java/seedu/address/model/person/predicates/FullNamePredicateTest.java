@@ -2,7 +2,6 @@ package seedu.address.model.person.predicates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.MessageFormat;
@@ -77,11 +76,9 @@ public class FullNamePredicateTest {
     }
 
     @Test
-    public void test_emptyStringSubstring_throwsIllegalArgumentException() {
+    public void test_emptyStringSubstring_returnsTrue() {
         FullNamePredicate predicate = new FullNamePredicate(Collections.singletonList(""));
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> predicate.test(new
-                PersonBuilder().withName(NAME_ALICE_BOB).build()));
-        assertEquals("Substring parameter cannot be empty", e.getMessage());
+        assertTrue(predicate.test(new PersonBuilder().withName(NAME_ALICE_BOB).build()));
     }
 
     @Test

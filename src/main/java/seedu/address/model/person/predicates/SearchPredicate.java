@@ -65,7 +65,7 @@ public class SearchPredicate implements Predicate<Person> {
 
         this.tagsPredicate = argMultimap.getValue(PREFIX_TAG).isPresent()
                 ? new TagsMatchOneKeywordPredicate(argMultimap.getAllValues(PREFIX_TAG))
-                : new TagsMatchOneKeywordPredicate(new ArrayList<>());
+                : new TagsMatchOneKeywordPredicate(null);
         logger.fine(MessageFormat.format("TagsPredicate initialized: {0}", tagsPredicate));
     }
 
