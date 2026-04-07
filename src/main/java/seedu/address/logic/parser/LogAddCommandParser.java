@@ -35,12 +35,8 @@ public class LogAddCommandParser implements Parser<LogAddCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogAddCommand.MESSAGE_USAGE), pe);
         }
 
-        String message = indexAndMessageSplit.message();
-        if (!LogMessage.isValidLogMessage(message)) {
-            throw new ParseException(LogMessage.MESSAGE_CONSTRAINTS);
-        }
-
-        return new LogAddCommand(personIndex, new LogMessage(message));
+        LogMessage logMessage = ParserUtil.parseLogMessage(indexAndMessageSplit.message());
+        return new LogAddCommand(personIndex, logMessage);
     }
 
     private static SplitIndexAndMessage splitIndexAndMessage(String args) throws ParseException {

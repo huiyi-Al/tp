@@ -6,9 +6,9 @@ pageNav: 3
 
 # Linkline User Guide
 
-Linkline is a **desktop app for solo technicians to manage client details, optimized for use via a Command Line
-Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Linkline
-can get your contact management tasks done faster than traditional GUI apps.
+Linkline is a **desktop app for solo residential service technicians who want to manage client records quickly from the keyboard**. It keeps contact details, service addresses, notes, tags, and timestamped service logs in one place, so you can prepare for repeat jobs without digging through chat history or paper notes.
+
+Linkline is optimized for a Command Line Interface (CLI), but still gives you the convenience of a Graphical User Interface (GUI). If you can type quickly, Linkline can help you manage client records faster than a mouse-heavy app.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -17,35 +17,40 @@ can get your contact management tasks done faster than traditional GUI apps.
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version
-   prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. Ensure you have Java `17` or above installed on your computer.<br>
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103-F09-4/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for Linkline.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar linkline.jar` command
-   to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+1. Open a command terminal, `cd` into the folder you put the jar file in, and run:
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will
-   open the help window.<br>
-   Some example commands you can try:
+   ```text
+   java -jar linkline.jar
+   ```
 
-    * `list` : Lists all contacts.
+   If Linkline does not find an existing data file, it starts with sample data.<br>
+   A GUI similar to the one below should appear in a few seconds.<br>
+   ![Linkline main window](images/Ui.png)
 
-    * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01` : Adds a
-      contact named `John Doe` to Linkline.
+1. In the main window shown above:
 
-    * `copyaddr 3` : Copies the address of the 3rd contact shown in the current list to user's clipboard.
+   * The command box is at the top.
+   * The result display is directly below the command box.
+   * The left panel shows the current client list with each client's index, name, and phone number.
+   * The right panel shows the selected client's full details, including notes and service logs.
 
-    * `clear` : Deletes all contacts.
+1. Type a command in the command box and press Enter to execute it. Try these commands first:
 
-    * `exit` : Exits the app.
+   * `list`
+   * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01`
+   * `view 1`
+   * `find --tag=AC-Service`
+   * `copyaddr 1`
+   * `help`
 
-1. Refer to the [Features](#features) below for details of each command.
+1. Refer to the [Features](#features) below for the full command list, description, and examples.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -55,235 +60,293 @@ can get your contact management tasks done faster than traditional GUI apps.
 
 **Notes about the command format:**<br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add --name=NAME`, `NAME` is a parameter which can be used as `add --name=John Doe`.
+* Words in `UPPER_CASE` are values you supply.<br>
+  Example: in `add --name=NAME`, replace `NAME` with an actual name such as `Alex Yeoh`.
 
 * Items in square brackets are optional.<br>
-  e.g `--name=NAME [--tag=TAG]` can be used as `--name=John Doe --tag=AC-Service` or as `--name=John Doe`.
+  Example: `--name=NAME [--tag=TAG]` can be used as `--name=Alex Yeoh --tag=AC-Service` or `--name=Alex Yeoh`.
 
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[--tag=TAG]…​` can be used as ` ` (i.e. 0 times), `--tag=AC-Service`, `--tag=AC-Service --tag=Plumbing` etc.
+* Items followed by `...` can be repeated.<br>
+  Example: `[--tag=TAG]...` means you can use zero or more `--tag=` fields, such as no `--tag=` fields at all, `--tag=AC-Service`, or `--tag=AC-Service --tag=Plumbing`.
 
-* Parameters can be in any order except for `renametag`.<br>
-  e.g. if the command specifies `--name=NAME --phone=PHONE_NUMBER`, `--phone=PHONE_NUMBER --name=NAME` is also
-  acceptable.
+* When a command format shows a named field as `--field=[VALUE]`, that field may be given a value or left empty if that command gives the empty value a special meaning.<br>
+  Example: `find --tag=[TAG]` allows both `find --tag=Plumbing` and `find --tag=`.
 
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines
-  as space characters surrounding line-breaks may be omitted when copied over to the application.
-  </box>
+* When a command uses named fields such as `--name=` and `--phone=`, those fields can usually appear in any order unless stated otherwise.
 
-### Field constraints
+* Commands that do not accept arguments reject extra input.<br>
+  Example: `help 123` and `list now` are invalid.
 
-The following constraints apply to command fields:
+* If you are using a PDF version of this document, be careful when copying commands that span multiple lines. Some PDF viewers may remove spaces around line breaks.
+</box>
 
-* `NAME`: must not be blank, up to 100 characters.
-* `PHONE_NUMBER`: must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digits.
-* `EMAIL`: must be in valid `local-part@domain` format and satisfy email length/rule checks.
-* `ADDRESS`: must not be blank.
-* `TAG`: must not be blank, 1 to 50 characters.
+<box type="info" seamless>
+
+**Field constraints:**<br>
+
+The following constraints apply whenever these field values are entered in commands.
+
+* `NAME`: 1 to 100 printable characters. Must not be blank.
+* `PHONE_NUMBER`: Must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digit groups.
+* `EMAIL`: Must be a valid `local-part@domain` email address and satisfy Linkline's email validation rules.
+* `ADDRESS`: Must not be blank.
+* `TAG`: 1 to 50 printable characters. Must not be blank.
 * `NOTES`: 0 to 200 characters.
-* `LOG_MESSAGE`: must not be blank, 1 to 1000 characters.
+* `LOG_MESSAGE`: 1 to 1000 characters. Must contain at least one non-space character.
 
-### Viewing help : `help`
+</box>
 
-Shows a message explaining how to access the help page.
+<box type="tip" seamless>
+
+**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number. Whenever a command changes
+which clients are shown, whether by modifying data, resetting the list, or narrowing it, the displayed list remains
+sorted in that order.
+</box>
+
+### Viewing help: `help`
+
+Opens the help window.
 
 ![help message](images/helpMessage.png)
 
 Format: `help`
 
 * This command does not accept any arguments.
-* Entering `help` with additional parameters (e.g., `help 123`) will return an error message.
 
 ### Adding a client: `add`
 
-Adds a client to Linkline. List is automatically sorted lexicographically by `NAME`, followed by `PHONE_NUMBER`
+Adds a new client to Linkline.
 
-* Client with the same email or phone number as an existing client in Linkline cannot be added as they are
-  considered duplicated clients.
+Format:
 
-Format: `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]`
+```text
+add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NOTES] [--tag=TAG]...
+```
 
-<box type="tip" seamless>
-
-**Tip:** A client can have any number of tags (including 0) and 1 or 0 notes.
-</box>
+* `--name=`, `--phone=`, `--email=`, and `--address=` are required.
+* `--tag=` can be repeated. Other named fields can appear at most once.
+* Linkline rejects duplicates. Two clients are considered duplicates if they share the same email address (case-insensitive) or the same phone number after ignoring spaces and hyphens.
+* After a successful `add`, Linkline shows the full client list again.
 
 Examples:
 
-* `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01`
-*
+* `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
+* `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
-`add --name=Betsy Crowe --tag=AC service --email=betsycrowe@example.com --address=123 Clementi Rd #04-05 --phone=9123 4567 --notes=Gate code 1234, beware of large dog`
-
+Example result after a `add` command:
 ![add command result](images/addCommandResult.png)
 
-
-### Listing all clients : `list`
-
-Shows a sorted list of all clients in Linkline.
-
-![list command result](images/listCommandResult.png)
-
-Format: `list`
-
-* This command does not accept any arguments.
-* Entering `list` with additional parameters (e.g., `list 123`) will return an error message.
-
-### Editing a client : `edit`
+### Editing a client: `edit`
 
 Edits an existing client in Linkline.
 
 Format:
-`edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`
 
-* Edits the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the client will be removed i.e adding of tags is not cumulative.
-* You can remove all the client’s tags or notes by typing `--tag=` or `--notes=` respectively without specifying any
-  tags after it.
-* If the edited client duplicates another existing client in Linkline, the edit will fail.
+```text
+edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--notes=NOTES] [--tag=TAG]...
+```
 
-Examples:
-
-* `edit 1 --phone=91234567 --email=johndoe@example.com` Edits the phone number and email address of the 1st client to be
-  `91234567` and `johndoe@example.com` respectively.
-* `edit 2 --name=Betsy Crower --tag=` Edits the name of the 2nd client to be `Betsy Crower` and clears all existing
-  tags.
-
-### Locating clients by personal details: `find`
-
-Finds clients whose names / phone numbers / email address / physical address / tags are matched by the queried keywords
-specified per field. A sorted list of such clients is returned.
-
-The search works on a disjunction basis between fields (i.e. OR matching).
-
-For example, if a particular find command
-matches client A by name, and client B by phone number, both clients will be returned.
-
-Any `find` operation is applied only to the currently displayed list, and multiple `find` / `filtertag` operations can be
-chained together to shorten the list.
-
-For example, if there are 10 clients initially on the list, and a `find` / `filtertag` operations shortens it to 5 clients,
-any subsequent `find` / `filtertag` operations would only search within those 5 clients.
-
-In order to reset the clients list to show all clients again, type `list`.
-
-Format:
-`find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=[TAG] [--tag=[MORE_TAGS]] ...]`
-
-* Any preamble given will result in an error.
-* At least one of the optional fields must be provided.
-* If a field is specified, it must not be empty. The only exception to this is the tags field, which will search for
-  people with no tags if left empty.
-* A field can be specified as many times as keywords are required.
-* The order in which the fields are specified does not matter.
-* Only the fields specified are searched against.
-* In all fields, the search is case-insensitive. e.g. In name field, `hans` will match `Hans`.
-* In all fields, the order of the keywords does not matter. e.g. In name field, `Hans Bo` will match `Bo Hans`.
-* In all fields, clients whose field matches at least one keyword in that specified field as a substring will be
-  returned (i.e. `OR` search). e.g. In name field, `Gru Ya` will match `Hans Gruber`, `Bo Yang`.
+* The index refers to the index number shown in the current displayed client list.
+* The index must be a positive integer.
+* At least one field must be provided.
+* Except for `--tag=`, each field can appear at most once.
+* Any field you provide replaces the client's current value for that field.
+* Editing tags is not cumulative. If you provide `--tag=`, Linkline replaces the client's entire tag list with the tags you supplied.
+* Use `--tag=` with no value to clear all tags.
+* Use `--notes=` with no value to clear notes.
+* Linkline rejects edits that would make the client duplicate another existing client.
 
 Examples:
 
-* `find` is not a valid command as no fields are provided.
-* `find --name=Alice --phone= --email=gmail.com` is not a valid command as phone field is specified but empty.
-* `find --name=Alice Bob` will have 1 keyword `Alice Bob`.
-* `find --name=Alice --name=Bob` will have 2 name keywords `Alice` and `Bob`.
-* `find --name=jon --name=Jack` can return clients with names `Jonathon Lee`, `Jon Doe`, and `Jack Black`.
-* `find --phone=1234` can return clients with numbers `91234567` and `94561234`.
-* `find --email=.edu` can return clients with email addresses `e123456678@u.nus.edu` and `f123456678@u.ntu.edu`.
-* `find --address=Street` can return clients with physical addresses `Woodlands Street`, `Admiralty Street`
-* `find --tag=wiring` can return clients with tag `Wiring`, but not `ElectricalWiring`,
-*
+* `edit 1 --phone=91234567 --email=johndoe@example.com`
+* `edit 2 --name=Betsy Crower --tag=`
+* `edit 3 --notes=Client requested weekday morning visits`
 
-`find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair`
-is a valid combination of all fields.
-
-*
-
-`find --phone=123 --phone=4567 --name=James --name=Jake --tag=Aircon-Repair --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard`
-will return the same results as the previous command.<br>
-
-![find command result](images/findCommandResult.png)
-
-### Deleting a client : `delete`
+### Deleting a client: `delete`
 
 Deletes the specified client from Linkline with confirmation.
 
 Format: `delete INDEX`
 
-* Deletes the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index **must be a positive integer** 1, 2, 3, …​
-* **Two-step confirmation**:
-    * First run of `delete INDEX`: shows a confirmation message only (no deletion yet).
-    * Second matching `delete INDEX`: completes the deletion.
-* Any other command (including invalid command input) after the first `delete` will cancel the pending deletion.
+* The index refers to the index number shown in the current displayed client list.
+* The index must be a positive integer.
+* This command uses two-step confirmation:
+    * The first `delete INDEX` only shows a confirmation message.
+    * The second matching `delete INDEX` completes the deletion.
+* Any other command, including an invalid command, provided after the first `delete` command cancels the pending deletion.
 
 Examples:
 
-* `list` followed by `delete 2`
-    * Shows confirmation message with the client's details (no deletion yet).
-    * Typing `delete 2` again confirms and deletes the 2nd client.
-* `find --name=Betsy` followed by `delete 1`
-    * Shows confirmation message for the 1st client in the search results, if exists (no deletion yet).
-    * Typing `delete 1` again deletes that client.
-* `delete 1` followed by `list`
-    * The pending deletion is cancelled. The list command executes normally.
+* `delete 1` followed by `find --name=Bernice`
+    * The pending deletion is canceled by the `find` command.
+* `delete 1`
+  * Shows confirmation message for deleting the client at index 1.
+  * If you enter `delete 1` again, the client at index 1 is deleted.
 
+Example result after a `delete` command (with confirmation):
 ![pending delete command result](images/pendingDeleteCommandResult.png)
 
 ![confirmed delete command result](images/confirmedDeleteCommandResult.png)
 
 <box type="tip" seamless>
 
-**Tip:** After the first `delete 1` command, any of the following will confirm the deletion: `delete 1` or `delete 01`.
-Leading/trailing spaces and spaces between the command word and index are ignored, numbers with leading zeros (e.g., '
-01', '001') also confirm the deletion.
+**Tip:** After the first `delete 1`, commands such as `delete 1` and `delete 01` both confirm the deletion because Linkline compares the parsed index value. Leading/trailing spaces and spaces between the command word and index are ignored. Numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
 </box>
 
-### Copying a client's address: `copyaddr`
+### Clearing all entries: `clear`
 
-Copies the specified client's address from Linkline.
+Clears all data in Linkline with confirmation.
 
-Format: `copyaddr INDEX`
+Format: `clear`
 
-* Copies the client's address at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* This command does not accept any arguments.
+* This command uses two-step confirmation:
+    * The first `clear` only shows a confirmation message.
+    * The second `clear` clears all entries.
+* Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
-### Copying a client's edit command format: `copyedit`
+Example result after a `clear` command:
+![clear command result](images/clearCommandResult.png)
 
-Copies the edit command format for the specified client, allowing you to easily modify their details.
+### Listing all clients: `list`
 
-Format: `copyedit INDEX`
+Shows all clients.
 
-* Copies the edit command with all current details of the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index must be a positive integer 1, 2, 3, …​
-* The copied format includes the client's name, phone, email, address, notes, and all tags.
+Format: `list`
+
+* This command resets any previous `find` or `filtertag`.
+* This command does not accept any arguments.
+
+Example result after a `list` command:
+![list command result](images/listCommandResult.png)
 
 ### Viewing client details: `view`
 
-Shows the specified client's full details.
+Shows the specified client's full details in the right-hand panel.
 
 Format: `view INDEX`
 
-* Shows the client's full details at the specified `INDEX` in the right-hand panel.
 * The index refers to the index number shown in the current displayed client list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index must be a positive integer such as `1`, `2`, or `3`.
+
+Example result after a `view` command:
+![view command result](images/viewCommandResult.png)
+
+<box type="tip" seamless>
+
+**Tip:** Use this command before `logdelete` if you need to check the log numbers shown in the UI to locate the index of the log you would like to delete.
+</box>
 
 Examples:
 
-* `find --name=John Don` followed by `view 1`
-* `add --name=John Doe --phone=9876-5432 --email=johnd@example.com --address=John street, block 123, #01-01` followed by
-  `view 1`
+* `view 1`
+* `find --name=Alex` followed by `view 1`
 
-![view command result](images/viewCommandResult.png)
+### Finding clients by details: `find`
+
+Searches the currently displayed list for clients whose name, phone number, email address, physical address, or tag
+matches at least one supplied query. Like `filtertag`, this command continues narrowing the current list; use `list`
+when you want to search from the full client list again.
+
+Format:
+
+```text
+find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address=SUBADDRESS]... [--tag=[SUBTAG]]...
+```
+
+* Provide at least one search field. Any text before the first field is invalid.
+* `--name=`, `--phone=`, `--email=`, and `--address=` must have a value.
+* `--tag=` may be left empty. `find --tag=` matches clients with no tags.
+* Repeat a field when you want to supply multiple queries for that field.<br>
+  Example: `find --name=Alex --name=Tan`
+* Within a single `find` command, Linkline uses `OR` matching across all supplied queries and fields.<br>
+  Example: `find --name=Alex --tag=Plumbing` returns clients whose name matches `Alex` **or** whose tag matches `Plumbing`.
+* All matching is case-insensitive substring matching, including tags.<br>
+  Example: `--tag=Electrical` matches the tag `Electrical Wiring`.
+* `find --name=Alice Bob` searches for the single substring `Alice Bob`. To search for `Alice` and `Bob` separately,
+  use `find --name=Alice --name=Bob`.
+
+Examples:
+
+* `find --phone=9927`
+* `find --email=@example.com`
+* `find --address=Tampines`
+* `find --tag=Electrical`
+* `find --tag=`
+* `find --name=Alex` followed by `filtertag --tag=AC-Service`
+* `find --name=alex --name=bernice --name=oliveiro --name=david --name=irfan --name=roy`
+
+Example result after a `find` command:
+![find command result](images/findCommandResult.png)
+
+### Filtering clients by tag: `filtertag`
+
+Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. Like `find`, this
+command continues narrowing the current list; use `list` when you want to return to the full client list.
+
+Format:
+
+```text
+filtertag --tag=[TAG] [--tag=[MORE_TAGS]]...
+```
+
+* Provide at least one `--tag=` field. Any text before the first `--tag=` is invalid.
+* Each non-empty `--tag=` value is treated as one whole tag name, even if it contains spaces.
+* Non-empty tag values use case-insensitive exact matching.
+  Example: `--tag=Electrical` does not match the tag `Electrical Wiring`.
+* If you provide multiple non-empty tags, a client must contain **all** of them to be shown.
+  Example: `filtertag --tag=Plumbing --tag=Electrical Wiring` only shows clients tagged with both `Plumbing` and `Electrical Wiring`.
+* `filtertag --tag=` is a special case that matches only clients with no tags.
+* You cannot mix blank and non-blank tag values in the same command.<br>
+  Example: `filtertag --tag=Plumbing --tag=` is invalid.
+
+Examples:
+
+* `filtertag --tag=AC-Service`
+* `filtertag --tag=`
+* `find --address=Tampines` followed by `filtertag --tag=Electrical Wiring`
+* `filtertag --tag=Plumbing --tag=Electrical Wiring`
+
+Example result after a `filtertag` command:
+![filtertag command result](images/filtertagCommandResult.png)
+
+### Copying a client's address: `copyaddr`
+
+Copies the specified client's address to your system clipboard.
+
+Format: `copyaddr INDEX`
+
+* The index refers to the index number shown in the current displayed client list.
+* The index must be a positive integer.
+* If Linkline cannot access the clipboard, it shows an error instead of copying anything.
+
+Examples:
+
+* `copyaddr 1`
+* `find --tag=Plumbing` followed by `copyaddr 2`
+
+### Copying an edit command template: `copyedit`
+
+Copies a ready-to-edit `edit` command for the specified client to your system clipboard.
+
+Format: `copyedit INDEX`
+
+* The index refers to the index number shown in the current displayed client list.
+* The index must be a positive integer.
+* The copied command uses the client's current displayed index.
+* The copied command includes the client's name, phone, email, address, and all current tags.
+* If the client has notes, the copied command also includes `--notes=...`.
+* This is useful when you want to change a field with long or multiple values (e.g., tags, notes, ...) without retyping the rest.
+
+Examples:
+
+* `copyedit 1`
+* `find --name=Bernice` followed by `copyedit 1`
+
+<box type="tip" seamless>
+
+**Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only the field you want, and then press Enter.
+</box>
 
 ### Adding a client log: `logadd`
 
@@ -291,190 +354,151 @@ Adds a timestamped log entry to the specified client.
 
 Format: `logadd INDEX LOG_MESSAGE`
 
-* Adds a new log entry to the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index **must be a positive integer** 1, 2, 3, ...
-* `LOG_MESSAGE` must be between 1 and 1000 characters.
+* The index refers to the index number shown in the current displayed client list.
+* The index must be a positive integer.
+* Linkline automatically records the current date and time for the new log entry.
+* Use `view INDEX` if you want to inspect the updated logs in the right-hand panel.
 
 Examples:
 
 * `logadd 1 Observed leakage beneath sink during site visit.`
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
+* `logadd 3 Fixed plumbing issue for toilet in master bedroom. Recommended plumbing services for other toilets.`
 
+Example result after a `logadd` command:
 ![logadd command result](images/logaddCommandResult.png)
 
 ### Deleting a client log: `logdelete`
 
-Deletes a specific log entry from the specified client with confirmation.
+Deletes one log entry from the specified client with confirmation.
 
 Format: `logdelete CLIENT_INDEX LOG_INDEX`
 
-* Deletes the log at `LOG_INDEX` for the client at `CLIENT_INDEX`.
-* `CLIENT_INDEX` refers to the index number shown in the displayed client list.
+* `CLIENT_INDEX` refers to the index number shown in the current displayed client list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
-* **Log numbering note**: Logs are displayed newest-first, but numbered oldest-to-newest.
-  For example, if a client has 5 logs, the topmost (and the latest) log is `Log 5`.
-* Both indices **must be positive integers** 1, 2, 3, ...
-* **Two-step confirmation**:
-    * First run of `logdelete CLIENT_INDEX LOG_INDEX`: shows a confirmation message only (no deletion yet).
-    * Second matching `logdelete CLIENT_INDEX LOG_INDEX`: deletes the selected log.
-* Any other command (including invalid command input) after the first `logdelete` will cancel the pending log deletion.
+* Both indices must be positive integers.
+* If the client has no logs, the command fails.
+* If `LOG_INDEX` does not exist for that client, the command fails.
+* This command uses two-step confirmation:
+  * The first `logdelete CLIENT_INDEX LOG_INDEX` only shows a confirmation message.
+  * The second matching `logdelete CLIENT_INDEX LOG_INDEX` deletes the log entry.
+* Any other command, including an invalid command, cancels the pending log deletion.
+* In the right-hand panel, logs are shown newest first, but numbered oldest to newest.<br>
+  Example: if a client has 5 logs, the topmost and latest entry is labeled `Log 5`.
 
 Examples:
 
-* `view 2` followed by `logdelete 2 1`
-    * Shows confirmation message for log `1` of client `2` (no deletion yet).
-    * Typing `logdelete 2 1` again confirms and deletes that log.
-* `logdelete 2 1` followed by `list`
-    * The pending log deletion is cancelled. The list command executes normally.
+* `logdelete 3 1` followed by `find --name=Bernice`
+    * The pending deletion is canceled by the `find` command.
+* `logdelete 3 1`
+  * Shows confirmation message for deleting log `1` of client `3`.
+  * If you enter `logdelete 3 1` again, the corresponding log is deleted.
 
+Example result after a `logdelete` command:
 ![confirmed logdelete command result](images/logdeleteCommandResult.png)
-
-### Filtering clients by tags: `filtertag`
-
-Filters clients whose tags contain all the given keywords or clients with no tags. If there is more than one client, the list returned is
-sorted.
-
-Format: `filtertag --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`
-
-* Multiple keywords can be provided, separated by spaces
-* The filter is case-insensitive. e.g `Plumbing` will match `plumbing`
-* Only filters by tags.
-* Only clients matching all one keyword will be returned (i.e. `AND` search).
-* Providing a blank `TAG_KEYWORD` will return a list of clients with no tags.
-* The `filtertag` command does not accept a mix of specified `TAG_KEYWORD` and blank `TAG_KEYWORD`.
-* Multiple `filtertag` operations can be chained together to shorten the list (refer to [Locating clients by personal details: `find`](#locating-clients-by-personal-details-find)).
-
-Examples:
-
-* `filtertag --tag=AC-Service --tag=Plumbing` filters all clients with tags `AC-Service` and `Plumbing`.
-* `filtertag --tag=` filters all clients with no tags.
-
-![filtertag command result](images/filtertagCommandResult.png)
 
 ### Renaming a tag: `renametag`
 
-Renames an existing tag to a new name across Linkline. All clients with the old tag will be updated with
-the new tag name.
+Renames an existing tag across all clients in Linkline.
 
 Format: `renametag --tag=OLD_TAG --tag=NEW_TAG`
 
-* Tags have to be in this specific order and only 2 parameters are accepted.
-* The `OLD_TAG` must exist in Linkline.
-* The `NEW_TAG` must be a valid tag name and should not already exist in Linkline.
-* Tag names are case-insensitive. e.g., `PLUMBING` and `plumbing` are considered the same tag.
+* Provide exactly two `--tag=` fields, in this order: `OLD_TAG`, then `NEW_TAG`.
+* The `OLD_TAG` must already exist in Linkline.
+* The `NEW_TAG` must be valid and must not already exist.
+* Tag names are case-insensitive.<br>
+  Example: `PLUMBING` and `plumbing` are treated as the same tag.
+* After a successful rename, Linkline shows the full client list again.
 
 Examples:
 
-* `renametag --tag=AC-Service --tag=Aircon-Repair` renames all instances of `AC-Service` to `Aircon-Repair`.
-* `renametag --tag=plumbing --tag=General-Maintenance` renames the `plumbing` tag to `General-Maintenance`.
+* `renametag --tag=Electrical Wiring --tag=Electrical`
+* `renametag --tag=AC-Service --tag=AC-Repair`
 
+Example result after a `renametag` command:
 ![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
 
-Deletes a specific tag and removes it from all clients currently having it.
+Deletes a tag from Linkline and removes it from all clients that currently use it.
 
 Format: `deletetag TAG_NAME`
 
-* The `TAG_NAME` must exist in Linkline.
-* **Two-step confirmation**:
-    * First run of `deletetag TAG_NAME`: shows a confirmation message only (no deletion yet).
-    * Second matching `deletetag TAG_NAME`: removes that tag globally from all clients.
-* Any other command (including invalid command input) after the first `deletetag` will cancel the pending tag deletion.
-* This operation cannot be undone.
+* `TAG_NAME` must already exist in Linkline.
+* This command uses two-step confirmation:
+  * The first `deletetag TAG_NAME` only shows a confirmation message.
+  * The second matching `deletetag TAG_NAME` deletes the tag globally.
+* Any other command, including an invalid command, cancels the pending tag deletion.
+* After a successful deletion, Linkline shows the full client list again.
 
 Examples:
 
-* `deletetag plumbing`
-    * Shows confirmation message for deleting tag `plumbing` (no deletion yet).
-    * Typing `deletetag plumbing` again confirms and removes it from all clients.
-* `deletetag plumbing` followed by `list`
-    * The pending tag deletion is cancelled. The list command executes normally.
+* `deletetag Electrical Wiring` followed by `find --name=Bernice`
+  * The pending deletion is canceled by the `find` command.
+* `deletetag ac-repair`
+    * Shows confirmation message for deleting tag `ac-repair`.
+    * If you enter `deletetag ac-repair` again, the tag `ac-repair` is deleted.
 
+Example result after a `deletetag` command:
 ![confirmed deletetag command result](images/deletetagCommandResult.png)
 
-### Clearing all entries : `clear`
+### Exiting Linkline: `exit`
 
-Clears all entries in Linkline.
-
-![clear command result](images/clearCommandResult.png)
-
-Format: `clear`
-
-* This command does not accept any arguments.
-* Entering `clear` with additional parameters (e.g., `clear 123`) will return an error message.
-* **Two-step confirmation**:
-    * First run of `clear`: shows a confirmation message only (no clearing yet).
-    * Second `clear`: clears all entries in Linkline.
-* Any other command (including invalid command input) after the first `clear` will cancel the pending action.
-
-### Exiting the program : `exit`
-
-Exits the program.
+Closes the application.
 
 Format: `exit`
 
 * This command does not accept any arguments.
-* Entering `exit` with additional parameters (e.g., `exit 123`) will return an error message.
+* This command saves data to disk before exiting. If Linkline cannot save data, it shows an error and does not exit.
 
 ### Saving the data
 
-LinkLine data are saved in the hard disk automatically after any command that changes the data. There is no need to save
-manually.
+Linkline saves data to disk automatically after any command that changes the data. There is no manual save command.
 
 ### Editing the data file
 
-LinkLine data are saved automatically as a JSON file `[JAR file location]/data/linkline.json`. Advanced users are
-welcome to update data directly by editing that data file.
+Linkline stores data in `[JAR file location]/data/linkline.json`. Advanced users can edit this file directly.
 
 <box type="warning" seamless>
 
-**Caution:**
-If your changes to the data file makes its format invalid, LinkLine will discard all data and start with an empty data
-file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the LinkLine to behave in unexpected ways (e.g., if a value entered is outside the
-acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+**Caution:**<br>
+If the data file is malformed or contains invalid data, Linkline starts with an empty address book on the next run. If possible, Linkline also creates a timestamped backup of the corrupted file in the same folder before continuing.<br>
+Even when the JSON format is valid, values outside Linkline's accepted constraints can still cause unexpected behavior. Make a backup before editing the file manually.
 </box>
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains
-the data of your previous LinkLine home folder.
+**Q**: How do I transfer my data to another computer?<br>
+**A**: Install Linkline on the other computer and replace the new `data/linkline.json` file with the one from your previous Linkline home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only
-   the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the
-   application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut
-   `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to
-   manually restore the minimized Help Window.
+1. **When using multiple screens**, if you move the application to a secondary screen and later switch to using only the primary screen, the GUI may open off-screen. Delete `preferences.json` before starting Linkline again.
+2. **If you minimize the Help Window** and then run `help` again, the original Help Window remains minimized and no new Help Window appears. Restore the minimized Help Window manually.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
 
-| Action                       | Format, Examples                                                                                                                                                                                                                                                                                                                                                                                              |
-|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                      | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--tag=TAG]…​ [--notes=NOTES]` <br> e.g., `add --name=James Ho --phone=22224444 --email=jamesho@example.com --address=123, Clementi Rd, 1234665 --tag=AC-Service --tag=Plumbing --notes=Prefers morning visits`                                                                                                                         |
-| **Clear**                    | `clear`                                                                                                                                                                                                                                                                                                                                                                                                       |
-| **Copy Address**             | `copyaddr INDEX`<br> e.g., `copyaddr 1`                                                                                                                                                                                                                                                                                                                                                                       |
-| **Copy Edit Command Format** | `copyedit INDEX`<br> e.g., `copyedit 2`                                                                                                                                                                                                                                                                                                                                                                       |
-| **Delete**                   | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                                                                                                                                                                                                                           |
-| **Delete Tag**               | `deletetag TAG_NAME`<br> e.g., `deletetag plumbing`                                                                                                                                                                                                                                                                                                                                                           |
-| **Edit**                     | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--tag=TAG]…​ [--notes=NOTES]`<br> e.g.,`edit 2 --name=James Lee --email=jameslee@example.com`                                                                                                                                                                                                                           |
-| **Filter Tag**               | `filtertag --tag=TAG_KEYWORD [--tag=MORE_KEYWORDS]…​`<br> e.g., `filtertag --tag=Plumbing`                                                                                                                                                                                                                                                                                                                    |
-| **Find**                     | `find [--name=SUBNAME [--name=MORE_SUBNAMES] ...] [--phone=SUBNUMBER [--phone=MORE_SUBNUMBERS] ...] [--email=SUBEMAIL [--email=MORE_SUBEMAILS] ...] [--address=SUBADDRESS [--address=MORE_SUBADDRESS] ...] [--tag=TAG [--tag=MORE_TAGS] ...]`<br> e.g., `find --name=James --name=Jake --phone=123 --phone=4567 --email=@yahoo.com --address=Street --address=Avenue --address=Boulevard --tag=Aircon-Repair` |
-| **Help**                     | `help`                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **List**                     | `list`                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **Log Add**                  | `logadd INDEX LOG_MESSAGE`<br> e.g., `logadd 1 Observed leakage beneath sink during site visit.`                                                                                                                                                                                                                                                                                                              |
-| **Log Delete**               | `logdelete CLIENT_INDEX LOG_INDEX`<br> e.g., `logdelete 2 1`                                                                                                                                                                                                                                                                                                                                                  |
-| **Rename Tag**               | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br> e.g., `renametag --tag=AC-Service --tag=Aircon-Repair`                                                                                                                                                                                                                                                                                                            |
-| **View**                     | `view INDEX`<br> e.g., `view 1`                                                                                                                                                                                                                                                                                                                                                                               |
-
+| Action | Format, Examples                                                                                                                                                                                                                         |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add** | `add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NOTES] [--tag=TAG]...`<br>Example: `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05 --tag=AC-Service` |
+| **Clear** | `clear`                                                                                                                                                                                                                                  |
+| **Copy Address** | `copyaddr INDEX`<br>Example: `copyaddr 1`                                                                                                                                                                                                |
+| **Copy Edit Command** | `copyedit INDEX`<br>Example: `copyedit 1`                                                                                                                                                                                                |
+| **Delete** | `delete INDEX`<br>Example: `delete 2`                                                                                                                                                                                                    |
+| **Delete Tag** | `deletetag TAG_NAME`<br>Example: `deletetag plumbing`                                                                                                                                                                                    |
+| **Edit** | `edit INDEX [--name=NAME] [--phone=PHONE_NUMBER] [--email=EMAIL] [--address=ADDRESS] [--notes=NOTES] [--tag=TAG]...`<br>Example: `edit 2 --phone=91234567 --notes=Client requested morning slot`                                         |
+| **Exit** | `exit`                                                                                                                                                                                                                                   |
+| **Filter Tag** | `filtertag --tag=[TAG] [--tag=[MORE_TAGS]]...`<br>Example: `filtertag --tag=Plumbing --tag=Electrical Wiring`                                                                                                                            |
+| **Find** | `find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address=SUBADDRESS]... [--tag=[TAG]]...`<br>Example: `find --name=Alex --tag=AC-Service`                                                                       |
+| **Help** | `help`                                                                                                                                                                                                                                   |
+| **List** | `list`                                                                                                                                                                                                                                   |
+| **Log Add** | `logadd INDEX LOG_MESSAGE`<br>Example: `logadd 1 Completed AC servicing and replaced filter.`                                                                                                                                            |
+| **Log Delete** | `logdelete CLIENT_INDEX LOG_INDEX`<br>Example: `logdelete 2 1`                                                                                                                                                                           |
+| **Rename Tag** | `renametag --tag=OLD_TAG --tag=NEW_TAG`<br>Example: `renametag --tag=AC-Service --tag=AC-Repair`                                                                                                                                         |
+| **View** | `view INDEX`<br>Example: `view 1`                                                                                                                                                                                                        |

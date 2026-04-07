@@ -41,7 +41,7 @@ MainWindow --> "0..1" HelpWindow
 
 PersonListPanel -down-> "*" PersonCard
 
-PersonDetailPanel *-down-> "1" PersonDetailCard
+PersonDetailPanel *-down-> "0..1" PersonDetailCard
 
 MainWindow -left-|> UiPart
 
@@ -54,6 +54,7 @@ HelpWindow --|> UiPart
 PersonDetailPanel --|> UiPart
 
 PersonCard ..> Model
+PersonListPanel ..> Model
 PersonDetailPanel ..> Model
 PersonDetailCard ..> Model
 UiManager -right-> Logic
