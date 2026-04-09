@@ -17,7 +17,7 @@ This project is based on the [AddressBook-Level 3](https://se-education.org/addr
 the [SE-EDU initiative](https://se-education.org).
 
 ### AI Assistance
-* [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek to assist with writing additional test cases for `CopyAddrCommand`, `CopyEditCommand`, `DeleteCommand`, `EditCommand`, `DeletePendingAction`, `ClearPendingAction`, and `LogDeletePendingAction` to improve test coverage. Suggestions included edge cases for clipboard failures, invalid indices, filtered lists, duplicate detection, and confirmation flows. All generated tests were reviewed, refined, and manually verified before inclusion.
+* [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek in a limited assistive role for parts of the test cases for some features implemented, including `copyaddr`, `copyedit`, `delete`, `edit`, and pending action confirmation flows. This included identifying edge cases and suggesting test scenarios to increase coverage. All suggestions were reviewed, adapted, and refined manually before inclusion in the project.
 
 --------------------------------------------------------------------------------------------------------------------
 
