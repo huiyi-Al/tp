@@ -21,8 +21,10 @@ the [SE-EDU initiative](https://se-education.org).
   and Logs features. This included exploring JavaFX implementation approaches for UI components that display notes and
   logs, and drafting initial versions of Notes- and Logs-related test cases from manually specified scenarios. All
   suggestions were reviewed, adapted, and refined manually before inclusion in the project.
-
 * [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek in a limited assistive role for parts of the test cases for some features implemented, including `copyaddr`, `copyedit`, `delete`, `edit`, and pending action confirmation flows. This included identifying edge cases and suggesting test scenarios to increase coverage. All suggestions were reviewed, adapted, and refined manually before inclusion in the project.
+* [Sheryl Phoa](AboutUs.html#sheryl-phoa) used Gemini in a limited assistive role for parts of the development and test
+  cases of the `filtertag`, `renametag` and `deletetag` features. This included suggesting test scenarios to increase
+  test coverage. All suggestions were reviewed, adapted and refined manually before inclusion in the project.
 
 --------------------------------------------------------------------------------------------------------------------
 
