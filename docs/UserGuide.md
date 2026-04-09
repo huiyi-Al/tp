@@ -426,7 +426,7 @@ Examples:
 
 * `logdelete 3 1` followed by `find --name=Bernice`
     * The pending deletion is canceled by the `find` command.
-* `logdelete 3 1`
+* Continuing from the earlier `logadd 3 ...` example: `logdelete 3 1`
   * Shows confirmation message for deleting log `1` of client `3`.
   * If you enter `logdelete 3 1` again, the corresponding log is deleted.
 

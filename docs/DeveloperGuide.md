@@ -17,6 +17,11 @@ This project is based on the [AddressBook-Level 3](https://se-education.org/addr
 the [SE-EDU initiative](https://se-education.org).
 
 ### AI Assistance
+* [Shim Jaejun](AboutUs.html#shim-jaejun) used Codex in a limited assistive role for parts of the Notes
+  and Logs features. This included exploring JavaFX implementation approaches for UI components that display notes and
+  logs, and drafting initial versions of Notes- and Logs-related test cases from manually specified scenarios. All
+  suggestions were reviewed, adapted, and refined manually before inclusion in the project.
+
 * [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek in a limited assistive role for parts of the test cases for some features implemented, including `copyaddr`, `copyedit`, `delete`, `edit`, and pending action confirmation flows. This included identifying edge cases and suggesting test scenarios to increase coverage. All suggestions were reviewed, adapted, and refined manually before inclusion in the project.
 
 --------------------------------------------------------------------------------------------------------------------
