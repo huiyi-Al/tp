@@ -22,6 +22,8 @@ the [SE-EDU initiative](https://se-education.org).
   logs, and drafting initial versions of Notes- and Logs-related test cases from manually specified scenarios. All
   suggestions were reviewed, adapted, and refined manually before inclusion in the project.
 
+* [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek in a limited assistive role for parts of the test cases for some features implemented, including `copyaddr`, `copyedit`, `delete`, `edit`, and pending action confirmation flows. This included identifying edge cases and suggesting test scenarios to increase coverage. All suggestions were reviewed, adapted, and refined manually before inclusion in the project.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
