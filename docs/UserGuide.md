@@ -109,7 +109,11 @@ Opens the help window.
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
+Format:
+
+```text
+help
+```
 
 * This command does not accept any arguments.
 
@@ -166,7 +170,11 @@ Examples:
 
 Deletes the specified client from Linkline with confirmation.
 
-Format: `delete INDEX`
+Format:
+
+```text
+delete INDEX
+```
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer.
@@ -197,7 +205,11 @@ Example result after a `delete` command (with confirmation):
 
 Clears all data in Linkline with confirmation.
 
-Format: `clear`
+Format:
+
+```text
+clear
+```
 
 * This command does not accept any arguments.
 * This command uses two-step confirmation:
@@ -212,7 +224,11 @@ Example result after a `clear` command:
 
 Shows all clients.
 
-Format: `list`
+Format:
+
+```text
+list
+```
 
 * This command resets any previous `find` or `filtertag`.
 * This command does not accept any arguments.
@@ -224,7 +240,11 @@ Example result after a `list` command:
 
 Shows the specified client's full details in the right-hand panel.
 
-Format: `view INDEX`
+Format:
+
+```text
+view INDEX
+```
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer such as `1`, `2`, or `3`.
@@ -314,7 +334,11 @@ Example result after a `filtertag` command:
 
 Copies the specified client's address to your system clipboard.
 
-Format: `copyaddr INDEX`
+Format:
+
+```text
+copyaddr INDEX
+```
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer.
@@ -329,7 +353,11 @@ Examples:
 
 Copies a ready-to-edit `edit` command for the specified client to your system clipboard.
 
-Format: `copyedit INDEX`
+Format:
+
+```text
+copyedit INDEX
+```
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer.
@@ -352,7 +380,11 @@ Examples:
 
 Adds a timestamped log entry to the specified client.
 
-Format: `logadd INDEX LOG_MESSAGE`
+Format:
+
+```text
+logadd INDEX LOG_MESSAGE
+```
 
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer.
@@ -372,7 +404,11 @@ Example result after a `logadd` command:
 
 Deletes one log entry from the specified client with confirmation.
 
-Format: `logdelete CLIENT_INDEX LOG_INDEX`
+Format:
+
+```text
+logdelete CLIENT_INDEX LOG_INDEX
+```
 
 * `CLIENT_INDEX` refers to the index number shown in the current displayed client list.
 * `LOG_INDEX` refers to the log number shown in the UI for that client.
@@ -401,7 +437,11 @@ Example result after a `logdelete` command:
 
 Renames an existing tag across all clients in Linkline.
 
-Format: `renametag --tag=OLD_TAG --tag=NEW_TAG`
+Format:
+
+```text
+renametag --tag=OLD_TAG --tag=NEW_TAG
+```
 
 * Provide exactly two `--tag=` fields, in this order: `OLD_TAG`, then `NEW_TAG`.
 * The `OLD_TAG` must already exist in Linkline.
@@ -422,7 +462,11 @@ Example result after a `renametag` command:
 
 Deletes a tag from Linkline and removes it from all clients that currently use it.
 
-Format: `deletetag TAG_NAME`
+Format:
+
+```text
+deletetag TAG_NAME
+```
 
 * `TAG_NAME` must already exist in Linkline.
 * This command uses two-step confirmation:
@@ -446,7 +490,11 @@ Example result after a `deletetag` command:
 
 Closes the application.
 
-Format: `exit`
+Format:
+
+```text
+exit
+```
 
 * This command does not accept any arguments.
 * This command saves data to disk before exiting. If Linkline cannot save data, it shows an error and does not exit.
