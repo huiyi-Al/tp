@@ -217,7 +217,7 @@ clear
     * The second `clear` clears all entries.
 * Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
-Example result after a `clear` command:
+Example result after a `clear` command with a successful confirmation:
 ![clear command result](images/clearCommandResult.png)
 
 ### Listing all clients: `list`
@@ -497,7 +497,6 @@ exit
 ```
 
 * This command does not accept any arguments.
-* This command saves data to disk before exiting. If Linkline cannot save data, it shows an error and does not exit.
 
 ### Saving the data
 
