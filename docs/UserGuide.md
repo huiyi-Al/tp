@@ -217,7 +217,9 @@ Example result after an `delete` command (with confirmation):
 
 <box type="tip" seamless>
 
-**Tip:** After the first `delete 1`, commands such as `delete 1` and `delete 01` both confirm the deletion because Linkline compares the parsed index value. Leading/trailing spaces and spaces between the command word and index are ignored. Numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
+**Tip:** After the first `delete 1`, commands such as `delete 1` and `delete 01` both confirm the deletion because
+Linkline compares the parsed index value. Leading/trailing spaces and spaces between the command word and index are
+ignored. Numbers with leading zeros (e.g., '01', '001') also confirm the deletion.
 </box>
 
 ### Clearing all entries: `clear`
