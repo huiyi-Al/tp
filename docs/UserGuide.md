@@ -504,7 +504,7 @@ exit
 
 ### Saving the data
 
-Linkline saves data to disk automatically after any command that changes the data. There is no manual save command.
+Linkline saves data to disk automatically after any command. There is no manual save command.
 
 ### Editing the data file
 
