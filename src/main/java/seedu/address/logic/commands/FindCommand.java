@@ -34,8 +34,8 @@ public class FindCommand extends Command {
                     {0}: Finds all clients whose details contain any of the given queries \
                     and displays them as a list with index numbers.
                     Preamble given will result in an error.
-                    Parameters: {1}subName [OPTIONAL_SUBNAMES] {2}subNumber [OPTIONAL_SUBNUMBERS] {3}subEmail \
-                    [OPTIONAL_SUBEMAILS] {4}subAddresses [OPTIONAL_SUBADDRESSES] {5}tags [OPTIONAL_TAGS]
+                    Parameters: find [{1}=SUBNAME]... [{2}SUBNUMBER]... [{3}SUBEMAIL]... [{4}SUBADDRESS]... \
+                    [{5}[SUBTAG]]...
                     Example: {0} {1}david {2}123 {3}d@gmail {4}Woodlands {5}Friend""",
             COMMAND_WORD, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG
     );

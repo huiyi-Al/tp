@@ -40,26 +40,24 @@ public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
             return false;
         }
 
-        // Tag prefix specified but empty, match only those with no tags
-        if (subTags.size() == 1 && subTags.get(0).isEmpty()) {
-            logger.info("Tag prefix specified without keywords.");
-            return person.getTags().isEmpty();
-        }
-
-        logger.fine("Tag prefix specified with keywords.");
+        logger.fine("Tag prefix specified");
         boolean result = subTags.stream()
                 .anyMatch(subTag -> {
+                    logger.fine("Processing blank tag prefix");
+                    if (subTag.isBlank()) {
+                        return person.getTags().isEmpty();
+                    }
+
+                    logger.fine("Processing normal tag prefix");
                     boolean match = person.getTags().stream()
                             .anyMatch(tag -> {
                                 String tagString = tag.toString();
-                                if (tagString.length() <= 2) { // Account for empty tag
-                                    return subTag.isEmpty();
-                                }
                                 String trimmed = tagString.substring(1, tagString.length() - 1);
                                 return StringUtil.containsSubstringIgnoreCase(trimmed, subTag);
                             });
                     logger.fine(MessageFormat.format(
                             "Checking keyword: {0}, match: {1}", subTag, match));
+
                     return match;
                 });
 
