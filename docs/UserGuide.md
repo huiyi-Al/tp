@@ -135,6 +135,11 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 * Linkline rejects duplicates. Two clients are considered duplicates if they share the same email address (case-insensitive) or the same phone number after ignoring spaces and hyphens.
 * After a successful `add`, Linkline shows the full client list again.
 
+<box type="tip" seamless>
+
+**Note:** Only one phone number is supported per client. For additional numbers (e.g., home, office), please use the `notes` field.
+</box>
+
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
