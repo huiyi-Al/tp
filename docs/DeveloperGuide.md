@@ -1049,6 +1049,13 @@ Team size: 5
    emails, addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find`
    with fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
    job records.
-5. **Enhance phone number handling with country codes:** Linkline currently stores a single phone number per client with limited country code support. We plan to enhance this by allowing optional `+<country_code>` prefixes (e.g., `+65 91234567`) and normalizing numbers using `country_code + local_digits` for duplicate detection. This ensures `+65 9999 9999` and `9999 9999` are treated as duplicates, while `+66 9999 9999` remains distinct. We also plan to support a default country code (e.g., `setcountrycode 65`) so users can enter local numbers without typing `+65` every time.
+5. **Enhance phone number handling with country codes:** Linkline currently stores a single phone number per client with 
+limited country code support. We plan to enhance this by allowing optional `+<country_code>` prefixes
+(e.g., `+65 91234567`) and normalizing numbers using `country_code + local_digits` for duplicate detection.
+This ensures `+65 9999 9999` and `9999 9999` are treated as duplicates, while `+66 9999 9999` remains distinct.
+We also plan to support a default country code (e.g., `setcountrycode 65`) so users can enter local numbers without
+typing `+65` every time.
 
-6. **Support multiple phone numbers per client:** Linkline currently stores only one phone number per client. We plan to extend phone number storage to support multiple numbers (e.g., mobile, home, office). As an interim workaround, users can store secondary numbers in the `notes` field.
+6. **Support multiple phone numbers per client:** Linkline currently stores only one phone number per client. We plan to
+extend phone number storage to support multiple numbers (e.g., mobile, home, office). As an interim workaround, users
+can store secondary numbers in the `notes` field.
