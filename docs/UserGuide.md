@@ -137,8 +137,9 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 
 <box type="tip" seamless>
 
-**Note:** Only one phone number is supported per client. For additional numbers (e.g., home, office), please use the
-`notes` field.
+**Note:** Only one primary phone number is supported per client. If you need to store additional numbers (e.g., home,
+office), you may add them in the `notes` field. However, please note that numbers stored in `notes` will **not** be
+included in search results when using the `find` command.
 </box>
 
 <box type="tip" seamless>
