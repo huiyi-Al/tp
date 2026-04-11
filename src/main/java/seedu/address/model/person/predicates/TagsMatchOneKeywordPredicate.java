@@ -52,9 +52,6 @@ public class TagsMatchOneKeywordPredicate implements Predicate<Person> {
                     boolean match = person.getTags().stream()
                             .anyMatch(tag -> {
                                 String tagString = tag.toString();
-                                if (tagString.length() <= 2) { // Account for empty tag
-                                    return false;
-                                }
                                 String trimmed = tagString.substring(1, tagString.length() - 1);
                                 return StringUtil.containsSubstringIgnoreCase(trimmed, subTag);
                             });
