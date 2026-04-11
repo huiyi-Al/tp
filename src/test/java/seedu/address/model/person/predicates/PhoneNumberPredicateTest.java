@@ -36,6 +36,7 @@ import seedu.address.testutil.PersonBuilder;
 public class PhoneNumberPredicateTest {
 
     private static final String PHONE_NUMBER = "91234567";
+    private static final String PHONE_NUMBER_HYPHENSPACE = "9-123 4567";
 
     @Test
     public void equals_sameObject_returnsTrue() {
@@ -92,6 +93,12 @@ public class PhoneNumberPredicateTest {
     public void test_substringEqualsFullNumber_returnsTrue() {
         PhoneNumberPredicate predicate = new PhoneNumberPredicate(Collections.singletonList(PHONE_NUMBER));
         assertTrue(predicate.test(new PersonBuilder().withPhone(PHONE_NUMBER).build()));
+    }
+
+    @Test
+    public void test_hyphenSpaceIgnored_returnsTrue() {
+        PhoneNumberPredicate predicate = new PhoneNumberPredicate(Collections.singletonList(PHONE_NUMBER));
+        assertTrue(predicate.test(new PersonBuilder().withPhone(PHONE_NUMBER_HYPHENSPACE).build()));
     }
 
     @Test

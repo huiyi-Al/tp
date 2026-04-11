@@ -34,11 +34,17 @@ public class PhoneNumberPredicate implements Predicate<Person> {
 
         boolean result = subNumbers.stream()
                 .anyMatch(subNumber -> {
-                    boolean match = StringUtil.containsSubstringIgnoreCase(
+                    boolean match1 = StringUtil.containsSubstringIgnoreCase(
                             person.getPhone().value, subNumber);
                     logger.fine(MessageFormat.format(
-                            "Checking subNumber: {0}, match: {1}", subNumber, match));
-                    return match;
+                            "Checking subNumber: {0}, match1: {1}", subNumber, match1));
+
+                    boolean match2 = StringUtil.containsSubstringIgnoreCase(
+                            person.getPhone().value.replace(" ", "").replace("-", ""), subNumber);
+                    logger.fine(MessageFormat.format(
+                            "Checking subNumber: {0}, match2: {1}", subNumber, match2));
+
+                    return match1 || match2;
                 });
 
         logger.fine(MessageFormat.format("Final result: {0}", result));
