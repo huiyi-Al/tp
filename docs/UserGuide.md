@@ -137,7 +137,15 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 
 <box type="tip" seamless>
 
-**Note:** Only one phone number is supported per client. For additional numbers (e.g., home, office), please use the `notes` field.
+**Note:** Only one phone number is supported per client. For additional numbers (e.g., home, office), please use the
+`notes` field.
+</box>
+
+<box type="tip" seamless>
+
+**Note on country codes:** Country codes (e.g., `+65`) are not officially supported. As a workaround, you can prefix the
+country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detection ignores hyphens and spaces, so
+`65-91234567`, `65-9123-4567`, and `6591234567` will be treated as the same number.
 </box>
 
 Examples:
