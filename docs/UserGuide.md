@@ -283,7 +283,7 @@ Examples:
 Searches the currently displayed list for clients whose name, phone number, email address, physical address, or tag
 matches at least one supplied query. Uses `OR` matching across all supplied queries and fields.
 
-`find` will only search based on the clients currently displayed on the list on the left side of the program. \
+`find` will only search based on the clients currently in the displayed list. \
 Both `find` and `filtertag` commands can be used to narrow down the current list. \
 
 Use `list` when you want to search from the full client list again.
@@ -322,8 +322,8 @@ Example result after a `find` command:
 
 ### Filtering clients by tag: `filtertag`
 
-Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `OR` matching across
-all supplied queries and fields
+Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `AND` matching
+across all supplied queries and fields
 
 `filtertag` will only search based on the clients currently displayed on the list on the left side of the program. \
 Both `find` and `filtertag` commands can be used to narrow down the current list.
