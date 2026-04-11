@@ -21,14 +21,14 @@ public class NameTest {
 
     @Test
     public void isValidName_allowedPunctuation_returnsTrue() {
-        assertTrue(Name.isValidName("John/Jane"));      // slash
-        assertTrue(Name.isValidName("John-Doe"));       // hyphen
-        assertTrue(Name.isValidName("O'Connor"));       // apostrophe
-        assertTrue(Name.isValidName("John_Doe"));       // underscore
+        assertTrue(Name.isValidName("John/Jane")); // slash
+        assertTrue(Name.isValidName("John-Doe")); // hyphen
+        assertTrue(Name.isValidName("O'Connor")); // apostrophe
+        assertTrue(Name.isValidName("John_Doe")); // underscore
         assertTrue(Name.isValidName("Johnson & Sons")); // ampersand
-        assertTrue(Name.isValidName("Dr. Smith"));      // period
-        assertTrue(Name.isValidName("S/O John"));       // slash
-        assertTrue(Name.isValidName("c/o Mary"));       // slash
+        assertTrue(Name.isValidName("Dr. Smith")); // period
+        assertTrue(Name.isValidName("S/O John")); // slash
+        assertTrue(Name.isValidName("c/o Mary")); // slash
     }
 
     @Test
