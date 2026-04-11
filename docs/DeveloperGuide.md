@@ -49,7 +49,7 @@ Given below is a quick overview of main components and how they interact with ea
 **`Main`** (consisting of classes `Main` and `MainApp`) is in charge of the app launch and shut down.
 
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+* At shutdown, it shuts down the other components and invokes cleanup methods where necessary.
 
 The bulk of the app's work is done by the following four components:
 
