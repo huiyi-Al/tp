@@ -36,7 +36,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                     if (p.equals(PREFIX_TAG)) {
                         return false;
                     }
-                    return argMultimap.getValue(p).map(String::isEmpty).orElse(false);
+                    return argMultimap.getAllValues(p).stream().anyMatch(String::isBlank);
                 });
 
         if (preamblePresent || nonePresent || anyPresentButInvalidEmpty) {

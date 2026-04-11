@@ -81,6 +81,11 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 * When a command uses named fields such as `--name=` and `--phone=`, those fields can usually appear in any order unless
   stated otherwise.
 
+* In prefix-based commands, a field value must not contain a space immediately followed by another field marker used by
+  the same command.<br>
+  Example: `--notes=Call before arriving --tag=Urgent` is interpreted as a notes value followed by a tag field, not as
+  one literal notes value.
+
 * Commands that do not accept arguments reject extra input.<br>
   Example: `help 123` and `list now` are invalid.
 
@@ -418,6 +423,7 @@ logadd INDEX LOG_MESSAGE
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer.
 * Linkline automatically records the current date and time for the new log entry.
+* Custom or backdated log timestamps are not currently supported.
 * Use `view INDEX` if you want to inspect the updated logs in the right-hand panel.
 
 Examples:
@@ -538,10 +544,13 @@ Linkline stores data in `[JAR file location]/data/linkline.json`. Advanced users
 <box type="warning" seamless>
 
 **Caution:**<br>
-If the data file is malformed or contains invalid data, Linkline starts with an empty address book on the next run. If
-possible, Linkline also creates a timestamped backup of the corrupted file in the same folder before continuing.<br>
-Even when the JSON format is valid, values outside Linkline's accepted constraints can still cause unexpected behavior.
-Make a backup before editing the file manually.
+If the data file contains invalid JSON, missing required fields, or invalid field values that violate Linkline's
+constraints, Linkline starts with an empty address book on the next run. If possible, Linkline also creates a
+timestamped backup of the corrupted file in the same folder before continuing.<br>
+Not every manual edit mistake will trigger this recovery path. For example, missing optional fields such as `notes`,
+`logs`, or `tags` may still be defaulted during loading instead of causing a backup to be created. Even though Linkline
+attempts to create a backup when loading fails, it is still best to make your own backup before editing the file
+manually.
 </box>
 
 --------------------------------------------------------------------------------------------------------------------
