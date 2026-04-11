@@ -140,7 +140,7 @@ Examples:
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
 * `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
-Example result after a `add` command:
+Example result after an `add` command:
 ![add command result](images/addCommandResult.png)
 
 ### Editing a client: `edit`
@@ -194,7 +194,7 @@ Examples:
   * Shows confirmation message for deleting the client at index 1.
   * If you enter `delete 1` again, the client at index 1 is deleted.
 
-Example result after a `delete` command (with confirmation):
+Example result after an `delete` command (with confirmation):
 ![pending delete command result](images/pendingDeleteCommandResult.png)
 
 ![confirmed delete command result](images/confirmedDeleteCommandResult.png)
@@ -220,7 +220,7 @@ clear
     * The second `clear` clears all entries.
 * Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
-Example result after a `clear` command with a successful confirmation:
+Example result after an `clear` command with a successful confirmation:
 ![clear command result](images/clearCommandResult.png)
 
 ### Listing all clients: `list`
@@ -236,7 +236,7 @@ list
 * This command resets any previous `find` or `filtertag`.
 * This command does not accept any arguments.
 
-Example result after a `list` command:
+Example result after an `list` command:
 ![list command result](images/listCommandResult.png)
 
 ### Viewing client details: `view`
@@ -252,7 +252,7 @@ view INDEX
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer such as `1`, `2`, or `3`.
 
-Example result after a `view` command:
+Example result after an `view` command:
 ![view command result](images/viewCommandResult.png)
 
 <box type="tip" seamless>
@@ -299,7 +299,7 @@ Examples:
 * `find --name=Alex` followed by `filtertag --tag=AC-Service`
 * `find --name=alex --name=bernice --name=oliveiro --name=david --name=irfan --name=roy`
 
-Example result after a `find` command:
+Example result after an `find` command:
 ![find command result](images/findCommandResult.png)
 
 ### Filtering clients by tag: `filtertag`
@@ -330,7 +330,7 @@ Examples:
 * `find --address=Tampines` followed by `filtertag --tag=Electrical Wiring`
 * `filtertag --tag=Plumbing --tag=Electrical Wiring`
 
-Example result after a `filtertag` command:
+Example result after an `filtertag` command:
 ![filtertag command result](images/filtertagCommandResult.png)
 
 ### Copying a client's address: `copyaddr`
@@ -401,7 +401,7 @@ Examples:
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
 * `logadd 3 Fixed plumbing issue for toilet in master bedroom. Recommended plumbing services for other toilets.`
 
-Example result after a `logadd` command:
+Example result after an `logadd` command:
 ![logadd command result](images/logaddCommandResult.png)
 
 ### Deleting a client log: `logdelete`
@@ -434,7 +434,7 @@ Examples:
   * Shows confirmation message for deleting log `1` of client `3`.
   * If you enter `logdelete 3 1` again, the corresponding log is deleted.
 
-Example result after a `logdelete` command:
+Example result after an `logdelete` command:
 ![confirmed logdelete command result](images/logdeleteCommandResult.png)
 
 ### Renaming a tag: `renametag`
@@ -459,7 +459,7 @@ Examples:
 * `renametag --tag=Electrical Wiring --tag=Electrical`
 * `renametag --tag=AC-Service --tag=AC-Repair`
 
-Example result after a `renametag` command:
+Example result after an `renametag` command:
 ![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
@@ -487,7 +487,7 @@ Examples:
     * Shows confirmation message for deleting tag `ac-repair`.
     * If you enter `deletetag ac-repair` again, the tag `ac-repair` is deleted.
 
-Example result after a `deletetag` command:
+Example result after an `deletetag` command:
 ![confirmed deletetag command result](images/deletetagCommandResult.png)
 
 ### Exiting Linkline: `exit`
