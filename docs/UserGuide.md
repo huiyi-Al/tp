@@ -86,7 +86,7 @@ Linkline is optimized for a Command Line Interface (CLI), but still gives you th
 
 The following constraints apply whenever these field values are entered in commands.
 
-* `NAME`: 1 to 100 printable characters. Must not be blank.
+* `NAME`: 1 to 100 characters. Must not be blank.
 * `PHONE_NUMBER`: Must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digit groups.
 * `EMAIL`: Must be a valid `local-part@domain` email address and satisfy Linkline's email validation rules.
 * `ADDRESS`: Must not be blank.
