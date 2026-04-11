@@ -42,10 +42,10 @@ public class MainApp extends Application {
     public static final Version VERSION = new Version(0, 2, 2, true);
     private static final DateTimeFormatter BACKUP_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final String DATA_FILE_CORRUPTED_WARNING_FORMAT =
-            "Data file %s could not be loaded because it contains invalid or malformed data.%n"
+            "Data file %s could not be loaded because it contains invalid JSON or malformed Linkline data.%n"
             + "Linkline started with an empty address book.";
     private static final String DATA_FILE_CORRUPTED_BACKUP_WARNING_FORMAT =
-            "Data file %s could not be loaded because it contains invalid or malformed data.%n"
+            "Data file %s could not be loaded because it contains invalid JSON or malformed Linkline data.%n"
             + "A backup of the original file was created at %s.%n"
             + "Linkline started with an empty address book.";
     private static final String CORRUPTED_BACKUP_FILENAME_FORMAT = "%s.corrupted-%s.bak";

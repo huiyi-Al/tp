@@ -214,9 +214,8 @@ The `Storage` component,
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects
   that belong to the `Model`).
 
-If address book data is malformed or violates model constraints, the storage layer reports the load failure through
-`DataLoadingException`. Linkline's fallback behavior for such startup failures, including creating a backup of the
-corrupted file when possible, is coordinated by `MainApp` rather than by the `Storage` component itself.
+If address book data is malformed or violates model constraints, the storage layer reports the load failure through `DataLoadingException`. Recovery from such startup failures is handled by `MainApp`, which also attempts to create a backup of the corrupted file when possible.
+During deserialization, missing non-required fields such as `notes`, `logs`, and `tags` are defaulted when possible. However, if those fields are present but contain invalid values, they are still treated as malformed data and can cause loading to fail.
 
 ### Common classes
 
@@ -249,12 +248,14 @@ In the documentation, command formats use `--field=[VALUE]` when a command accep
 
 This design keeps most prefix-based commands consistent, but it also explains several current limitations:
 
-* values cannot contain another recognized prefix in the middle unless quoting/escaping is added in future
+* a field value cannot safely include a space followed by another recognized field marker for the same command
 * leading and trailing whitespace in user input cannot be preserved
 * the parser does not currently support quoted arguments or escape sequences
 
-These limitations are acceptable for the current command set, but they are also the reason quoted/escaped CLI syntax is
-listed as a future enhancement.
+This trade-off is intentional. Compared with shorter prefix styles such as `n/` or `p/`, Linkline's current
+`--field=` syntax is less likely to collide with normal user-entered text while still remaining manageable to type
+frequently. Quoted and escaped input remains a planned enhancement because it would remove several of the current
+parsing edge cases and could also make more compact command syntax variants practical in the future.
 
 ### Confirmation-based commands with `PendingAction`
 
@@ -827,13 +828,30 @@ or restore `data/linkline.json` first.
 
 1. Recovering from a corrupted data file
 
-    1. Prerequisites: Launch the app once, execute `list`, and close the app so that `data/linkline.json` exists.
+    1. Prerequisites: Launch the app once, execute `list`, and close the app so that sample `data/linkline.json` exists.
 
-    1. Open `data/linkline.json` and replace the file content with `not valid json` (e.g., change `"name"` to `"names"`).
+    1. Test case: Invalid JSON format.<br>
+       Open `data/linkline.json` and break the JSON syntax, for example by removing a closing brace or quote.
 
     1. Re-launch the app.<br>
-       Expected: Linkline starts with an empty client list, shows a startup warning about malformed data, and creates
-       a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder when permissions allow.
+       Expected: Linkline starts with an empty client list, shows a startup warning about invalid JSON or malformed
+       Linkline data, and creates a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder
+       when permissions allow.
+
+    1. Test case: Valid JSON format but invalid Linkline data schema.<br>
+       Restore the original sample data file, then rename a required key such as `"name"` to `"names"` while keeping
+       the file as valid JSON.
+
+    1. Re-launch the app.<br>
+       Expected: Linkline starts with an empty client list, shows a startup warning about invalid JSON or malformed
+       Linkline data, and creates a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder
+       when permissions allow.
+   
+<box type="info" seamless>
+
+Removing or renaming optional fields such as `notes`, `logs`, or `tags` may still allow the file to load because Linkline defaults missing optional fields during deserialization. To reproduce startup recovery reliably, use invalid JSON syntax, corrupt a required field, or insert an invalid field value.
+
+</box>
 
 ### Navigating and narrowing the displayed list
 
@@ -884,7 +902,7 @@ or restore `data/linkline.json` first.
        Expected: Success message shown. `Ethan Lim` appears in the displayed list in sorted order.
 
     1. Test case:
-       `add --name=Ethan Clone --phone=9786 1234 --email=ethan.clone@example.com --address=Blk 9 Test Road`<br>
+       `add --name=Alex Clone --phone=8743 8807 --email=alex.clone@example.com --address=Blk 9 Test Road`<br>
        Expected: Duplicate-client error shown because phone numbers are compared ignoring formatting.
 
 1. Copying a client's address
@@ -954,12 +972,14 @@ or restore `data/linkline.json` first.
 
 1. Deleting a log
 
-    1. Test case: `logdelete 1 3`<br>
+    1. Prerequisites: Use a fresh app folder or restore the original sample data. Execute `view 1` so that
+       `Alex Yeoh` is selected in the right-hand panel.
+
+    1. Test case: `logdelete 1 2`<br>
        Expected: No log is deleted yet. A confirmation message identifies the latest log of `Alex Yeoh`.
 
-    1. Test case: `logdelete 1 3` immediately again<br>
-       Expected: The newly added log is deleted. The right-hand panel returns to showing two logs, with the latest
-       visible one labeled `Log 2`.
+    1. Test case: `logdelete 1 2` immediately again<br>
+       Expected: The latest log is deleted. The right-hand panel returns to showing one log, labeled `Log 1`.
 
     1. Test case: `logdelete 3 1`<br>
        Expected: Error message shown because the third sample client (`Charlotte Oliveiro`) has no logs.
@@ -1014,14 +1034,18 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 Team size: 5
 
-1. Enhance `find` to search notes and log text: The current `find` command can search names, phone numbers, emails,
-   addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find` with support
-   for fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
+1. Support quoted and escaped CLI field values: Linkline currently treats a space followed by another recognized field
+   marker as the start of a new argument, and it also trims away boundary whitespace. We plan to support quoted input
+   such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`, and `\n` so
+   free-text fields can preserve literal special text more reliably. This would also make more compact syntax variants (e.g., `-n=...`, `n/...`) easier to consider in the future if needed.
+2. Support user-specified service timestamps for logs: `logadd` currently records only the current system date and
+   time at the moment the command is entered. We plan to support storing the actual service datetime separately from
+   the log creation time so users can backdate missed job notes without losing an audit trail.
+3. Add `logedit` for correcting existing log entries: Linkline currently supports `logadd` and `logdelete`, but
+   fixing a mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a
+   `logedit` command so users can update an existing log entry directly while keeping the rest of the client's log
+   history intact.
+4. Extend `find` to search notes and log history: The current `find` command can search names, phone numbers,
+   emails, addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find`
+   with fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
    job records.
-2. Add `logedit` to correct existing log entries: Linkline currently supports `logadd` and `logdelete`, but fixing a
-   mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a `logedit` command
-   so users can update an existing log message directly while keeping the rest of the client's log history intact.
-3. Add quoted and escaped CLI field values: The current parser does not handle quoted values, which makes it awkward
-   to enter text containing prefix-like substrings, preserved whitespace, or special characters. We plan to support
-   quoted input such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`,
-   and `\n`.
