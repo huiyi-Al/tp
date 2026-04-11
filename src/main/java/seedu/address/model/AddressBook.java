@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -176,7 +175,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         tags.remove(key);
 
         updatePersonsWithTag(key, tagsSet -> {
-            tagsSet.remove(key);
+            tagsSet.removeIf(t -> t.isSameTag(key));
             return tagsSet;
         });
     }

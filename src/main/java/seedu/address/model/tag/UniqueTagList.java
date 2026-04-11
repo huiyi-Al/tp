@@ -73,9 +73,13 @@ public class UniqueTagList implements Iterable<Tag> {
      */
     public void remove(Tag toRemove) {
         requireNonNull(toRemove);
-        if (!internalList.remove(toRemove)) {
-            throw new TagNotFoundException();
-        }
+
+        Tag tagInList = internalList.stream()
+                .filter(t -> t.isSameTag(toRemove))
+                .findFirst()
+                .orElseThrow(TagNotFoundException::new);
+
+        internalList.remove(tagInList);
     }
 
     public void setTags(UniqueTagList replacement) {

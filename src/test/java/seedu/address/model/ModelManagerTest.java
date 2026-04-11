@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_AC_SERVICE;
@@ -124,6 +125,21 @@ public class ModelManagerTest {
         // Verify the person in the filtered list reflects the change
         Person alice = modelManager.getFilteredPersonList().get(0);
         assertTrue(alice.getTags().contains(newTag));
+    }
+
+    @Test
+    public void setTag_changeCapitalization_updatesSelection() {
+        Tag oldTag = new Tag("plumbing");
+        Tag newTag = new Tag("Plumbing");
+        Person alice = new PersonBuilder(ALICE).withTags("plumbing").build();
+
+        modelManager.addPerson(alice);
+        modelManager.setSelectedPerson(alice);
+
+        modelManager.setTag(oldTag, newTag);
+
+        Tag updatedTag = modelManager.getSelectedPerson().getValue().getTags().iterator().next();
+        assertEquals("Plumbing", updatedTag.tagName);
     }
 
     @Test
