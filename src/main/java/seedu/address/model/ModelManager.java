@@ -142,9 +142,9 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedTag);
 
         addressBook.setTag(target, editedTag);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     @Override
@@ -152,9 +152,9 @@ public class ModelManager implements Model {
         requireNonNull(target);
 
         addressBook.removeTag(target);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     /**
