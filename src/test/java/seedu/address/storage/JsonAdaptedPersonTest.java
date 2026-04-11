@@ -203,6 +203,18 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_nullOptionalFields_returnsPersonWithDefaults() throws Exception {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        null, null, null);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(new Notes(Notes.DEFAULT_NOTE), modelPerson.getNotes());
+        assertEquals(List.of(), modelPerson.getLogHistory().asUnmodifiableList());
+        assertEquals(Set.of(), modelPerson.getTags());
+    }
+
+    @Test
     public void toModelType_invalidLogs_throwsIllegalValueException() {
         List<JsonAdaptedLogEntry> invalidLogs = new ArrayList<>(VALID_LOGS);
         invalidLogs.add(new JsonAdaptedLogEntry(INVALID_LOG_TIMESTAMP, "Valid log message"));
