@@ -80,6 +80,9 @@ Linkline is optimized for a Command Line Interface (CLI), but still gives you th
 * Commands that do not accept arguments reject extra input.<br>
   Example: `help 123` and `list now` are invalid.
 
+* Commands and prefixes are case-sensitive.<br>
+  Example: `list` is a valid command, but `List` or `LIST` will be rejected. Similarly, `--name=` is recognized, but `--Name=` or `--NAME=` will not work as expected.
+
 * If you are using a PDF version of this document, be careful when copying commands that span multiple lines. Some PDF viewers may remove spaces around line breaks.
 </box>
 
