@@ -430,11 +430,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | solo residential service technician | copy a ready-made edit command for an existing client                                  | update a client record with fewer typing mistakes               |
 | `* *`    | solo residential service technician | append a timestamped service note to a client's record as a visit log                  | track what was done previously and follow up correctly          |
 | `* *`    | solo residential service technician | delete an incorrect log entry                                                          | keep a client's service history accurate                        |
-| `* *`    | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `* *`    | solo residential service technician | attach tags to a client                                                                | recognize customer types or service types at a glance           |
 | `* *`    | solo residential service technician | filter clients by tag                                                                  | narrow down to the relevant subset                              |
 | `* *`    | solo residential service technician | see a "Today's Visits" list when I tag clients with a date and remove them when done   | manage my daily visits quickly                                  |
 | `*`      | new user                            | start with sample data on first launch                                                 | understand how the app is supposed to look without entering everything first |
+| `*`      | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `*`      | solo residential service technician | be prompted before deleting a client record                                            | avoid accidentally losing important past records                |
 | `*`      | solo residential service technician | group tags into larger categories                                                      | categorize clients and services more systematically             |
 | `*`      | solo residential service technician | update or rename a tag globally                                                        | keep my tagging consistent when I change my conventions         |
