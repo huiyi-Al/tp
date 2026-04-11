@@ -45,7 +45,15 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equalsIgnoreCase(otherTag.tagName);
+        return tagName.equals(otherTag.tagName);
+    }
+
+    /**
+     * Returns true if both tags have the same name ignoring case.
+     * Use this for duplicate detection.
+     */
+    public boolean isSameTag(Tag other) {
+        return other != null && tagName.equalsIgnoreCase(other.tagName);
     }
 
     @Override

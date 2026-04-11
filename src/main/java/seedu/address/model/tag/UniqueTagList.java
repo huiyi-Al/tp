@@ -32,7 +32,7 @@ public class UniqueTagList implements Iterable<Tag> {
      */
     public boolean contains(Tag toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::equals);
+        return internalList.stream().anyMatch(toCheck::isSameTag);
     }
 
     /**
@@ -60,7 +60,7 @@ public class UniqueTagList implements Iterable<Tag> {
             throw new TagNotFoundException();
         }
 
-        if (!target.equals(editedTag) && contains(editedTag)) {
+        if (!target.isSameTag(editedTag) && contains(editedTag)) {
             throw new DuplicateTagException();
         }
 

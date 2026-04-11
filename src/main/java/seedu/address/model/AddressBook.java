@@ -187,10 +187,15 @@ public class AddressBook implements ReadOnlyAddressBook {
     private void updatePersonsWithTag(Tag target, UnaryOperator<Set<Tag>> tagTransformer) {
         List<Person> updatedPersonList = persons.asUnmodifiableObservableList().stream()
                 .map(person -> {
-                    if (!person.getTags().contains(target)) {
+                    boolean hasTag = person.getTags().stream().anyMatch(t -> t.isSameTag(target));
+                    if (!hasTag) {
                         return person;
                     }
-                    Set<Tag> updatedTags = new HashSet<>(person.getTags());
+
+                    Set<Tag> updatedTags = person.getTags().stream()
+                            .filter(t -> !t.isSameTag(target))
+                            .collect(Collectors.toSet());
+
                     // tagTransformer decides if we rename or remove the tag
                     tagTransformer.apply(updatedTags);
 
