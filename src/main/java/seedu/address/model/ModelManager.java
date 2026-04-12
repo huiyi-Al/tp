@@ -203,6 +203,8 @@ public class ModelManager implements Model {
     public void addPredicateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         activePredicates.add(predicate);
+        //Solution below inspired by
+        //https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html#and-java.util.function.Predicate-
         Predicate<Person> uberPredicate = activePredicates.stream().reduce(p -> true, Predicate::and);
         filteredPersons.setPredicate(uberPredicate);
     }
