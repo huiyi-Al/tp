@@ -68,6 +68,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         trimmedArgs = MessageFormat.format(" {0}", trimmedArgs);
 
+        // Solution below adapted from https://stackoverflow.com/a/9863752/11906335
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 trimmedArgs, EXPECTED_PREFIXES.toArray(new Prefix[0]));
         logger.fine(MessageFormat.format("ArgumentMultimap created: {0}", argMultimap));
