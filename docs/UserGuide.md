@@ -410,6 +410,13 @@ Examples:
 the field you want, and then press Enter.
 </box>
 
+<box type="warning" seamless>
+
+**Warning:** The `copyedit` command copies the current **displayed index**, not the client's identity.
+- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the copied command may now refer to a different client.
+- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain outdated information.
+</box>
+
 ### Adding a client log: `logadd`
 
 Adds a timestamped log entry to the specified client.
