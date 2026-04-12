@@ -101,7 +101,17 @@ public class CommandTestUtil {
     public static void assertCommandSuccess(Command command, Model actualModel, String expectedMessage,
                                             Model expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage);
+        if (shouldSaveAddressBook(command)) {
+            expectedCommandResult = expectedCommandResult.withSaveRequired();
+        }
         assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel);
+    }
+
+    private static boolean shouldSaveAddressBook(Command command) {
+        return command instanceof AddCommand
+                || command instanceof EditCommand
+                || command instanceof LogAddCommand
+                || command instanceof RenameTagCommand;
     }
 
     /**

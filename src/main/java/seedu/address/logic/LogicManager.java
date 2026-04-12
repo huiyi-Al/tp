@@ -61,7 +61,9 @@ public class LogicManager implements Logic {
                     // User confirmed
                     CommandResult result = pendingAction.complete(model);
                     pendingAction = null;
-                    saveAddressBook();
+                    if (result.shouldSaveAddressBook()) {
+                        saveAddressBook();
+                    }
                     return result;
                 } else {
                     // User typed another command - clear pending
@@ -80,7 +82,9 @@ public class LogicManager implements Logic {
             }
 
             // Normal command result
-            saveAddressBook();
+            if (result.shouldSaveAddressBook()) {
+                saveAddressBook();
+            }
             return result;
 
         } catch (ParseException | CommandException e) {

@@ -79,7 +79,7 @@ public class LogAddCommand extends Command {
         model.setPerson(targetPerson, editedPerson);
         logLogCountTransition(personIndex.getOneBased(), previousLogCount, updatedLogHistory.size());
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, editedPerson.getName())).withSaveRequired();
     }
 
     /**
