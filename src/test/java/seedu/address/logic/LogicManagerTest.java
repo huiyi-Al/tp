@@ -50,7 +50,7 @@ public class LogicManagerTest {
     public Path temporaryFolder;
 
     private Model model = new ModelManager();
-    private Logic logic;
+    private LogicManager logic;
 
     @BeforeEach
     public void setUp() {
@@ -80,6 +80,22 @@ public class LogicManagerTest {
     }
 
     @Test
+    public void execute_readOnlyCommandWithStorageFailure_success() throws Exception {
+        Path prefPath = temporaryFolder.resolve("ExceptionUserPrefs.json");
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
+            @Override
+            public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+                throw DUMMY_IO_EXCEPTION;
+            }
+        };
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        assertCommandSuccess(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
     public void execute_storageThrowsIoException_throwsCommandException() {
         assertCommandFailureForExceptionFromStorage(DUMMY_IO_EXCEPTION, String.format(
                 LogicManager.FILE_OPS_ERROR_FORMAT, DUMMY_IO_EXCEPTION.getMessage()));
@@ -89,6 +105,73 @@ public class LogicManagerTest {
     public void execute_storageThrowsAdException_throwsCommandException() {
         assertCommandFailureForExceptionFromStorage(DUMMY_AD_EXCEPTION, String.format(
                 LogicManager.FILE_OPS_PERMISSION_ERROR_FORMAT, DUMMY_AD_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    public void execute_storageThrowsIoException_marksAddressBookDirty() {
+        MutableJsonAddressBookStorage addressBookStorage =
+                new MutableJsonAddressBookStorage(temporaryFolder.resolve("dirty-linkline.json"));
+        addressBookStorage.setExceptionToThrow(DUMMY_IO_EXCEPTION);
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("dirty-userPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        assertCommandFailureForSavingAmy(String.format(
+                LogicManager.FILE_OPS_ERROR_FORMAT, DUMMY_IO_EXCEPTION.getMessage()));
+        assertTrue(logic.hasUnsavedAddressBookChanges());
+    }
+
+    @Test
+    public void execute_successfulWriteAfterFailedSave_clearsAddressBookDirty() throws Exception {
+        MutableJsonAddressBookStorage addressBookStorage =
+                new MutableJsonAddressBookStorage(temporaryFolder.resolve("recover-linkline.json"));
+        addressBookStorage.setExceptionToThrow(DUMMY_IO_EXCEPTION);
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("recover-userPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        assertCommandFailureForSavingAmy(String.format(
+                LogicManager.FILE_OPS_ERROR_FORMAT, DUMMY_IO_EXCEPTION.getMessage()));
+        assertTrue(logic.hasUnsavedAddressBookChanges());
+
+        addressBookStorage.setExceptionToThrow(null);
+        logic.execute(AddCommand.COMMAND_WORD + " --name=Bob Tan --phone=92345678 "
+                + "--email=bobtan@example.com --address=456 Recovery Street");
+
+        assertFalse(logic.hasUnsavedAddressBookChanges());
+    }
+
+    @Test
+    public void saveAddressBookIfUnsaved_dirtyAndStorageRecovered_savesAndClearsDirty() throws Exception {
+        MutableJsonAddressBookStorage addressBookStorage =
+                new MutableJsonAddressBookStorage(temporaryFolder.resolve("flush-linkline.json"));
+        addressBookStorage.setExceptionToThrow(DUMMY_IO_EXCEPTION);
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("flush-userPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        assertCommandFailureForSavingAmy(String.format(
+                LogicManager.FILE_OPS_ERROR_FORMAT, DUMMY_IO_EXCEPTION.getMessage()));
+        assertTrue(logic.hasUnsavedAddressBookChanges());
+
+        addressBookStorage.setExceptionToThrow(null);
+        logic.saveAddressBookIfUnsaved();
+
+        assertFalse(logic.hasUnsavedAddressBookChanges());
+        assertEquals(2, addressBookStorage.getSaveCallCount());
+    }
+
+    @Test
+    public void saveAddressBookIfUnsaved_clean_doesNotAttemptSave() throws Exception {
+        MutableJsonAddressBookStorage addressBookStorage =
+                new MutableJsonAddressBookStorage(temporaryFolder.resolve("clean-linkline.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("clean-userPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        logic.saveAddressBookIfUnsaved();
+
+        assertEquals(0, addressBookStorage.getSaveCallCount());
     }
 
     @Test
@@ -188,6 +271,15 @@ public class LogicManagerTest {
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
 
+    private void assertCommandFailureForSavingAmy(String expectedMessage) {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + NOTES_DESC_AMY;
+        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+        ModelManager expectedModel = new ModelManager();
+        expectedModel.addPerson(expectedPerson);
+        assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+    }
+
     @Test
     public void execute_delete_confirmationFlow() throws Exception {
         Person personToDelete = new PersonBuilder(AMY).withTags().build();
@@ -215,5 +307,31 @@ public class LogicManagerTest {
                 Messages.formatBasic(personToDelete)), secondResult.getFeedbackToUser());
 
         assertFalse(secondResult.hasPendingAction());
+    }
+
+    private static class MutableJsonAddressBookStorage extends JsonAddressBookStorage {
+        private IOException exceptionToThrow;
+        private int saveCallCount;
+
+        private MutableJsonAddressBookStorage(Path filePath) {
+            super(filePath);
+        }
+
+        private void setExceptionToThrow(IOException exceptionToThrow) {
+            this.exceptionToThrow = exceptionToThrow;
+        }
+
+        private int getSaveCallCount() {
+            return saveCallCount;
+        }
+
+        @Override
+        public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+            saveCallCount++;
+            if (exceptionToThrow != null) {
+                throw exceptionToThrow;
+            }
+            super.saveAddressBook(addressBook, filePath);
+        }
     }
 }

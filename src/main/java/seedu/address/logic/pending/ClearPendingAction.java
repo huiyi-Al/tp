@@ -38,7 +38,7 @@ public class ClearPendingAction implements PendingAction {
     @Override
     public CommandResult complete(Model model) throws CommandException {
         model.setAddressBook(new AddressBook());
-        return new CommandResult(ClearCommand.MESSAGE_SUCCESS);
+        return new CommandResult(ClearCommand.MESSAGE_SUCCESS).withSaveRequired();
     }
 
     @Override

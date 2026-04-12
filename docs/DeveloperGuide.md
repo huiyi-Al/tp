@@ -150,8 +150,9 @@ How the `Logic` component works:
 1. The command may communicate with the `Model` during execution to read or modify in-memory data.
 1. The result of the command execution is encapsulated as a `CommandResult` object and returned back from `Logic`.
 1. If the `CommandResult` carries a `PendingAction`, `LogicManager` stores it and waits for a matching follow-up
-   command instead of completing the action immediately. Otherwise, `LogicManager` persists the updated address book
-   through `Storage` before returning the result to the UI.
+   command instead of completing the action immediately.
+1. If the `CommandResult` requires an address book save, `LogicManager` persists the updated address book through
+   `Storage` before returning the result to the UI.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -272,12 +273,12 @@ The first execution of such a command does not immediately mutate the model. Ins
 
 1. The command validates the request and creates a concrete `PendingAction` object.
 1. The command returns a `CommandResult` carrying both the confirmation message and the pending action.
-1. `LogicManager` stores that pending action instead of saving data immediately.
+1. `LogicManager` stores that pending action instead of attempting any address book save at that stage.
 
 When the next user command arrives, `LogicManager` checks whether it matches the stored pending action:
 
-* If it matches, `LogicManager` calls `PendingAction#complete(model)`, clears the pending action, and then saves the
-  updated address book.
+* If it matches, `LogicManager` calls `PendingAction#complete(model)`, clears the pending action, and then applies the
+  normal save policy to the returned `CommandResult`.
 * If it does not match, `LogicManager` discards the pending action and executes the new command normally.
 * If parsing or command execution fails, `LogicManager` also clears the pending action.
 
@@ -362,6 +363,27 @@ Instead, `LogDeleteCommand` converts the displayed log number into the internal 
 `internal index = total logs - display index`
 
 This conversion ensures that the command deletes the same log entry that the user sees labeled in the UI.
+
+### Persistence policy
+
+Linkline uses separate persistence policies for address book data and user preferences.
+
+#### Address book data
+
+* Successful commands that modify persisted address book data mark their `CommandResult` as save-required.
+* `LogicManager` saves `data/linkline.json` only for save-required results. Read-only commands, failed commands, and
+  first-stage confirmation results (i.e., the `PendingAction`s) do not trigger an address book save.
+* If such a save fails after the in-memory model has already changed, `LogicManager` records that unsaved address book
+  changes are still present.
+* A later successful address book save clears that unsaved state.
+* On graceful shutdown, `MainApp.stop()` makes one best-effort retry only if that unsaved state is still present. Failing of which, it logs the failure and exits without further retries (i.e., the file is not saved).
+
+#### User preferences
+
+* GUI preferences such as window size and position are saved to `preferences.json` on graceful shutdown instead of
+  after every command.
+* This is acceptable because preferences are session-level state for the next run, while `linkline.json` stores the
+  primary user data that should be saved immediately after successful data-changing commands.
 
 ### Field validation constraints
 
@@ -828,7 +850,9 @@ or restore `data/linkline.json` first.
 
 1. Recovering from a corrupted data file
 
-    1. Prerequisites: Launch the app once, execute `list`, and close the app so that sample `data/linkline.json` exists.
+    1. Prerequisites: Launch the app once, execute any successful data-changing command such as
+       `add --name=Temp User --phone=91234567 --email=temp@example.com --address=123 Test Road`, and close the app so
+       that `data/linkline.json` exists.
 
     1. Test case: Invalid JSON format.<br>
        Open `data/linkline.json` and break the JSON syntax, for example by removing a closing brace or quote.
@@ -839,8 +863,8 @@ or restore `data/linkline.json` first.
        when permissions allow.
 
     1. Test case: Valid JSON format but invalid Linkline data schema.<br>
-       Restore the original sample data file, then rename a required key such as `"name"` to `"names"` while keeping
-       the file as valid JSON.
+       Restore a valid `data/linkline.json` first, then rename a required key such as `"name"` to `"names"` while
+       keeping the file as valid JSON.
 
     1. Re-launch the app.<br>
        Expected: Linkline starts with an empty client list, shows a startup warning about invalid JSON or malformed
@@ -1022,6 +1046,7 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 | **Multiple entity types** | AB3 manages only `Person` and `Tag`. Linkline adds `LogHistory`, `LogEntry`, and `LogMessage` as first-class entities with their own validation, storage, and UI representation. |
 | **Complex CLI syntax** | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                       |
 | **Two-step confirmation** | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                        |
+| **Selective persistence** | Reworked save behavior so only commands that modify `linkline.json` trigger address book writes, while failed writes leave a tracked dirty state for one best-effort retry on graceful exit. |
 | **Duplicate detection** | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                  |
 | **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `linkline.json` without auto-overwriting.                                                                     |
 | **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |

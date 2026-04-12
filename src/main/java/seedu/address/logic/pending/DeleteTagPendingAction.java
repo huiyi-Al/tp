@@ -55,7 +55,8 @@ public class DeleteTagPendingAction implements PendingAction {
     @Override
     public CommandResult complete(Model model) throws CommandException {
         model.deleteTag(tagToDelete);
-        return new CommandResult(String.format(DeleteTagCommand.MESSAGE_DELETE_TAG_SUCCESS, tagToDelete.tagName));
+        return new CommandResult(String.format(DeleteTagCommand.MESSAGE_DELETE_TAG_SUCCESS,
+                tagToDelete.tagName)).withSaveRequired();
     }
 
     @Override
