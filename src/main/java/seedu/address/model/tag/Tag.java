@@ -11,7 +11,7 @@ public class Tag {
 
     public static final String MESSAGE_CONSTRAINTS = "Tag names can take any values between 1 and 50 characters long "
             + "and should not be blank";
-    public static final String VALIDATION_REGEX = "^\\S[\\p{Print}]{0,49}$";
+    public static final String VALIDATION_REGEX = "^(?!\\s+$).{1,50}$";
 
     public final String tagName;
 

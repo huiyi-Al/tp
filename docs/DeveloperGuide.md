@@ -394,15 +394,15 @@ the length-based limits below apply after boundary whitespace has been removed. 
 the client index from the free-text log message, then passes the message through `ParserUtil.parseLogMessage`, so log
 messages follow the same trimming rule as other parser-handled fields.
 
-| Field        | Constraint summary                                                                                                                            |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| Field        | Constraint summary                                                                                                                           |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | `Name`       | 1 to 100 Unicode code points, and cannot be blank (`Name#VALIDATION_REGEX`).                                                       |
-| `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
+| `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                   |
 | `Email`      | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
-| `Address`    | Must not be blank (first non-whitespace character required).                                                                                  |
-| `Tag`        | 1 to 50 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
-| `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
-| `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                             |
+| `Address`    | Must not be blank (first non-whitespace character required).                                                                                 |
+| `Tag`        | 1 to 50 Unicode code points, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
+| `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                      |
+| `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                            |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.
 
