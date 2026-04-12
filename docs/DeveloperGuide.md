@@ -1039,7 +1039,7 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 <box type="info" seamless>
 
-### Difficulty Level & Challenges
+### Challenges
 
 | **Challenge** | **Description**                                                                                                                                                               |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
