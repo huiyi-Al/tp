@@ -99,7 +99,7 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 
 The following constraints apply whenever these field values are entered in commands.
 
-* `NAME`: 1 to 100 printable characters. Must not be blank.
+* `NAME`: 1 to 100 characters. Must not be blank.
 * `PHONE_NUMBER`: Must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digit groups.
 * `EMAIL`: Must be a valid `local-part@domain` email address. Must not exceed 320 characters. The local-part must be
   between 1 and 64 characters. The local-part should only contain alphanumeric characters and these special characters,

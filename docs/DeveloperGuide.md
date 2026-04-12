@@ -374,7 +374,7 @@ messages follow the same trimming rule as other parser-handled fields.
 
 | Field        | Constraint summary                                                                                                                            |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| `Name`       | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`).                                                                 |
+| `Name`       | 1 to 100 Unicode code points, and cannot be blank (`Name#VALIDATION_REGEX`).                                                       |
 | `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
 | `Email`      | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
 | `Address`    | Must not be blank (first non-whitespace character required).                                                                                  |
