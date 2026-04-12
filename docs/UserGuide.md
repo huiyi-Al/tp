@@ -99,9 +99,15 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 
 The following constraints apply whenever these field values are entered in commands.
 
-* `NAME`: 1 to 100 printable characters. Must not be blank.
+* `NAME`: 1 to 100 characters. Must not be blank.
 * `PHONE_NUMBER`: Must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digit groups.
-* `EMAIL`: Must be a valid `local-part@domain` email address and satisfy Linkline's email validation rules.
+* `EMAIL`: Must be a valid `local-part@domain` email address. Must not exceed 320 characters. The local-part must be
+  between 1 and 64 characters. The local-part should only contain alphanumeric characters and these special characters,
+  excluding the parentheses, (!#$%&'*+/=?^_`{|}~.-). The local part may not start or end with special characters and
+  special characters cannot appear consecutively. The domain is made up of domain labels separated by periods and must
+  not exceed 255 characters. The domain name must end with a domain label at least 2 characters long. Each domain label
+  must start and end with alphanumeric characters, not exceed 63 characters, and consist of alphanumeric characters
+  separated only by hyphens, if any.
 * `ADDRESS`: Must not be blank.
 * `TAG`: 1 to 50 printable characters. Must not be blank.
 * `NOTES`: 0 to 200 characters.
@@ -111,9 +117,9 @@ The following constraints apply whenever these field values are entered in comma
 
 <box type="tip" seamless>
 
-**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number. Whenever a command changes
-which clients are shown, whether by modifying data, resetting the list, or narrowing it, the displayed list remains
-sorted in that order.
+**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number (by numeric digits only – spaces
+and hyphens are ignored). Whenever a command changes which clients are shown, whether by modifying data, resetting the
+list, or narrowing it, the displayed list remains sorted in that order.
 </box>
 
 ### Viewing help: `help`
@@ -145,6 +151,20 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 * Linkline rejects duplicates. Two clients are considered duplicates if they share the same email address (
   case-insensitive) or the same phone number after ignoring spaces and hyphens.
 * After a successful `add`, Linkline shows the full client list again.
+
+<box type="tip" seamless>
+
+**Note:** Only one primary phone number is supported per client. If you need to store additional numbers (e.g., home,
+office), you may add them in the `notes` field. However, please note that numbers stored in `notes` will **not** be
+included in search results when using the `find` command.
+</box>
+
+<box type="tip" seamless>
+
+**Note on country codes:** Country codes (e.g., `+65`) are not officially supported. As a workaround, you can prefix the
+country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detection ignores hyphens and spaces, so
+`65-91234567`, `65-9123-4567`, and `6591234567` will be treated as the same number.
+</box>
 
 Examples:
 
@@ -307,6 +327,9 @@ find [--name=SUBNAME]... [--phone=SUBNUMBER]... [--email=SUBEMAIL]... [--address
 * Within a single `find` command, Linkline uses `OR` matching across all supplied queries and fields.<br>
   Example: `find --name=Alex --tag=Plumbing` returns clients whose name matches `Alex` **or** whose tag matches
   `Plumbing`.
+* For the `phone` field specifically, queries will match clients regardless of whether hyphens and spaces are present
+  or omitted in their actual phone field.
+  Example: `find --phone=91278492` will match clients with phone numbers `91278492`, `9127-8492`, `9127 8492`.
 * All matching is case-insensitive substring matching, including tags.<br>
   Example: `--tag=Electrical` matches the tag `Electrical Wiring`.
 * `find --name=Alice Bob` searches for the single substring `Alice Bob`. To search for `Alice` and `Bob` separately,
@@ -381,6 +404,15 @@ Examples:
 * `copyaddr 1`
 * `find --tag=Plumbing` followed by `copyaddr 2`
 
+<box type="warning" seamless>
+
+**Warning:** The `copyaddr` command copies the address based on the current displayed index. The copied address may
+become outdated if:
+
+- The client list changes (e.g., via `list` or `find`), causing the index to point to a different client.
+- The client's address is edited after copying.
+  </box>
+
 ### Copying an edit command template: `copyedit`
 
 Copies a ready-to-edit `edit` command for the specified client to your system clipboard.
@@ -408,6 +440,20 @@ Examples:
 
 **Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only
 the field you want, and then press Enter.
+<<<<<<< HEAD
+=======
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** The `copyedit` command copies the current **displayed index**, not the client's identity.
+
+- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the
+  copied command may now refer to a different client.
+- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
+  outdated information.
+
+> > > > > > > master
 </box>
 
 ### Adding a client log: `logadd`

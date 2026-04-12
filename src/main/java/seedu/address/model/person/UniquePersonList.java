@@ -155,10 +155,17 @@ public class UniquePersonList implements Iterable<Person> {
     /**
      * Sorts the internal list based on the project's lexicographical requirements.
      * 1. Normalized name (case-insensitive) ascending.
-     * 2. Normalized phone ascending (tie-breaker).
+     * 2. Normalized phone ascending (tie-breaker), ignoring spaces and hyphens
      */
     private void sortInternalList() {
         internalList.sort(Comparator.comparing((Person p) -> p.getName().fullName.toLowerCase())
-                .thenComparing(p -> p.getPhone().value));
+                .thenComparing(p -> extractDigits(p.getPhone().value)));
+    }
+
+    /**
+     * Extracts only numeric digits from a phone string.
+     */
+    private String extractDigits(String phoneString) {
+        return phoneString.replaceAll("[^0-9]", "");
     }
 }

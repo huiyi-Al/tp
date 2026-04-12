@@ -16,7 +16,7 @@ public class Name {
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "(?s)(?!\\s*$)[\\p{Print}]{1,100}";
+    public static final String VALIDATION_REGEX = "^(?!\\s+$).{1,100}$";
 
     public final String fullName;
 

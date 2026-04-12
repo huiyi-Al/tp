@@ -21,7 +21,7 @@ public class FilterTagCommand extends Command {
             + "Returns clients with all specified tags. Commands cannot have a mix of specific tags and blank tags. "
             + "If there is a blank tag, clients with no tags are filtered.\n"
             + "Parameters: " + PREFIX_TAG + "TAG [" + PREFIX_TAG + "MORE_TAGS]...\n"
-            + "Example: " + COMMAND_WORD + PREFIX_TAG + "AC-Service " + PREFIX_TAG + "Plumbing";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "AC-Service " + PREFIX_TAG + "Plumbing";
 
     public static final String MESSAGE_MIX_COMMAND =
             "A mix of specific tags and blank tags are not allowed in filtertag.";
