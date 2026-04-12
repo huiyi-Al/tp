@@ -94,7 +94,7 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 
 * If you are using a PDF version of this document, be careful when copying commands that span multiple lines. Some PDF
   viewers may remove spaces around line breaks.
-  </box>
+</box>
 
 <box type="info" seamless>
 
@@ -274,7 +274,7 @@ list
 * This command resets any previous `find` or `filtertag`.
 * This command does not accept any arguments.
 
-Example result after an `list` command:
+Example result after a `list` command:
 ![list command result](images/listCommandResult.png)
 
 ### Viewing client details: `view`
@@ -354,7 +354,7 @@ Example result after a `find` command:
 Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `AND` matching
 across all supplied queries and fields
 
-`filtertag` will only search based on the clients currently displayed on the list on the left side of the program. \
+`filtertag` will only search based on the clients currently in the displayed list. \
 Both `find` and `filtertag` commands can be used to narrow down the current list.
 
 Use `list` when you want to search from the full client list again.
@@ -441,8 +441,6 @@ Examples:
 
 **Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only
 the field you want, and then press Enter.
-<<<<<<< HEAD
-=======
 </box>
 
 <box type="warning" seamless>
@@ -453,8 +451,6 @@ the field you want, and then press Enter.
   copied command may now refer to a different client.
 - If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
   outdated information.
-
-> > > > > > > master
 </box>
 
 ### Adding a client log: `logadd`
