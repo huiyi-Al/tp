@@ -142,9 +142,9 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedTag);
 
         addressBook.setTag(target, editedTag);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     @Override
@@ -152,9 +152,9 @@ public class ModelManager implements Model {
         requireNonNull(target);
 
         addressBook.removeTag(target);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     /**
@@ -163,7 +163,7 @@ public class ModelManager implements Model {
      */
     private void refreshSelectedPersonIfTagAffected(Tag target) {
         Person currentlySelected = selectedPerson.getValue();
-        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
+        if (currentlySelected != null && currentlySelected.getTags().stream().anyMatch(t -> t.isSameTag(target))) {
             selectedPerson.setValue(null);
             getFilteredPersonList().stream()
                     .filter(p -> p.isSamePerson(currentlySelected))
