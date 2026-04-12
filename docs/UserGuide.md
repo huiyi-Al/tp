@@ -169,7 +169,9 @@ country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detect
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
-* `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
+*
+
+`add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
 Example result after a `add` command:
 ![add command result](images/addCommandResult.png)
@@ -304,8 +306,12 @@ Examples:
 ### Finding clients by details: `find`
 
 Searches the currently displayed list for clients whose name, phone number, email address, physical address, or tag
-matches at least one supplied query. Like `filtertag`, this command continues narrowing the current list; use `list`
-when you want to search from the full client list again.
+matches at least one supplied query. Uses `OR` matching across all supplied queries and fields.
+
+`find` will only search based on the clients currently in the displayed list. \
+Both `find` and `filtertag` commands can be used to narrow down the current list. \
+
+Use `list` when you want to search from the full client list again.
 
 Format:
 
@@ -344,8 +350,13 @@ Example result after a `find` command:
 
 ### Filtering clients by tag: `filtertag`
 
-Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. Like `find`, this
-command continues narrowing the current list; use `list` when you want to return to the full client list.
+Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `AND` matching
+across all supplied queries and fields
+
+`filtertag` will only search based on the clients currently displayed on the list on the left side of the program. \
+Both `find` and `filtertag` commands can be used to narrow down the current list.
+
+Use `list` when you want to search from the full client list again.
 
 Format:
 
@@ -397,9 +408,10 @@ Examples:
 
 **Warning:** The `copyaddr` command copies the address based on the current displayed index. The copied address may
 become outdated if:
+
 - The client list changes (e.g., via `list` or `find`), causing the index to point to a different client.
 - The client's address is edited after copying.
-</box>
+  </box>
 
 ### Copying an edit command template: `copyedit`
 
@@ -428,15 +440,20 @@ Examples:
 
 **Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only
 the field you want, and then press Enter.
+<<<<<<< HEAD
+=======
 </box>
 
 <box type="warning" seamless>
 
 **Warning:** The `copyedit` command copies the current **displayed index**, not the client's identity.
+
 - If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the
-copied command may now refer to a different client.
+  copied command may now refer to a different client.
 - If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
-outdated information.
+  outdated information.
+
+> > > > > > > master
 </box>
 
 ### Adding a client log: `logadd`
