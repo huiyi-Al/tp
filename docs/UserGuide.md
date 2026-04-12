@@ -152,6 +152,20 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
   case-insensitive) or the same phone number after ignoring spaces and hyphens.
 * After a successful `add`, Linkline shows the full client list again.
 
+<box type="tip" seamless>
+
+**Note:** Only one primary phone number is supported per client. If you need to store additional numbers (e.g., home,
+office), you may add them in the `notes` field. However, please note that numbers stored in `notes` will **not** be
+included in search results when using the `find` command.
+</box>
+
+<box type="tip" seamless>
+
+**Note on country codes:** Country codes (e.g., `+65`) are not officially supported. As a workaround, you can prefix the
+country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detection ignores hyphens and spaces, so
+`65-91234567`, `65-9123-4567`, and `6591234567` will be treated as the same number.
+</box>
+
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
