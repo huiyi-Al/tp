@@ -120,9 +120,9 @@ The following constraints apply whenever these field values are entered in comma
 
 <box type="tip" seamless>
 
-**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number. Whenever a command changes
-which clients are shown, whether by modifying data, resetting the list, or narrowing it, the displayed list remains
-sorted in that order.
+**Tip:** Linkline keeps the displayed client list sorted by name, then by phone number (by numeric digits only – spaces
+and hyphens are ignored). Whenever a command changes which clients are shown, whether by modifying data, resetting the
+list, or narrowing it, the displayed list remains sorted in that order.
 </box>
 
 ### Viewing help: `help`
@@ -154,6 +154,20 @@ add --name=NAME --phone=PHONE_NUMBER --email=EMAIL --address=ADDRESS [--notes=NO
 * Linkline rejects duplicates. Two clients are considered duplicates if they share the same email address (
   case-insensitive) or the same phone number after ignoring spaces and hyphens.
 * After a successful `add`, Linkline shows the full client list again.
+
+<box type="tip" seamless>
+
+**Note:** Only one primary phone number is supported per client. If you need to store additional numbers (e.g., home,
+office), you may add them in the `notes` field. However, please note that numbers stored in `notes` will **not** be
+included in search results when using the `find` command.
+</box>
+
+<box type="tip" seamless>
+
+**Note on country codes:** Country codes (e.g., `+65`) are not officially supported. As a workaround, you can prefix the
+country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detection ignores hyphens and spaces, so
+`65-91234567`, `65-9123-4567`, and `6591234567` will be treated as the same number.
+</box>
 
 Examples:
 
@@ -293,8 +307,12 @@ Examples:
 ### Finding clients by details: `find`
 
 Searches the currently displayed list for clients whose name, phone number, email address, physical address, or tag
-matches at least one supplied query. Like `filtertag`, this command continues narrowing the current list; use `list`
-when you want to search from the full client list again.
+matches at least one supplied query. Uses `OR` matching across all supplied queries and fields.
+
+`find` will only search based on the clients currently in the displayed list. \
+Both `find` and `filtertag` commands can be used to narrow down the current list. \
+
+Use `list` when you want to search from the full client list again.
 
 Format:
 
@@ -333,8 +351,13 @@ Example result after a `find` command:
 
 ### Filtering clients by tag: `filtertag`
 
-Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. Like `find`, this
-command continues narrowing the current list; use `list` when you want to return to the full client list.
+Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `AND` matching
+across all supplied queries and fields
+
+`filtertag` will only search based on the clients currently displayed on the list on the left side of the program. \
+Both `find` and `filtertag` commands can be used to narrow down the current list.
+
+Use `list` when you want to search from the full client list again.
 
 Format:
 
@@ -382,6 +405,15 @@ Examples:
 * `copyaddr 1`
 * `find --tag=Plumbing` followed by `copyaddr 2`
 
+<box type="warning" seamless>
+
+**Warning:** The `copyaddr` command copies the address based on the current displayed index. The copied address may
+become outdated if:
+
+- The client list changes (e.g., via `list` or `find`), causing the index to point to a different client.
+- The client's address is edited after copying.
+  </box>
+
 ### Copying an edit command template: `copyedit`
 
 Copies a ready-to-edit `edit` command for the specified client to your system clipboard.
@@ -409,13 +441,20 @@ Examples:
 
 **Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only
 the field you want, and then press Enter.
+<<<<<<< HEAD
+=======
 </box>
 
 <box type="warning" seamless>
 
 **Warning:** The `copyedit` command copies the current **displayed index**, not the client's identity.
-- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the copied command may now refer to a different client.
-- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain outdated information.
+
+- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the
+  copied command may now refer to a different client.
+- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
+  outdated information.
+
+> > > > > > > master
 </box>
 
 ### Adding a client log: `logadd`
