@@ -542,7 +542,21 @@ exit
 
 ### Saving the data
 
-Linkline saves data to disk automatically after any command that changes the data. There is no manual save command.
+Linkline saves address book data to `data/linkline.json` automatically after each successful command that changes
+persisted data. Read-only commands such as `list`, `find`, `view`, `help`, and clipboard commands do not update this
+file.
+
+If an address book save fails after a data-changing command, Linkline reports the error immediately. If those unsaved
+changes are still in memory when Linkline closes normally, it retries the save once. There is no manual save command.
+
+<box type="tip" seamless>
+
+**Tip:** If Linkline reports a save error after a data-changing command, try to fix that storage problem before
+exiting. The shutdown retry is best-effort only, so if it also fails, the unsaved address book changes in memory are
+lost when the app closes.
+</box>
+
+Window preferences such as size and position are saved separately to `preferences.json` when Linkline closes normally.
 
 ### Editing the data file
 
