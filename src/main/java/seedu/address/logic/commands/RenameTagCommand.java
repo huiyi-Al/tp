@@ -52,7 +52,7 @@ public class RenameTagCommand extends Command {
 
         model.setTag(oldTag, newTag);
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, oldTag.tagName, newTag.tagName));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, oldTag.tagName, newTag.tagName)).withSaveRequired();
     }
 
     @Override

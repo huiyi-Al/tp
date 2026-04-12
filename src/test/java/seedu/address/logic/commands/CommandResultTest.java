@@ -22,6 +22,9 @@ public class CommandResultTest {
         assertTrue(commandResult.equals(new CommandResult("feedback")));
         assertTrue(commandResult.equals(new CommandResult("feedback", false, false)));
 
+        // same values including save flag -> returns true
+        assertTrue(commandResult.equals(new CommandResult("feedback")));
+
         // same object -> returns true
         assertTrue(commandResult.equals(commandResult));
 
@@ -39,6 +42,9 @@ public class CommandResultTest {
 
         // different exit value -> returns false
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
+
+        // different shouldSaveAddressBook value -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback").withSaveRequired()));
     }
 
     @Test
@@ -56,6 +62,9 @@ public class CommandResultTest {
 
         // different exit value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true).hashCode());
+
+        // different shouldSaveAddressBook value -> returns different hashcode
+        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback").withSaveRequired().hashCode());
     }
 
     @Test
@@ -63,8 +72,17 @@ public class CommandResultTest {
         CommandResult commandResult = new CommandResult("feedback");
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
-                + ", exit=" + commandResult.isExit() + ", pendingAction=" + commandResult.getPendingAction() + "}";
+                + ", exit=" + commandResult.isExit() + ", shouldSaveAddressBook="
+                + commandResult.shouldSaveAddressBook() + ", pendingAction=" + commandResult.getPendingAction() + "}";
         assertEquals(expected, commandResult.toString());
+    }
+
+    @Test
+    public void withSaveRequired() {
+        CommandResult commandResult = new CommandResult("feedback").withSaveRequired();
+
+        assertTrue(commandResult.shouldSaveAddressBook());
+        assertEquals(commandResult, commandResult.withSaveRequired());
     }
 
     @Test
@@ -75,7 +93,8 @@ public class CommandResultTest {
 
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
-                + ", exit=" + commandResult.isExit() + ", pendingAction=" + commandResult.getPendingAction() + "}";
+                + ", exit=" + commandResult.isExit() + ", shouldSaveAddressBook="
+                + commandResult.shouldSaveAddressBook() + ", pendingAction=" + commandResult.getPendingAction() + "}";
         assertEquals(expected, commandResult.toString());
     }
 }

@@ -35,6 +35,7 @@ public class LogicManager implements Logic {
     private final AddressBookParser addressBookParser;
 
     private PendingAction pendingAction = null;
+    private boolean hasUnsavedAddressBookChanges = false;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -61,7 +62,7 @@ public class LogicManager implements Logic {
                     // User confirmed
                     CommandResult result = pendingAction.complete(model);
                     pendingAction = null;
-                    saveAddressBook();
+                    saveAddressBookIfRequired(result);
                     return result;
                 } else {
                     // User typed another command - clear pending
@@ -80,7 +81,7 @@ public class LogicManager implements Logic {
             }
 
             // Normal command result
-            saveAddressBook();
+            saveAddressBookIfRequired(result);
             return result;
 
         } catch (ParseException | CommandException e) {
@@ -90,14 +91,33 @@ public class LogicManager implements Logic {
         }
     }
 
-    private void saveAddressBook() throws CommandException {
+    private void saveAddressBookIfRequired(CommandResult result) throws CommandException {
+        if (!result.shouldSaveAddressBook()) {
+            return;
+        }
         try {
             storage.saveAddressBook(model.getAddressBook());
+            hasUnsavedAddressBookChanges = false;
         } catch (AccessDeniedException e) {
+            hasUnsavedAddressBookChanges = true;
             throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
         } catch (IOException ioe) {
+            hasUnsavedAddressBookChanges = true;
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
+    }
+
+    @Override
+    public void saveAddressBookIfUnsaved() throws IOException {
+        if (!hasUnsavedAddressBookChanges) {
+            return;
+        }
+        storage.saveAddressBook(model.getAddressBook());
+        hasUnsavedAddressBookChanges = false;
+    }
+
+    boolean hasUnsavedAddressBookChanges() {
+        return hasUnsavedAddressBookChanges;
     }
 
     @Override
