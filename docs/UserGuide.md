@@ -40,19 +40,19 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 
 1. In the main window shown above:
 
-    * The command box is at the top.
-    * The result display is directly below the command box.
-    * The left panel shows the current client list with each client's index, name, and phone number.
-    * The right panel shows the selected client's full details, including notes and service logs.
+   * The command box is at the top.
+   * The result display is directly below the command box.
+   * The left panel shows the current client list with each client's index, name, and phone number.
+   * The right panel shows the selected client's full details, including notes and service logs.
 
 1. Type a command in the command box and press Enter to execute it. Try these commands first:
 
-    * `list`
-    * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01`
-    * `view 1`
-    * `find --tag=AC-Service`
-    * `copyaddr 1`
-    * `help`
+   * `list`
+   * `add --name=John Doe --phone=98765432 --email=johnd@example.com --address=John street, block 123, #01-01`
+   * `view 1`
+   * `find --tag=AC-Service`
+   * `copyaddr 1`
+   * `help`
 
 1. Refer to the [Features](#features) below for the full command list, description, and examples.
 
@@ -89,9 +89,12 @@ Interface (GUI). If you can type quickly, Linkline can help you manage client re
 * Commands that do not accept arguments reject extra input.<br>
   Example: `help 123` and `list now` are invalid.
 
+* Commands and prefixes are case-sensitive.<br>
+  Example: `list` is a valid command, but `List` or `LIST` will be rejected. Similarly, `--name=` is recognized, but `--Name=` or `--NAME=` will not work as expected.
+
 * If you are using a PDF version of this document, be careful when copying commands that span multiple lines. Some PDF
   viewers may remove spaces around line breaks.
-  </box>
+</box>
 
 <box type="info" seamless>
 
@@ -169,11 +172,9 @@ country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detect
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
-*
+* `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
-`add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
-
-Example result after a `add` command:
+Example result after an `add` command:
 ![add command result](images/addCommandResult.png)
 
 ### Editing a client: `edit`
@@ -226,8 +227,8 @@ Examples:
 * `delete 1` followed by `find --name=Bernice`
     * The pending deletion is canceled by the `find` command.
 * `delete 1`
-    * Shows confirmation message for deleting the client at index 1.
-    * If you enter `delete 1` again, the client at index 1 is deleted.
+  * Shows confirmation message for deleting the client at index 1.
+  * If you enter `delete 1` again, the client at index 1 is deleted.
 
 Example result after a `delete` command (with confirmation):
 ![pending delete command result](images/pendingDeleteCommandResult.png)
@@ -353,7 +354,7 @@ Example result after a `find` command:
 Shows only clients in the currently displayed list whose tags satisfy the supplied tag filter. uses `AND` matching
 across all supplied queries and fields
 
-`filtertag` will only search based on the clients currently displayed on the list on the left side of the program. \
+`filtertag` will only search based on the clients currently in the displayed list. \
 Both `find` and `filtertag` commands can be used to narrow down the current list.
 
 Use `list` when you want to search from the full client list again.
@@ -440,8 +441,6 @@ Examples:
 
 **Tip:** A common workflow for editing is `copyedit INDEX`, paste the copied command into the command box, change only
 the field you want, and then press Enter.
-<<<<<<< HEAD
-=======
 </box>
 
 <box type="warning" seamless>
@@ -452,8 +451,6 @@ the field you want, and then press Enter.
   copied command may now refer to a different client.
 - If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
   outdated information.
-
-> > > > > > > master
 </box>
 
 ### Adding a client log: `logadd`

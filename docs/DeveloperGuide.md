@@ -49,13 +49,13 @@ Given below is a quick overview of main components and how they interact with ea
 **`Main`** (consisting of classes `Main` and `MainApp`) is in charge of the app launch and shut down.
 
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+* At shutdown, it shuts down the other components and invokes cleanup methods where necessary.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
+* [**`UI`**](#ui-component): The UI of the app.
 * [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
+* [**`Model`**](#model-component): Holds the data of the app in memory.
 * [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
@@ -80,7 +80,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using
 the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component
-through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the
+through its interface rather than the concrete class (reason: to prevent outside components being coupled to the
 implementation of a component), as illustrated in the (partial) class diagram below.
 
 <puml src="diagrams/ComponentManagers.puml" width="300" />
@@ -452,11 +452,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | solo residential service technician | copy a ready-made edit command for an existing client                                  | update a client record with fewer typing mistakes               |
 | `* *`    | solo residential service technician | append a timestamped service note to a client's record as a visit log                  | track what was done previously and follow up correctly          |
 | `* *`    | solo residential service technician | delete an incorrect log entry                                                          | keep a client's service history accurate                        |
-| `* *`    | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `* *`    | solo residential service technician | attach tags to a client                                                                | recognize customer types or service types at a glance           |
 | `* *`    | solo residential service technician | filter clients by tag                                                                  | narrow down to the relevant subset                              |
 | `* *`    | solo residential service technician | see a "Today's Visits" list when I tag clients with a date and remove them when done   | manage my daily visits quickly                                  |
 | `*`      | new user                            | start with sample data on first launch                                                 | understand how the app is supposed to look without entering everything first |
+| `*`      | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `*`      | solo residential service technician | be prompted before deleting a client record                                            | avoid accidentally losing important past records                |
 | `*`      | solo residential service technician | group tags into larger categories                                                      | categorize clients and services more systematically             |
 | `*`      | solo residential service technician | update or rename a tag globally                                                        | keep my tagging consistent when I change my conventions         |
@@ -1039,7 +1039,7 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 <box type="info" seamless>
 
-### Difficulty Level & Challenges
+### Challenges
 
 | **Challenge** | **Description**                                                                                                                                                               |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
