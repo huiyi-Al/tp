@@ -383,8 +383,8 @@ Examples:
 
 **Warning:** The `copyaddr` command copies the address based on the current displayed index. The copied address may
 become outdated if:
-- The client list changes (e.g., via `list` or `find`), causing the index to point to a different client
-- The client's address is edited after copying
+- The client list changes (e.g., via `list` or `find`), causing the index to point to a different client.
+- The client's address is edited after copying.
 </box>
 
 ### Copying an edit command template: `copyedit`
