@@ -532,7 +532,7 @@ Use case ends.
 1. `user` locates the target client in the displayed client list.
 2. `user` requests to change the client's phone number by specifying the client's index and the new phone number.
 3. `Linkline` validates the new phone number and duplicate rules.
-4. `Linkline` updates the client's phone number, keeps the client list name-sorted, and saves the updated data.<br>
+4. `Linkline` updates the client's phone number, sorts the list, and saves the updated data.<br>
   Use case ends.
 
 **Extensions**
@@ -578,7 +578,7 @@ Use case ends.
 **MSS**
 
 1. `user` requests to list all stored clients.
-2. `Linkline` shows all clients in name-sorted order.<br>
+2. `Linkline` shows all clients in sorted order.<br>
   Use case ends.
 
 **Extensions**
