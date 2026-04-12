@@ -101,7 +101,13 @@ The following constraints apply whenever these field values are entered in comma
 
 * `NAME`: 1 to 100 printable characters. Must not be blank.
 * `PHONE_NUMBER`: Must contain 3 to 15 digits in total. Spaces and hyphens are allowed only between digit groups.
-* `EMAIL`: Must be a valid `local-part@domain` email address and satisfy Linkline's email validation rules.
+* `EMAIL`: Must be a valid `local-part@domain` email address. Must not exceed 320 characters. The local-part must be
+  between 1 and 64 characters. The local-part should only contain alphanumeric characters and these special characters,
+  excluding the parentheses, (!#$%&'*+/=?^_`{|}~.-). The local part may not start or end with special characters and
+  special characters cannot appear consecutively. The domain is made up of domain labels separated by periods and must
+  not exceed 255 characters. The domain name must end with a domain label at least 2 characters long. Each domain label
+  must start and end with alphanumeric characters, not exceed 63 characters, and consist of alphanumeric characters
+  separated only by hyphens, if any.
 * `ADDRESS`: Must not be blank.
 * `TAG`: 1 to 50 printable characters. Must not be blank.
 * `NOTES`: 0 to 200 characters.

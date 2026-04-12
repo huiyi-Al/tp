@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Email {
 
-    private static final String SPECIAL_CHARACTERS = "+_.-";
+    private static final String SPECIAL_CHARACTERS = "!#$%&'*+/=?^_`{|}~.-";
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
             + "and adhere to the following constraints:\n"
             + "1. The total email address must not exceed 320 characters.\n"
@@ -33,7 +33,7 @@ public class Email {
     private static final String LENGTH_CHECK = "(?=.{1,320}$)";
     // Local part length 1-64
     private static final String LOCAL_PART_LENGTH_CHECK = "(?=[^@]{1,64}@)";
-    // Local part: Alphanumeric, can have (+_.-) but not at start/end or consecutively
+    // Local part: Alphanumeric, can have (!#$%&'*+/=?^_`{|}~.-) but not at start/end or consecutively
     private static final String LOCAL_PART_REGEX =
             "[" + ALPHANUMERIC + "]+([" + SPECIAL_CHARACTERS + "][" + ALPHANUMERIC + "]+)*";
     // Domain length limit 1-255
