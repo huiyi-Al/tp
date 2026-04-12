@@ -210,7 +210,7 @@ Examples:
   * Shows confirmation message for deleting the client at index 1.
   * If you enter `delete 1` again, the client at index 1 is deleted.
 
-Example result after an `delete` command (with confirmation):
+Example result after a `delete` command (with confirmation):
 ![pending delete command result](images/pendingDeleteCommandResult.png)
 
 ![confirmed delete command result](images/confirmedDeleteCommandResult.png)
@@ -238,7 +238,7 @@ clear
     * The second `clear` clears all entries.
 * Any other command, including an invalid command, provided after the first `clear` command cancels the pending action.
 
-Example result after an `clear` command with a successful confirmation:
+Example result after a `clear` command with a successful confirmation:
 ![clear command result](images/clearCommandResult.png)
 
 ### Listing all clients: `list`
@@ -270,7 +270,7 @@ view INDEX
 * The index refers to the index number shown in the current displayed client list.
 * The index must be a positive integer such as `1`, `2`, or `3`.
 
-Example result after an `view` command:
+Example result after a `view` command:
 ![view command result](images/viewCommandResult.png)
 
 <box type="tip" seamless>
@@ -322,7 +322,7 @@ Examples:
 * `find --name=Alex` followed by `filtertag --tag=AC-Service`
 * `find --name=alex --name=bernice --name=oliveiro --name=david --name=irfan --name=roy`
 
-Example result after an `find` command:
+Example result after a `find` command:
 ![find command result](images/findCommandResult.png)
 
 ### Filtering clients by tag: `filtertag`
@@ -354,7 +354,7 @@ Examples:
 * `find --address=Tampines` followed by `filtertag --tag=Electrical Wiring`
 * `filtertag --tag=Plumbing --tag=Electrical Wiring`
 
-Example result after an `filtertag` command:
+Example result after a `filtertag` command:
 ![filtertag command result](images/filtertagCommandResult.png)
 
 ### Copying a client's address: `copyaddr`
@@ -427,7 +427,7 @@ Examples:
 * `logadd 2 Client requested follow-up call next Wednesday at 2pm.`
 * `logadd 3 Fixed plumbing issue for toilet in master bedroom. Recommended plumbing services for other toilets.`
 
-Example result after an `logadd` command:
+Example result after a `logadd` command:
 ![logadd command result](images/logaddCommandResult.png)
 
 ### Deleting a client log: `logdelete`
@@ -460,7 +460,7 @@ Examples:
     * Shows confirmation message for deleting log `1` of client `3`.
     * If you enter `logdelete 3 1` again, the corresponding log is deleted.
 
-Example result after an `logdelete` command:
+Example result after a `logdelete` command:
 ![confirmed logdelete command result](images/logdeleteCommandResult.png)
 
 ### Renaming a tag: `renametag`
@@ -485,7 +485,7 @@ Examples:
 * `renametag --tag=Electrical Wiring --tag=Electrical`
 * `renametag --tag=AC-Service --tag=AC-Repair`
 
-Example result after an `renametag` command:
+Example result after a `renametag` command:
 ![renametag command result](images/renametagCommandResult.png)
 
 ### Deleting a tag: `deletetag`
@@ -513,7 +513,7 @@ Examples:
     * Shows confirmation message for deleting tag `ac-repair`.
     * If you enter `deletetag ac-repair` again, the tag `ac-repair` is deleted.
 
-Example result after an `deletetag` command:
+Example result after a `deletetag` command:
 ![confirmed deletetag command result](images/deletetagCommandResult.png)
 
 ### Exiting Linkline: `exit`
@@ -530,7 +530,7 @@ exit
 
 ### Saving the data
 
-Linkline saves data to disk automatically after any command. There is no manual save command.
+Linkline saves data to disk automatically after any command that changes the data. There is no manual save command.
 
 ### Editing the data file
 
