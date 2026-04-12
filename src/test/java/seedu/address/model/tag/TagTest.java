@@ -29,9 +29,11 @@ public class TagTest {
         // invalid tag names
         assertFalse(Tag.isValidTagName("")); // empty string (0 characters)
         assertFalse(Tag.isValidTagName(" ")); // spaces only
+        assertFalse(Tag.isValidTagName("    ")); // multiple spaces
         assertFalse(Tag.isValidTagName("a".repeat(51))); // 51 characters (Exceeds 50 limit)
+        assertFalse(Tag.isValidTagName("王".repeat(51))); // 51 Unicode characters
 
-        // valid tag names
+        // valid tag names - ASCII
         assertTrue(Tag.isValidTagName("a")); // exactly 1 character
         assertTrue(Tag.isValidTagName("abcde12345")); // alphanumeric
         assertTrue(Tag.isValidTagName("12345")); // numeric only
@@ -39,6 +41,17 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("2nd floor")); // spaces now allowed
         assertTrue(Tag.isValidTagName("#urgent")); // leading symbols allowed
         assertTrue(Tag.isValidTagName("a".repeat(50))); // exactly 50 characters
+
+        // valid tag names - Unicode (non-Latin scripts)
+        assertTrue(Tag.isValidTagName("王")); // single character Unicode
+        assertTrue(Tag.isValidTagName("空调")); // Chinese
+        assertTrue(Tag.isValidTagName("에어컨")); // Korean
+        assertTrue(Tag.isValidTagName("エアコン")); // Japanese
+        assertTrue(Tag.isValidTagName("王".repeat(50))); // exactly 50 characters Unicode
+
+        // valid tag names - mixed scripts and symbols
+        assertTrue(Tag.isValidTagName("Aircon 空调"));
+        assertTrue(Tag.isValidTagName("#电工"));
     }
 
     @Test
