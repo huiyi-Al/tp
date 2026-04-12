@@ -169,9 +169,7 @@ country code with a hyphen (e.g., `65-91234567`). Be aware that duplicate detect
 Examples:
 
 * `add --name=John Tan --phone=9123 4567 --email=johntan@example.com --address=123 Clementi Rd, #04-05`
-*
-
-`add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
+* `add --name=Alex Yeoh --phone=98765432 --email=alexyeoh1234@gmail.com --address=123 Clementi Street --notes=Strict visitor screening --tag=Electrical Wiring`
 
 Example result after a `add` command:
 ![add command result](images/addCommandResult.png)
@@ -395,6 +393,14 @@ Examples:
 * `copyaddr 1`
 * `find --tag=Plumbing` followed by `copyaddr 2`
 
+<box type="warning" seamless>
+
+**Warning:** The `copyaddr` command copies the address based on the current displayed index. The copied address may
+become outdated if:
+- The client list changes (e.g., via `list` or `find`), causing the index to point to a different client.
+- The client's address is edited after copying.
+</box>
+
 ### Copying an edit command template: `copyedit`
 
 Copies a ready-to-edit `edit` command for the specified client to your system clipboard.
@@ -427,8 +433,10 @@ the field you want, and then press Enter.
 <box type="warning" seamless>
 
 **Warning:** The `copyedit` command copies the current **displayed index**, not the client's identity.
-- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the copied command may now refer to a different client.
-- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain outdated information.
+- If you change the displayed list (e.g., using `list` or `find`) before running the pasted command, the index in the
+copied command may now refer to a different client.
+- If the client's details (e.g., name, phone, email) have been edited since copying, the copied command may contain
+outdated information.
 </box>
 
 ### Adding a client log: `logadd`
