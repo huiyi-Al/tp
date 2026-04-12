@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 import javafx.beans.value.ObservableValue;
@@ -50,4 +51,9 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Saves the address book if there are unsaved changes from a prior failed save.
+     */
+    void saveAddressBookIfUnsaved() throws IOException;
 }

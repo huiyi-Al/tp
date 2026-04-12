@@ -200,6 +200,11 @@ public class MainApp extends Application {
     public void stop() {
         logger.info("============================ [ Stopping Linkline ] =============================");
         try {
+            logic.saveAddressBookIfUnsaved();
+        } catch (IOException e) {
+            logger.severe("Failed to save address book " + StringUtil.getDetails(e));
+        }
+        try {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
