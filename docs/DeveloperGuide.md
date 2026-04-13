@@ -401,7 +401,7 @@ messages follow the same trimming rule as other parser-handled fields.
 | `Email`      | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
 | `Address`    | Must not be blank (first non-whitespace character required).                                                                                 |
 | `Tag`        | 1 to 50 Unicode code points, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
-| `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                      |
+| `Notes`      | Optional free text with max length 500 Unicode code points (`Notes#MAX_LENGTH`).                                                                      |
 | `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                            |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.

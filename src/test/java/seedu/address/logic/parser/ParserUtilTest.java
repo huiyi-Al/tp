@@ -27,10 +27,10 @@ public class ParserUtilTest {
     private static final String INVALID_PHONE = "+-651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
-    private static final String INVALID_NOTES = "a".repeat(201);
-    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
-    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(200);
-    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(201);
+    private static final String INVALID_NOTES = "a".repeat(Notes.MAX_LENGTH + 1);
+    private static final String MAX_LENGTH_NOTES = "a".repeat(Notes.MAX_LENGTH);
+    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(Notes.MAX_LENGTH);
+    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(Notes.MAX_LENGTH + 1);
     private static final String INVALID_TAG = "";
     private static final String INVALID_LOG_MESSAGE = "";
 

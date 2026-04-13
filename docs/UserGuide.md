@@ -113,7 +113,7 @@ The following constraints apply whenever these field values are entered in comma
   separated only by hyphens, if any.
 * `ADDRESS`: Must not be blank.
 * `TAG`: 1 to 50 characters. Must not be blank.
-* `NOTES`: 0 to 200 characters.
+* `NOTES`: 0 to 500 characters.
 * `LOG_MESSAGE`: 1 to 1000 characters. Must contain at least one non-space character.
 
 </box>
