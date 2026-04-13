@@ -15,5 +15,5 @@
 
         <Label fx:id="noselectionLabel"
                styleClass="result-display"
-               alignment="CENTER" />
+               alignment="CENTER" wrapText="true"/>
 </StackPane>

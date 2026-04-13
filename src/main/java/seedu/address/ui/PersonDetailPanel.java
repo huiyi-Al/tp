@@ -52,7 +52,7 @@ public class PersonDetailPanel extends UiPart<Region> {
 
         noselectionLabel.setVisible(true);
         noselectionLabel.setManaged(true);
-        noselectionLabel.setText("Select a client to view details");
+        noselectionLabel.setText("Please use the 'view' command to view client details");
     }
 
     /**
