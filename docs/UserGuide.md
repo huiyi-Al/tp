@@ -222,7 +222,7 @@ Example result after a `list` command:
 
 ### Viewing client details: `view`
 
-Shows the specified client's full details in the right-hand panel.
+Shows the specified client's full details in the right-hand panel (including full client name, tags, phone number, email address...).
 
 Format: `view INDEX`
 
@@ -481,8 +481,6 @@ Even when the JSON format is valid, values outside Linkline's accepted constrain
 
 1. **When using multiple screens**, if you move the application to a secondary screen and later switch to using only the primary screen, the GUI may open off-screen. Delete `preferences.json` before starting Linkline again.
 2. **If you minimize the Help Window** and then run `help` again, the original Help Window remains minimized and no new Help Window appears. Restore the minimized Help Window manually.
-3. **The blue highlight in person list** is only help to allocate the client when using `view` and `edit` command, remove or change its position by clicking clients or type in other command won't affect the function and correctness of the command.
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
