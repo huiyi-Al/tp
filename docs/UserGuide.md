@@ -113,9 +113,14 @@ The following constraints apply whenever these field values are entered in comma
   separated only by hyphens, if any.
 * `ADDRESS`: Must not be blank.
 * `TAG`: 1 to 50 characters. Must not be blank.
-* `NOTES`: 0 to 200 characters.
+* `NOTES`: 0 to 500 characters.
 * `LOG_MESSAGE`: 1 to 1000 characters. Must contain at least one non-space character.
 
+</box>
+
+<box type="tip" seamless>
+
+**Note on character counting:** For free-text fields such as `NOTES` and `LOG_MESSAGE`, character limits are measured internally using Unicode code points. In most cases, this matches what users would visually perceive and naturally count as characters, though some combined symbols may count differently.
 </box>
 
 <box type="tip" seamless>
