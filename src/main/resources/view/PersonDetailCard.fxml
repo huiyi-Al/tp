@@ -26,7 +26,7 @@
             <FlowPane fx:id="tags" styleClass="label" />
             <Region minHeight="5" prefHeight="5" />
             <Separator styleClass="dotted-separator" />
-            <Label fx:id="phone" styleClass="card_small_label, emoji-label" text="\$phone">
+            <Label fx:id="phone" styleClass="card_small_label, emoji-label" text="\$phone" wrapText="true">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -34,25 +34,26 @@
                   </image>
                </ImageView>
             </graphic>
-         </Label>
-            <Label fx:id="email" styleClass="card_small_label, emoji-label" text="\$email">
-            <graphic>
-               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/email.png" />
-                  </image>
-               </ImageView>
-            </graphic>
-         </Label>
-            <Label fx:id="address" styleClass="card_small_label, emoji-label" text="\$address">
-            <graphic>
-               <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../images/address.png" />
-                  </image>
-               </ImageView>
-            </graphic>
-         </Label>
+            </Label>
+
+            <HBox alignment="TOP_LEFT" spacing="5" maxWidth="Infinity">
+                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../images/email.png" />
+                </ImageView>
+                <Label fx:id="email" styleClass="card_small_label, emoji-label"
+                       text="\$email" wrapText="true" maxWidth="Infinity"
+                       HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <HBox alignment="TOP_LEFT" spacing="5" maxWidth="Infinity">
+                <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../images/address.png" />
+                </ImageView>
+                <Label fx:id="address" styleClass="card_small_label, emoji-label"
+                       text="\$address" wrapText="true" maxWidth="Infinity"
+                       HBox.hgrow="ALWAYS"/>
+            </HBox>
+
              <VBox alignment="TOP_LEFT" spacing="4.0">
                 <HBox alignment="CENTER_LEFT" spacing="4.0">
                    <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">

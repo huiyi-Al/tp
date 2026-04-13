@@ -185,9 +185,16 @@ public class ModelManager implements Model {
 
     @Override
     public void resetPredicatesFilteredPersonList() {
+        Person currentSelected = getSelectedPerson().getValue();
         activePredicates.clear();
         addPredicateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         assert activePredicates.size() == 1;
+
+        if (currentSelected != null && filteredPersons.contains(currentSelected)) {
+            setSelectedPerson(currentSelected);
+        } else {
+            setSelectedPerson(null);
+        }
     }
 
     @Override
