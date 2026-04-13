@@ -242,6 +242,8 @@ Examples:
 * `view 1`
 * `find --name=Alex` followed by `view 1`
 
+**Note:** The blue highlight in person list is only to help allocating client, to see details of a client or before making any information modification, please use `view` command.
+
 ### Finding clients by details: `find`
 
 Searches the currently displayed list for clients whose name, phone number, email address, physical address, or tag
