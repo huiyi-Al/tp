@@ -120,6 +120,11 @@ The following constraints apply whenever these field values are entered in comma
 
 <box type="tip" seamless>
 
+**Note on character counting:** For free-text fields such as `NOTES` and `LOG_MESSAGE`, character limits are measured internally using Unicode code points. In most cases, this matches what users would visually perceive and naturally count as characters, though some combined symbols may count differently.
+</box>
+
+<box type="tip" seamless>
+
 **Tip:** Linkline keeps the displayed client list sorted by name, then by phone number (by numeric digits only – spaces
 and hyphens are ignored). Whenever a command changes which clients are shown, whether by modifying data, resetting the
 list, or narrowing it, the displayed list remains sorted in that order.
