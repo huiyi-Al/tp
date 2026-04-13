@@ -788,7 +788,7 @@ Use case ends.
 4. A first-time user should be able to learn the basic workflow (`add`, `list`, `find`, `view`, `edit`) within about 10 minutes using sample data and the help command.
 5. Client identity must remain unique based on normalized phone number and case-insensitive email address.
 6. Client data must remain available across application restarts using a local human-editable JSON file.
-7. If the main data file is missing, malformed, or otherwise unreadable on startup, the application should not crash. It should start with an empty address book, warn the user, and preserve the original file as a backup when possible.
+7. The application should remain usable and should not crash on startup even if the main data file is missing, malformed, or otherwise unreadable, while preserving existing user data where possible.
 8. The application is intended for a single local user. Multi-user collaboration, cloud synchronization, and networked storage are out of scope.
 9. Data persistence is limited to a local human-editable JSON file. External database systems are out of scope.
 10. Error messages should be actionable and should describe either the violated field constraints or the correct command usage, rather than exposing technical stack traces.
