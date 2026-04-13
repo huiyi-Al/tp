@@ -9,9 +9,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names can take any values between 1 and 50 characters long "
+    public static final String MESSAGE_CONSTRAINTS = "Tag names can take any values between 1 and 50 characters long "
             + "and should not be blank";
-    public static final String VALIDATION_REGEX = "^\\S[\\p{Print}]{0,49}$";
+    public static final String VALIDATION_REGEX = "^(?!\\s+$).{1,50}$";
 
     public final String tagName;
 
@@ -45,7 +45,15 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equalsIgnoreCase(otherTag.tagName);
+        return tagName.equals(otherTag.tagName);
+    }
+
+    /**
+     * Returns true if both tags have the same name ignoring case.
+     * Use this for duplicate detection.
+     */
+    public boolean isSameTag(Tag other) {
+        return other != null && tagName.equalsIgnoreCase(other.tagName);
     }
 
     @Override

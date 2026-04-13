@@ -23,8 +23,10 @@ public class PersonDetailCard extends UiPart<Region> {
 
     private static final String FXML = "PersonDetailCard.fxml";
     private static final int NOTES_VISIBLE_ROWS = 3;
+    private static final int NOTES_MAX_VISIBLE_ROWS = 6;
     private static final double NOTES_VIEWPORT_VERTICAL_CHROME = 14;
     private static final double NOTES_DESCENDER_SAFETY_PADDING = 3;
+    private static final double NOTES_VIEWPORT_HEIGHT_RATIO = 0.22;
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -38,6 +40,8 @@ public class PersonDetailCard extends UiPart<Region> {
 
     @FXML
     private HBox cardPane;
+    @FXML
+    private ScrollPane cardScrollPane;
     @FXML
     private Label name;
     @FXML
@@ -73,6 +77,7 @@ public class PersonDetailCard extends UiPart<Region> {
         phone.setText("Phone number : " + person.getPhone().value);
         address.setText("Address : " + person.getAddress().value);
         email.setText("Email address : " + person.getEmail().value);
+        cardScrollPane.setFitToHeight(true);
         initializeNotes(person);
         initializeLogSummary(person);
 
@@ -107,10 +112,28 @@ public class PersonDetailCard extends UiPart<Region> {
         measurementText.setFont(notesValue.getFont());
         double lineHeight = measurementText.getLayoutBounds().getHeight();
         double minHeight = lineHeight + NOTES_VIEWPORT_VERTICAL_CHROME + NOTES_DESCENDER_SAFETY_PADDING;
-        double preferredHeight = (lineHeight * NOTES_VISIBLE_ROWS)
+        double baseHeight = (lineHeight * NOTES_VISIBLE_ROWS)
+                + NOTES_VIEWPORT_VERTICAL_CHROME + NOTES_DESCENDER_SAFETY_PADDING;
+        double maxHeight = (lineHeight * NOTES_MAX_VISIBLE_ROWS)
                 + NOTES_VIEWPORT_VERTICAL_CHROME + NOTES_DESCENDER_SAFETY_PADDING;
         notesScrollPane.setMinHeight(minHeight);
-        notesScrollPane.setPrefHeight(preferredHeight);
+        updateNotesViewportHeight(cardScrollPane.getViewportBounds().getHeight(), baseHeight, maxHeight);
+        cardScrollPane.viewportBoundsProperty().addListener((observable, oldBounds, newBounds) ->
+                updateNotesViewportHeight(newBounds.getHeight(), baseHeight, maxHeight));
+    }
+
+    private void updateNotesViewportHeight(double availableHeight, double baseHeight, double maxHeight) {
+        if (availableHeight <= 0) {
+            notesScrollPane.setPrefHeight(baseHeight);
+            return;
+        }
+
+        double adaptiveHeight = availableHeight * NOTES_VIEWPORT_HEIGHT_RATIO;
+        notesScrollPane.setPrefHeight(clamp(adaptiveHeight, baseHeight, maxHeight));
+    }
+
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
     }
 
     private static String normalizeNotesForDisplay(String rawNotes) {

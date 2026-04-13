@@ -63,7 +63,7 @@ public class DeletePendingAction implements PendingAction {
     public CommandResult complete(Model model) throws CommandException {
         model.deletePerson(personToDelete);
         return new CommandResult(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                formatPersonBasic(personToDelete)));
+                formatPersonBasic(personToDelete))).withSaveRequired();
     }
 
     @Override

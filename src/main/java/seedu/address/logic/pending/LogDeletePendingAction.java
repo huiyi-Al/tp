@@ -82,7 +82,7 @@ public class LogDeletePendingAction implements PendingAction {
         model.setPerson(person, editedPerson);
         logConfirmedDeletion(previousLogCount, updatedLogHistory.size());
         return new CommandResult(String.format(LogDeleteCommand.MESSAGE_SUCCESS,
-                displayLogIndex.getOneBased(), person.getName().fullName));
+                displayLogIndex.getOneBased(), person.getName().fullName)).withSaveRequired();
     }
 
     @Override

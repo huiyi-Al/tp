@@ -16,6 +16,16 @@ pageNav: 3
 This project is based on the [AddressBook-Level 3](https://se-education.org/addressbook-level3/) project created by
 the [SE-EDU initiative](https://se-education.org).
 
+### AI Assistance
+* [Shim Jaejun](AboutUs.html#shim-jaejun) used Codex in a limited assistive role for parts of the Notes
+  and Logs features. This included exploring JavaFX implementation approaches for UI components that display notes and
+  logs, and drafting initial versions of Notes- and Logs-related test cases from manually specified scenarios. All
+  suggestions were reviewed, adapted, and refined manually before inclusion in the project.
+* [Tan Kin Ru](AboutUs.html#tan-kin-ru) used DeepSeek in a limited assistive role for parts of the test cases for some features implemented, including `copyaddr`, `copyedit`, `delete`, `edit`, and pending action confirmation flows. This included identifying edge cases and suggesting test scenarios to increase coverage. All suggestions were reviewed, adapted, and refined manually before inclusion in the project.
+* [Sheryl Phoa](AboutUs.html#sheryl-phoa) used Gemini in a limited assistive role for parts of the development and test
+  cases of the `filtertag`, `renametag` and `deletetag` features. This included suggesting test scenarios to increase
+  test coverage. All suggestions were reviewed, adapted and refined manually before inclusion in the project.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -39,13 +49,13 @@ Given below is a quick overview of main components and how they interact with ea
 **`Main`** (consisting of classes `Main` and `MainApp`) is in charge of the app launch and shut down.
 
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+* At shutdown, it shuts down the other components and invokes cleanup methods where necessary.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
+* [**`UI`**](#ui-component): The UI of the app.
 * [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
+* [**`Model`**](#model-component): Holds the data of the app in memory.
 * [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
@@ -70,7 +80,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using
 the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component
-through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the
+through its interface rather than the concrete class (reason: to prevent outside components being coupled to the
 implementation of a component), as illustrated in the (partial) class diagram below.
 
 <puml src="diagrams/ComponentManagers.puml" width="300" />
@@ -140,8 +150,9 @@ How the `Logic` component works:
 1. The command may communicate with the `Model` during execution to read or modify in-memory data.
 1. The result of the command execution is encapsulated as a `CommandResult` object and returned back from `Logic`.
 1. If the `CommandResult` carries a `PendingAction`, `LogicManager` stores it and waits for a matching follow-up
-   command instead of completing the action immediately. Otherwise, `LogicManager` persists the updated address book
-   through `Storage` before returning the result to the UI.
+   command instead of completing the action immediately.
+1. If the `CommandResult` requires an address book save, `LogicManager` persists the updated address book through
+   `Storage` before returning the result to the UI.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -204,9 +215,8 @@ The `Storage` component,
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects
   that belong to the `Model`).
 
-If address book data is malformed or violates model constraints, the storage layer reports the load failure through
-`DataLoadingException`. Linkline's fallback behavior for such startup failures, including creating a backup of the
-corrupted file when possible, is coordinated by `MainApp` rather than by the `Storage` component itself.
+If address book data is malformed or violates model constraints, the storage layer reports the load failure through `DataLoadingException`. Recovery from such startup failures is handled by `MainApp`, which also attempts to create a backup of the corrupted file when possible.
+During deserialization, missing non-required fields such as `notes`, `logs`, and `tags` are defaulted when possible. However, if those fields are present but contain invalid values, they are still treated as malformed data and can cause loading to fail.
 
 ### Common classes
 
@@ -239,12 +249,14 @@ In the documentation, command formats use `--field=[VALUE]` when a command accep
 
 This design keeps most prefix-based commands consistent, but it also explains several current limitations:
 
-* values cannot contain another recognized prefix in the middle unless quoting/escaping is added in future
+* a field value cannot safely include a space followed by another recognized field marker for the same command
 * leading and trailing whitespace in user input cannot be preserved
 * the parser does not currently support quoted arguments or escape sequences
 
-These limitations are acceptable for the current command set, but they are also the reason quoted/escaped CLI syntax is
-listed as a future enhancement.
+This trade-off is intentional. Compared with shorter prefix styles such as `n/` or `p/`, Linkline's current
+`--field=` syntax is less likely to collide with normal user-entered text while still remaining manageable to type
+frequently. Quoted and escaped input remains a planned enhancement because it would remove several of the current
+parsing edge cases and could also make more compact command syntax variants practical in the future.
 
 ### Confirmation-based commands with `PendingAction`
 
@@ -261,12 +273,12 @@ The first execution of such a command does not immediately mutate the model. Ins
 
 1. The command validates the request and creates a concrete `PendingAction` object.
 1. The command returns a `CommandResult` carrying both the confirmation message and the pending action.
-1. `LogicManager` stores that pending action instead of saving data immediately.
+1. `LogicManager` stores that pending action instead of attempting any address book save at that stage.
 
 When the next user command arrives, `LogicManager` checks whether it matches the stored pending action:
 
-* If it matches, `LogicManager` calls `PendingAction#complete(model)`, clears the pending action, and then saves the
-  updated address book.
+* If it matches, `LogicManager` calls `PendingAction#complete(model)`, clears the pending action, and then applies the
+  normal save policy to the returned `CommandResult`.
 * If it does not match, `LogicManager` discards the pending action and executes the new command normally.
 * If parsing or command execution fails, `LogicManager` also clears the pending action.
 
@@ -352,6 +364,27 @@ Instead, `LogDeleteCommand` converts the displayed log number into the internal 
 
 This conversion ensures that the command deletes the same log entry that the user sees labeled in the UI.
 
+### Persistence policy
+
+Linkline uses separate persistence policies for address book data and user preferences.
+
+#### Address book data
+
+* Successful commands that modify persisted address book data mark their `CommandResult` as save-required.
+* `LogicManager` saves `data/linkline.json` only for save-required results. Read-only commands, failed commands, and
+  first-stage confirmation results (i.e., the `PendingAction`s) do not trigger an address book save.
+* If such a save fails after the in-memory model has already changed, `LogicManager` records that unsaved address book
+  changes are still present.
+* A later successful address book save clears that unsaved state.
+* On graceful shutdown, `MainApp.stop()` makes one best-effort retry only if that unsaved state is still present. Failing of which, it logs the failure and exits without further retries (i.e., the file is not saved).
+
+#### User preferences
+
+* GUI preferences such as window size and position are saved to `preferences.json` on graceful shutdown instead of
+  after every command.
+* This is acceptable because preferences are session-level state for the next run, while `linkline.json` stores the
+  primary user data that should be saved immediately after successful data-changing commands.
+
 ### Field validation constraints
 
 Field-level validation is enforced in the model layer (`Name`, `Phone`, `Email`, `Address`, `Tag`, `Notes`,
@@ -361,15 +394,15 @@ the length-based limits below apply after boundary whitespace has been removed. 
 the client index from the free-text log message, then passes the message through `ParserUtil.parseLogMessage`, so log
 messages follow the same trimming rule as other parser-handled fields.
 
-| Field        | Constraint summary                                                                                                                            |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| `Name`       | 1 to 100 printable characters, and cannot be blank (`Name#VALIDATION_REGEX`).                                                                 |
-| `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                    |
+| Field        | Constraint summary                                                                                                                           |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`       | 1 to 100 Unicode code points, and cannot be blank (`Name#VALIDATION_REGEX`).                                                       |
+| `Phone`      | Must contain 3 to 15 digits in total; spaces and hyphens are allowed only between digit groups (`Phone#VALIDATION_REGEX`).                   |
 | `Email`      | Enforces a stricter `local-part@domain` format where local-part and domain labels follow explicit character rules (`Email#VALIDATION_REGEX`). |
-| `Address`    | Must not be blank (first non-whitespace character required).                                                                                  |
-| `Tag`        | 1 to 50 printable characters, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
-| `Notes`      | Optional free text with max length 200 characters (`Notes#MAX_LENGTH`).                                                                       |
-| `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                             |
+| `Address`    | Must not be blank (first non-whitespace character required).                                                                                 |
+| `Tag`        | 1 to 50 Unicode code points, and cannot be blank (`Tag#VALIDATION_REGEX`).                                                                   |
+| `Notes`      | Optional free text with max length 500 Unicode code points (`Notes#MAX_LENGTH`).                                                                      |
+| `LogMessage` | 1 to 1000 Unicode code points (`LogMessage#MIN_LENGTH`, `LogMessage#MAX_LENGTH`).                                                            |
 
 This keeps validation centralized and consistent for both command execution and JSON deserialization.
 
@@ -419,11 +452,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | solo residential service technician | copy a ready-made edit command for an existing client                                  | update a client record with fewer typing mistakes               |
 | `* *`    | solo residential service technician | append a timestamped service note to a client's record as a visit log                  | track what was done previously and follow up correctly          |
 | `* *`    | solo residential service technician | delete an incorrect log entry                                                          | keep a client's service history accurate                        |
-| `* *`    | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `* *`    | solo residential service technician | attach tags to a client                                                                | recognize customer types or service types at a glance           |
 | `* *`    | solo residential service technician | filter clients by tag                                                                  | narrow down to the relevant subset                              |
 | `* *`    | solo residential service technician | see a "Today's Visits" list when I tag clients with a date and remove them when done   | manage my daily visits quickly                                  |
 | `*`      | new user                            | start with sample data on first launch                                                 | understand how the app is supposed to look without entering everything first |
+| `*`      | solo residential service technician | sort the contact list by most recent interaction                                       | prioritize clients I worked with recently                       |
 | `*`      | solo residential service technician | be prompted before deleting a client record                                            | avoid accidentally losing important past records                |
 | `*`      | solo residential service technician | group tags into larger categories                                                      | categorize clients and services more systematically             |
 | `*`      | solo residential service technician | update or rename a tag globally                                                        | keep my tagging consistent when I change my conventions         |
@@ -521,7 +554,7 @@ Use case ends.
 1. `user` locates the target client in the displayed client list.
 2. `user` requests to change the client's phone number by specifying the client's index and the new phone number.
 3. `Linkline` validates the new phone number and duplicate rules.
-4. `Linkline` updates the client's phone number, keeps the client list name-sorted, and saves the updated data.<br>
+4. `Linkline` updates the client's phone number, sorts the list, and saves the updated data.<br>
   Use case ends.
 
 **Extensions**
@@ -567,7 +600,7 @@ Use case ends.
 **MSS**
 
 1. `user` requests to list all stored clients.
-2. `Linkline` shows all clients in name-sorted order.<br>
+2. `Linkline` shows all clients in sorted order.<br>
   Use case ends.
 
 **Extensions**
@@ -755,7 +788,7 @@ Use case ends.
 4. A first-time user should be able to learn the basic workflow (`add`, `list`, `find`, `view`, `edit`) within about 10 minutes using sample data and the help command.
 5. Client identity must remain unique based on normalized phone number and case-insensitive email address.
 6. Client data must remain available across application restarts using a local human-editable JSON file.
-7. If the main data file is missing, malformed, or otherwise unreadable on startup, the application should not crash. It should start with an empty address book, warn the user, and preserve the original file as a backup when possible.
+7. The application should remain usable and should not crash on startup even if the main data file is missing, malformed, or otherwise unreadable, while preserving existing user data where possible.
 8. The application is intended for a single local user. Multi-user collaboration, cloud synchronization, and networked storage are out of scope.
 9. Data persistence is limited to a local human-editable JSON file. External database systems are out of scope.
 10. Error messages should be actionable and should describe either the violated field constraints or the correct command usage, rather than exposing technical stack traces.
@@ -817,13 +850,32 @@ or restore `data/linkline.json` first.
 
 1. Recovering from a corrupted data file
 
-    1. Prerequisites: Launch the app once, execute `list`, and close the app so that `data/linkline.json` exists.
+    1. Prerequisites: Launch the app once, execute any successful data-changing command such as
+       `add --name=Temp User --phone=91234567 --email=temp@example.com --address=123 Test Road`, and close the app so
+       that `data/linkline.json` exists.
 
-    1. Open `data/linkline.json` and replace the file content with `not valid json` (e.g., change `"name"` to `"names"`).
+    1. Test case: Invalid JSON format.<br>
+       Open `data/linkline.json` and break the JSON syntax, for example by removing a closing brace or quote.
 
     1. Re-launch the app.<br>
-       Expected: Linkline starts with an empty client list, shows a startup warning about malformed data, and creates
-       a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder when permissions allow.
+       Expected: Linkline starts with an empty client list, shows a startup warning about invalid JSON or malformed
+       Linkline data, and creates a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder
+       when permissions allow.
+
+    1. Test case: Valid JSON format but invalid Linkline data schema.<br>
+       Restore a valid `data/linkline.json` first, then rename a required key such as `"name"` to `"names"` while
+       keeping the file as valid JSON.
+
+    1. Re-launch the app.<br>
+       Expected: Linkline starts with an empty client list, shows a startup warning about invalid JSON or malformed
+       Linkline data, and creates a backup file named `linkline.json.corrupted-<timestamp>.bak` in the same folder
+       when permissions allow.
+   
+<box type="info" seamless>
+
+Removing or renaming optional fields such as `notes`, `logs`, or `tags` may still allow the file to load because Linkline defaults missing optional fields during deserialization. To reproduce startup recovery reliably, use invalid JSON syntax, corrupt a required field, or insert an invalid field value.
+
+</box>
 
 ### Navigating and narrowing the displayed list
 
@@ -874,7 +926,7 @@ or restore `data/linkline.json` first.
        Expected: Success message shown. `Ethan Lim` appears in the displayed list in sorted order.
 
     1. Test case:
-       `add --name=Ethan Clone --phone=9786 1234 --email=ethan.clone@example.com --address=Blk 9 Test Road`<br>
+       `add --name=Alex Clone --phone=8743 8807 --email=alex.clone@example.com --address=Blk 9 Test Road`<br>
        Expected: Duplicate-client error shown because phone numbers are compared ignoring formatting.
 
 1. Copying a client's address
@@ -944,12 +996,14 @@ or restore `data/linkline.json` first.
 
 1. Deleting a log
 
-    1. Test case: `logdelete 1 3`<br>
+    1. Prerequisites: Use a fresh app folder or restore the original sample data. Execute `view 1` so that
+       `Alex Yeoh` is selected in the right-hand panel.
+
+    1. Test case: `logdelete 1 2`<br>
        Expected: No log is deleted yet. A confirmation message identifies the latest log of `Alex Yeoh`.
 
-    1. Test case: `logdelete 1 3` immediately again<br>
-       Expected: The newly added log is deleted. The right-hand panel returns to showing two logs, with the latest
-       visible one labeled `Log 2`.
+    1. Test case: `logdelete 1 2` immediately again<br>
+       Expected: The latest log is deleted. The right-hand panel returns to showing one log, labeled `Log 1`.
 
     1. Test case: `logdelete 3 1`<br>
        Expected: Error message shown because the third sample client (`Charlotte Oliveiro`) has no logs.
@@ -985,13 +1039,14 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 <box type="info" seamless>
 
-### Difficulty Level & Challenges
+### Challenges
 
 | **Challenge** | **Description**                                                                                                                                                               |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Multiple entity types** | AB3 manages only `Person` and `Tag`. Linkline adds `LogHistory`, `LogEntry`, and `LogMessage` as first-class entities with their own validation, storage, and UI representation. |
 | **Complex CLI syntax** | Migrated from `n/` prefixes to Linux-style `--name=` format, requiring updates across all parsers, commands, and tests.                                                       |
 | **Two-step confirmation** | Implemented generic `PendingAction` framework for delete, clear, and log-delete commands without polluting `LogicManager` with command-specific logic.                        |
+| **Selective persistence** | Reworked save behavior so only commands that modify `linkline.json` trigger address book writes, while failed writes leave a tracked dirty state for one best-effort retry on graceful exit. |
 | **Duplicate detection** | Enhanced `edit` command to prevent duplicate phone/email across different clients while allowing self-edits.                                                                  |
 | **Corrupted file handling** | Added detection and user-friendly error messaging for corrupted `linkline.json` without auto-overwriting.                                                                     |
 | **UI improvements** | Redesigned the interface with a split-pane layout featuring a compact list view (showing name and phone) and a full details panel (showing all client information when selected via `view`).                                                                                                         |
@@ -1004,14 +1059,28 @@ This project extends the AddressBook-Level 3 (AB3) codebase into Linkline, a cli
 
 Team size: 5
 
-1. Enhance `find` to search notes and log text: The current `find` command can search names, phone numbers, emails,
-   addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find` with support
-   for fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
+1. **Support quoted and escaped CLI field values**: Linkline currently treats a space followed by another recognized field
+   marker as the start of a new argument, and it also trims away boundary whitespace. We plan to support quoted input
+   such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`, and `\n` so
+   free-text fields can preserve literal special text more reliably. This would also make more compact syntax variants (e.g., `-n=...`, `n/...`) easier to consider in the future if needed.
+2. **Support user-specified service timestamps for logs**: `logadd` currently records only the current system date and
+   time at the moment the command is entered. We plan to support storing the actual service datetime separately from
+   the log creation time so users can backdate missed job notes without losing an audit trail.
+3. **Add `logedit` for correcting existing log entries**: Linkline currently supports `logadd` and `logdelete`, but
+   fixing a mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a
+   `logedit` command so users can update an existing log entry directly while keeping the rest of the client's log
+   history intact.
+4. **Extend `find` to search notes and log history**: The current `find` command can search names, phone numbers,
+   emails, addresses, and tags, but it cannot search service notes or past log content. We plan to extend `find`
+   with fields such as `--notes=...` and `--log=...` so users can locate clients using site instructions or previous
    job records.
-2. Add `logedit` to correct existing log entries: Linkline currently supports `logadd` and `logdelete`, but fixing a
-   mistake in a log entry requires deleting the old log and adding a replacement. We plan to add a `logedit` command
-   so users can update an existing log message directly while keeping the rest of the client's log history intact.
-3. Add quoted and escaped CLI field values: The current parser does not handle quoted values, which makes it awkward
-   to enter text containing prefix-like substrings, preserved whitespace, or special characters. We plan to support
-   quoted input such as `--notes="Call before arriving -- bring ladder"` together with escapes such as `\"`, `\\`,
-   and `\n`.
+5. **Enhance phone number handling with country codes:** Linkline currently stores a single phone number per client with 
+   limited country code support. We plan to enhance this by allowing optional `+<country_code>` prefixes
+   (e.g., `+65 91234567`) and normalizing numbers using `country_code + local_digits` for duplicate detection.
+   This ensures `+65 9999 9999` and `9999 9999` are treated as duplicates, while `+66 9999 9999` remains distinct.
+   We also plan to support a default country code (e.g., `setcountrycode 65`) so users can enter local numbers without
+   typing `+65` every time.
+
+6. **Support multiple phone numbers per client:** Linkline currently stores only one phone number per client. We plan to
+   extend phone number storage to support multiple numbers (e.g., mobile, home, office). As an interim workaround, users
+   can store secondary numbers in the `notes` field.

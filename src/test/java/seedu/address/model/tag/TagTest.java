@@ -29,9 +29,11 @@ public class TagTest {
         // invalid tag names
         assertFalse(Tag.isValidTagName("")); // empty string (0 characters)
         assertFalse(Tag.isValidTagName(" ")); // spaces only
+        assertFalse(Tag.isValidTagName("    ")); // multiple spaces
         assertFalse(Tag.isValidTagName("a".repeat(51))); // 51 characters (Exceeds 50 limit)
+        assertFalse(Tag.isValidTagName("王".repeat(51))); // 51 Unicode characters
 
-        // valid tag names
+        // valid tag names - ASCII
         assertTrue(Tag.isValidTagName("a")); // exactly 1 character
         assertTrue(Tag.isValidTagName("abcde12345")); // alphanumeric
         assertTrue(Tag.isValidTagName("12345")); // numeric only
@@ -39,10 +41,21 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("2nd floor")); // spaces now allowed
         assertTrue(Tag.isValidTagName("#urgent")); // leading symbols allowed
         assertTrue(Tag.isValidTagName("a".repeat(50))); // exactly 50 characters
+
+        // valid tag names - Unicode (non-Latin scripts)
+        assertTrue(Tag.isValidTagName("王")); // single character Unicode
+        assertTrue(Tag.isValidTagName("空调")); // Chinese
+        assertTrue(Tag.isValidTagName("에어컨")); // Korean
+        assertTrue(Tag.isValidTagName("エアコン")); // Japanese
+        assertTrue(Tag.isValidTagName("王".repeat(50))); // exactly 50 characters Unicode
+
+        // valid tag names - mixed scripts and symbols
+        assertTrue(Tag.isValidTagName("Aircon 空调"));
+        assertTrue(Tag.isValidTagName("#电工"));
     }
 
     @Test
-    public void equals_caseInsensitive() {
+    public void equals_caseSensitive() {
         Tag tag = new Tag("Plumbing");
 
         // same object -> returns true
@@ -51,10 +64,10 @@ public class TagTest {
         // same values, same case -> returns true
         assertTrue(tag.equals(new Tag("Plumbing")));
 
-        // same values, different case -> returns true
-        assertTrue(tag.equals(new Tag("plumbing")));
-        assertTrue(tag.equals(new Tag("PLUMBING")));
-        assertTrue(tag.equals(new Tag("pLuMbInG")));
+        // same values, different case -> returns false
+        assertFalse(tag.equals(new Tag("plumbing")));
+        assertFalse(tag.equals(new Tag("PLUMBING")));
+        assertFalse(tag.equals(new Tag("pLuMbInG")));
 
         // different types -> returns false
         assertFalse(tag.equals(1));
@@ -64,6 +77,18 @@ public class TagTest {
 
         // different values -> returns false
         assertFalse(tag.equals(new Tag("Electrical")));
+    }
+
+    @Test
+    public void isSameTag_caseInsensitive() {
+        Tag tag = new Tag("Plumbing");
+
+        // different case -> returns true
+        assertTrue(tag.isSameTag(new Tag("plumbing")));
+        assertTrue(tag.isSameTag(new Tag("PLUMBING")));
+
+        // different values -> returns false
+        assertFalse(tag.isSameTag(new Tag("Electrical")));
     }
 
     @Test

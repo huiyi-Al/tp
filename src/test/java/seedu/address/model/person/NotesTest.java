@@ -7,10 +7,10 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class NotesTest {
-    private static final String MAX_LENGTH_NOTES = "a".repeat(200);
-    private static final String TOO_LONG_NOTES = "a".repeat(201);
-    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(200);
-    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(201);
+    private static final String MAX_LENGTH_NOTES = "a".repeat(Notes.MAX_LENGTH);
+    private static final String TOO_LONG_NOTES = "a".repeat(Notes.MAX_LENGTH + 1);
+    private static final String MAX_LENGTH_EMOJI_NOTES = "😀".repeat(Notes.MAX_LENGTH);
+    private static final String TOO_LONG_EMOJI_NOTES = "😀".repeat(Notes.MAX_LENGTH + 1);
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -35,8 +35,8 @@ public class NotesTest {
         // valid notes
         assertTrue(Notes.isValidNotes("This is a valid note.")); // normal note
         assertTrue(Notes.isValidNotes("")); // empty note
-        assertTrue(Notes.isValidNotes(MAX_LENGTH_NOTES)); // 200 characters
-        assertTrue(Notes.isValidNotes(MAX_LENGTH_EMOJI_NOTES)); // 200 Emojis
+        assertTrue(Notes.isValidNotes(MAX_LENGTH_NOTES)); // Notes.MAX_LENGTH characters
+        assertTrue(Notes.isValidNotes(MAX_LENGTH_EMOJI_NOTES)); // Notes.MAX_LENGTH Emojis
         assertTrue(Notes.isValidNotes("This note\nhas multiple lines.")); // multiline note
         assertTrue(Notes.isValidNotes("  Needs follow up tomorrow.  ")); // note with spaces
     }

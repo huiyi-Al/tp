@@ -142,9 +142,9 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedTag);
 
         addressBook.setTag(target, editedTag);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     @Override
@@ -152,9 +152,9 @@ public class ModelManager implements Model {
         requireNonNull(target);
 
         addressBook.removeTag(target);
-        refreshSelectedPersonIfTagAffected(target);
 
         resetPredicatesFilteredPersonList();
+        refreshSelectedPersonIfTagAffected(target);
     }
 
     /**
@@ -163,7 +163,7 @@ public class ModelManager implements Model {
      */
     private void refreshSelectedPersonIfTagAffected(Tag target) {
         Person currentlySelected = selectedPerson.getValue();
-        if (currentlySelected != null && currentlySelected.getTags().contains(target)) {
+        if (currentlySelected != null && currentlySelected.getTags().stream().anyMatch(t -> t.isSameTag(target))) {
             selectedPerson.setValue(null);
             getFilteredPersonList().stream()
                     .filter(p -> p.isSamePerson(currentlySelected))
@@ -203,6 +203,8 @@ public class ModelManager implements Model {
     public void addPredicateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         activePredicates.add(predicate);
+        //Solution below inspired by
+        //https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html#and-java.util.function.Predicate-
         Predicate<Person> uberPredicate = activePredicates.stream().reduce(p -> true, Predicate::and);
         filteredPersons.setPredicate(uberPredicate);
     }

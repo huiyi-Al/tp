@@ -197,7 +197,7 @@ public class FindCommandParserTest {
         argMultimap = ArgumentTokenizer.tokenize(TEST_MULTIEMAIL1.toUpperCase(), PREFIX_EMAIL);
         expected = generateFindCommand();
 
-        assertParseDifferent(parser, MessageFormat.format("{0}{1}", PREFIX_EMAIL, TEST_MULTIEMAIL1), expected);
+        assertParseDifferent(parser, TEST_MULTIEMAIL1, expected);
     }
 
     @Test

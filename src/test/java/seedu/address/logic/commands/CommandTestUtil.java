@@ -18,6 +18,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.person.Notes;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.predicates.NameContainsKeywordsPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
@@ -59,7 +60,7 @@ public class CommandTestUtil {
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_NOTES_DESC = " " + PREFIX_NOTES
-            + "a".repeat(201); // notes should be at most 200 chars
+            + "a".repeat(Notes.MAX_LENGTH + 1); // notes should be at most Notes.MAX_LENGTH chars
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG
             + "a".repeat(51); // tags should be at most 50 chars
 
@@ -101,7 +102,17 @@ public class CommandTestUtil {
     public static void assertCommandSuccess(Command command, Model actualModel, String expectedMessage,
                                             Model expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage);
+        if (shouldSaveAddressBook(command)) {
+            expectedCommandResult = expectedCommandResult.withSaveRequired();
+        }
         assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel);
+    }
+
+    private static boolean shouldSaveAddressBook(Command command) {
+        return command instanceof AddCommand
+                || command instanceof EditCommand
+                || command instanceof LogAddCommand
+                || command instanceof RenameTagCommand;
     }
 
     /**
